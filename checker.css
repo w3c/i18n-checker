@@ -1,0 +1,1364 @@
+/************************************************************
+Minimal style sheet for the W3C mobileOK Checker.
+
+This minimal style sheet should be the base style sheet for
+all media types.
+
+Styles may be extended to target specific media types, but
+note no further style sheet should be needed to target
+"handheld" devices.
+
+The production version of the Checker is available at:
+ http://validator.w3.org/mobile/
+
+The development version of the Checker is available at:
+ http://qa-dev.w3.org:8001/mobileok/
+
+The source code of the Checker is available at:
+ http://dev.w3.org/cvsweb/2009/mobileok-servlet
+
+The Checker follows some of the concepts of the OOCSS
+(Object-Oriented CSS) framework by Nicole Sullivan. See:
+ http://wiki.github.com/stubbornella/oocss
+************************************************************
+$Id: minimum.css,v 1.6 2010/03/18 16:52:13 fd Exp $
+************************************************************/
+
+
+/************************************************************
+Reset styles
+************************************************************/
+html, body, form, fieldset, p, a, ul, ol, li, div, legend, label,
+br, input, button, textarea, h1, h2, h3, h4, h5, strong {
+ margin: 0;
+ padding: 0;
+ border: 0;
+ font-weight: inherit;
+ font-style: normal;
+ font-size: 100%;
+ font-family: Helvetica, Arial, Sans-Serif;
+ vertical-align: baseline;
+ background: transparent;
+ line-height: normal;
+}
+
+
+/************************************************************
+Basic layout properties
+************************************************************/
+/* ====== Page Head, Body, and Foot ====== */
+.body,
+.main {
+ *display: block;
+ _position: relative;
+ _left: -3px;
+ _margin-right: -3px;
+ width: auto;
+ _zoom:1;
+}
+.body:after,
+.main:after {
+ content: " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+ visibility: hidden;
+ clear: both;
+ height: 0 !important;
+ display: block;
+ line-height: 0;
+ font-size: 36px;
+}
+.page {
+ margin: 0 auto;
+ width: 950px;
+}
+.liquid {
+ width: auto;
+ margin: 0;
+}
+
+
+/************************************************************
+Left and right columns.
+
+Just regular blocks by default.
+May be extended to create real columns in an advanced style
+sheet.
+************************************************************/
+.leftCol,
+.rightCol,
+.main {
+ float: none;
+ width: auto; 
+}
+
+
+/************************************************************
+Modules.
+************************************************************/
+.mod {
+ margin: 10px;
+}
+.hd,
+.bd,
+.ft {
+ overflow: hidden;
+ _overflow: visible;
+ _zoom: 1;
+}
+.inner {
+ position: relative;
+}
+
+
+/************************************************************
+Grids.
+************************************************************/
+.line:after,
+.lastUnit:after {
+ content: none;
+}
+.line {
+ *zoom:1;
+}
+.unit {
+ float: none;
+ display: inline;
+}
+.size1of1,
+.size1of2,
+.size1of3,
+.size2of3,
+.size1of4,
+.size3of4,
+.size1of5,
+.size2of5,
+.size3of5,
+.size4of5,
+.lastUnit {
+ float: none;
+ width: auto;
+}
+
+
+/************************************************************
+Base styles: Text
+************************************************************/
+strong { font-weight: bold; }
+em { font-style: italic; }
+
+h1, .h1 {
+ font-family: "Myriad Web", "Myriad Pro", "Gill Sans", Helvetica, Arial, Sans-Serif;
+ font-size: 1.6em;
+}
+
+h1 span, .h1 span {
+ padding-top: 15px;
+ border-bottom: 1px solid #6383b1;
+ border-color: #4e6f9e;
+}
+
+h2, .h2 { 
+ color: #690;
+ font-family: Verdana,Arial,sans-serif;
+ background-color: white;
+ font-size: 1.3em;
+ margin-bottom: 1em;    
+}
+
+h3, .h3 {
+ font-family: Verdana,Arial,sans-serif;
+ color: #777;
+ background-color: white;
+ font-size: 1.1em;
+ border-bottom: 1px dotted #aaaa77;
+ text-decoration: none;
+ margin-top: 1em;
+ margin-bottom: 1em;
+} 
+
+h4, .h4 {
+ font-family: Verdana,Arial,sans-serif;
+ color: #777;
+ font-style: italic;
+ text-decoration: none;
+ font-size: .9em;
+ font-weight:600;
+ margin-top: 1.5em;
+ margin-bottom: .5em;
+}
+
+h5, .h5
+h6, .h6 {
+ font-family: Verdana,Arial,sans-serif;
+ color: #690;
+ background-color: white;
+ font-weight: normal;
+ font-size: small;
+ margin-top: 1em;
+ margin-left: 1em;
+ margin-bottom: .7em;
+}
+
+abbr[title],
+acronym[title],
+span[title],
+strong[title] {
+ border-bottom: thin dotted;
+ cursor: help;
+}
+
+acronym:hover,
+abbr:hover {
+ cursor: help;
+}
+
+pre {
+ margin-left: 3em;
+ line-height: 100%;
+ white-space: pre-wrap;
+}
+
+p {
+ margin-top: 0.5em;
+ margin-bottom: 0.7em;
+}
+
+/** Implicit text that should only be needed to read the page aloud or to render the page without styles. */
+.impl {
+ display: none;
+}
+
+/** Generic style to hide inline content in the minimal version. Override this class in advanced style sheets. */
+.advin {
+ display: none;
+}
+
+
+/************************************************************
+Base styles: Hypertext
+************************************************************/
+a:link, a:visited {
+ text-decoration: underline;
+ color: #365D95;
+}
+
+a:hover, a:active {
+ text-decoration: underline;
+ color: #1f2126;
+}
+
+
+
+/************************************************************
+Base styles: List
+************************************************************/
+ul, ol {
+ list-style-position: outside;
+}
+
+li {
+ margin-left: 1em;
+}
+
+ol {
+ list-style-type: decimal;
+}
+
+ol ol {
+ list-style-type: lower-alpha;
+}
+
+ol ol ol {
+ list-style-type: lower-roman;
+}
+
+ul {
+ list-style-type: disc;
+}
+
+dt {
+ font-style: italic;
+ font-weight: bold;
+ margin-top: 1.5em;
+ margin-bottom: .3em;
+}
+
+dd {
+ margin-left: 1em;
+ margin-right: 1em;
+}
+
+
+/************************************************************
+Base styles: Forms
+************************************************************/
+form {
+ margin:0 !important;
+ padding: 0 !important;
+}
+
+legend {
+ font-size: 1.1em;
+ padding: 0.4em 0 0.6m 0;
+ margin-bottom: 0.5em;
+}
+
+input {
+ background-color: #EAEBEE;
+}
+
+textarea {
+ width: 98.5%;
+}
+
+input[type="text"],
+input[type="file"],
+textarea {
+ font-family: Monaco, "Courier New", Monospace;
+ font-size: 0.9em;
+ border: 1px solid #bbb;
+ border-top: 1px solid #777;
+ border-bottom: 1px solid #ddd;
+ background: #fefefe url("images/textbg.png") no-repeat top left;
+ padding: 0.2em 0.2em;
+ max-width: 1000px;
+ font-variant: normal;
+}
+
+input[type="text"],
+input[type="file"] {
+ margin: 0.3em 0 0 1em;
+}
+
+
+/************************************************************
+Base styles: Table
+************************************************************/
+table {
+ border-collapse: collapse;
+}
+
+td, th {
+ padding: 6px;
+}
+th {
+ padding-right: .5em;
+ text-align: left;
+ vertical-align: middle;
+ white-space: nowrap;
+ font-weight: bold;
+}
+
+td {
+ text-align: left;
+ padding-left: .5em;
+}
+
+
+
+/************************************************************
+Base styles: Image
+************************************************************/
+img {
+ vertical-align: middle;
+}
+
+a img {
+ border: 0;
+}
+
+
+/************************************************************
+Base styles: Code extracts
+************************************************************/
+code {
+ white-space: normal;
+ display: inline;
+ padding-left: .2em;
+ padding-right: .2em;
+ color: black;
+ border: 1px dotted #ccc;
+ background-color: #EAEBEE;
+ font-family: Monaco, "Courier New", monospace;
+ font-size: small;
+}
+
+code.block {
+ display: block;
+ padding: 1em;
+ white-space: pre-wrap;
+ margin-top: 1em;
+ margin-bottom: 1em;
+ margin-right:  3em;
+}
+
+code strong {
+ color: red;
+ font-weight: bold;
+ padding-left: .5ex;
+ padding-right: .5ex;
+}
+
+
+/************************************************************
+Base styles: Button
+************************************************************/
+button,
+.button {
+ color: #365D95;
+ padding: .3em 1em;
+ border: 1px outset #ccc;
+}
+
+button,
+.button {
+ border-style: inset !important;
+}
+
+
+/************************************************************
+Global page styles
+(note we should rather "extend" page than override it)
+************************************************************/
+.page {
+ background-color: white;
+ color: #1f2126;
+ margin: 0;
+ min-width: auto;
+}
+
+
+/************************************************************
+Header
+************************************************************/
+.w3cLogo,
+.mwiLogo {
+ display: none;
+}
+
+.title {
+ padding: 0 0 0 11px;
+}
+
+.head {
+ color: #fdfdfd;
+ margin-bottom: 0;
+ background-color: #365D95;
+}
+
+.tagline {
+ font-size: 0.7em;
+ letter-spacing: 0.1em;
+ line-height: 100% !important;
+ color: #D0DCEE;
+ background-color: transparent;
+ font-weight:bold;
+}
+
+
+/************************************************************
+Footer
+************************************************************/
+.w3cLargeLogo,
+.supportLogo {
+ display: none;
+}
+
+
+/************************************************************
+Index page's forms
+************************************************************/
+.forms h2,
+.forms .h2 {
+ display: none;
+}
+
+.forms label {
+ font-size: 0.9em;
+ padding-left: .2em;
+ padding-right: .2em;
+}
+
+
+#docAddr {
+ margin: 0;
+ width: 50%;
+}
+
+#report #docAddr {
+ width: 50%;
+}
+
+.submitLine {
+ padding: 0;
+ text-align: center;
+}
+		
+.submitSpan {
+ width: auto;
+ padding: 1em 0;
+ text-align: center;
+ border: 0;
+ background: url("images/button-left.png") no-repeat center left;
+ text-decoration: none;
+}
+
+.submitSpan input {
+ color: #365D95;
+ padding: .6em 2em;
+ background: url("images/button-right.png") no-repeat center right;
+}
+
+
+/************************************************************
+Generic bar
+************************************************************/
+.bar {
+ overflow: auto;
+}
+
+.bar .item {
+ float: none;
+ margin: 0;
+ list-style-type: none;
+}
+
+
+/************************************************************
+Tabulation bar
+************************************************************/
+.tabBar {
+ padding: 0.5em 0;
+ background-color: #EAEBEE;
+}
+
+.tabBar .item {
+ cursor: pointer;
+ margin-right: 0;
+ margin-top: 0.5em;
+ margin-bottom: 0.5em;
+ background: none;
+ font-weight: normal;
+ border-bottom: none;
+}
+
+.tabBar .item :link,
+.tabBar .item :visited {
+ color: #365D95;
+ padding: inherit;
+ background: none;
+ display: default;
+ margin-left: 0;
+ font-size: 0.9em;
+ text-decoration: none;
+}
+
+.tabBar .item.selected {
+ background: none;
+ border-bottom: none;
+ font-weight: bold;
+}
+
+.tabBar .item.selected :link,
+.tabBar .item.selected :visited {
+ background: none;
+ color: #1f2126;
+}
+
+.tabBar .item :hover,
+.tabBar .item :active {
+ color: #1f2126;
+}
+
+
+/* Some more specific styles for the "blur" effect on "validate by" */
+.tabBar .item span {
+ color: #616571;
+}
+
+.tabBar .item.selected span,
+.tabBar .item :hover span,
+.tabBar .item :active span {
+ color: #3d424f;
+}
+
+
+/* Tabulations body should have the same color as tabs */
+.tabBody {
+ background-color: #EAEBEE;
+ padding: 0.5em; 
+}
+
+
+/************************************************************
+Navigation bar
+************************************************************/
+.navBar {
+ padding: 0.2em;
+ border-top: 1px solid #DCDDE0;
+ border-bottom: 1px solid #DCDDE0;
+ background-color: #EAEBEE;
+}
+
+.navBar .inner {
+ float: none;
+}
+
+.navBar .item {
+ float: none;
+ margin-right: 0;
+ margin-top: 0.5em;
+ margin-bottom: 0.5em;
+}
+
+.navBar .item:before {
+ content: none;
+}
+
+.navBar :link,
+.navBar :visited {
+ color: #365D95;
+ text-decoration: none;
+}
+
+.navBar a:hover,
+.navBar a:active {
+ color: #1f2126;
+ text-decoration: underline;
+}
+
+/* In case you want a navigation bar that is centered,
+the following style should be added. */
+.centeredBar .inner {
+ float: none;
+ margin-left: auto;
+ margin-right: auto;
+ display: table;
+}
+
+
+/************************************************************
+Footer
+************************************************************/
+.foot {
+}
+
+.w3cLargeLogo {
+ width: 290px;
+ padding-right: 11px;
+}
+
+.supportLogo {
+ width: 101px;
+ padding-left: 11px;
+}
+
+.version {
+ font-size: smaller;
+ text-align: justify;
+ color: #888;
+ background-color: white;
+ margin-bottom: .6em;
+}
+
+.copyright {
+ text-align: justify;
+ text-transform: uppercase;
+ font-size: x-small;
+ line-height: 1.4;
+}
+
+.copyright,
+.copyright a {
+ text-decoration: none;
+ color: #7C8395;
+}
+
+.copyright :link,
+.copyright :visited {
+ color: #A3756E;
+}
+
+.copyright a:hover,
+.copyright a:active {
+ color: #7D4A42;
+}
+
+
+/************************************************************
+Grid columns
+(note we need to redefine lastUnit here as it must override
+the other rules)
+************************************************************/
+.min1of10,
+.min5of10,
+.min6of10,
+.min7of10,
+.min8of10,
+.lastUnit {
+ width: auto;
+}
+
+
+/************************************************************
+Modules
+************************************************************/
+/** Pure container, no impact on display. */
+.raw {
+ margin: 0;
+}
+
+/** Square block. */
+.square {
+ margin: 0;
+}
+
+.square .inner {
+ border-style: solid;
+ border-width: 1px;
+}
+
+
+/** Cancel any border. Necessary to allow nesting as we cannot
+ use the ">" operator in the above rule, since IE6 does not support it.
+ note that this class effectively prevents borders of inner modules.
+*/
+.noborder {
+ margin: 0;
+}
+
+.noborder .inner {
+ border: none;
+}
+
+.max350 {
+ max-width: auto;
+ margin-left: 0;
+ margin-right: 0;
+}
+
+
+/** Ad (in the sense of emphasized section) block.
+    The module should be used in conjunction with
+    one of the 'adhd' and 'adbd' styles.
+ */
+.ad .inner {
+ border-style: solid;
+ border-width: 1px 2px 2px;
+ min-height: 13em;
+ padding: 0;
+ font-size: 90%;
+ overflow: auto;
+}
+
+.ad1 .inner {
+ border-color: #005A9C;
+}
+
+.ad2 .inner {
+ border-color: #E2EDFE;
+}
+
+.ad3 .inner {
+ min-height: inherit;
+ background: #E2EDFE;
+}
+
+/** Keypad button. */
+.keypad .inner {
+ border: 2px solid black;
+ border-top-color: #666;
+ border-left-color: #666;
+ width: 10em;
+ min-height: inherit;
+}
+
+
+/************************************************************
+Module headers
+************************************************************/
+.adhd {
+ margin: 0;
+ padding: .2em;
+ text-transform: none;
+ text-align: left;
+ font-weight: normal;
+}
+
+.adhd1 {
+ background: #E2EDFE;
+ color: #0B5B9D;
+}
+
+.adhd2 {
+ background-color: #005A9C;
+ color: white;
+}
+
+.adhd3 {
+ color: #0B5B9D;
+}
+
+/** Report section header. */
+.section {
+ background: #92a7b2 url("images/header.png") repeat-x scroll left bottom;
+ padding: 0.5em;
+}
+
+/** Special rules: in section headers, reset heading styles in report sections. */
+.hd h2,
+.hd h3,
+.hd h4,
+.hd .h2,
+.hd .h3,
+.hd .h4 {
+ color: inherit;
+ background-color: inherit;
+ font-family: inherit;
+ font-size: inherit;
+ margin: inherit;
+ font-style: inherit;
+ font-weight: inherit;
+ border: none;
+}
+
+.section span {
+ display: inline;
+}
+
+.section strong {
+ float: none;
+}
+
+/** Warning section header. Background shows as orange. */
+.warningSection {
+ background: #ee8406 url("images/header-warning.png") repeat-x scroll left bottom;
+}
+
+/** Implicit section header. Not displayed. */
+.implicit {
+ display: none;
+}
+
+/** Failure/Warning message section header. */
+.msg {
+ background: #e1e1e1 url("images/header-msg-odd.png") repeat-x scroll left top;
+ padding: 0.5em 0 0.5em;
+ font-weight: bold;
+}
+
+.even .msg {
+ background: #ededed url("images/header-msg-even.png") repeat-x scroll left top;
+}
+
+
+/** Explanation sections (why? where? how?) */
+.explain {
+ background: #e2edfe url("images/header-sub.png") repeat-x scroll left top;
+ padding-left: 0;
+}
+
+
+
+/************************************************************
+Module bodies
+************************************************************/
+/** Regular text section. */
+.text {
+ margin: 0.5em;
+}
+
+.keypadbd {
+ background: #0B5B9D url("images/color_keys.png") no-repeat 99% 50%;
+ color: white;
+ font-size: 1.1em;
+ padding: 0.3em;
+ margin: 0;
+}
+
+.keypadbd :link,
+.keypadbd :visited {
+ color: #fff;
+}
+
+.explanation {
+ padding-left: 0;
+ padding-bottom: 0.5em;
+ font-size: 80%;
+}
+
+.explanation li {
+	margin-left: 2em;
+	}
+	
+.resultScore {
+ background: white url("images/score-bg.png") repeat-x left top;
+ padding: 0.5em;
+}
+
+.ve {
+ font-size: smaller;
+ text-align: justify;
+}
+
+.ve p {
+ line-height: 110%;
+}
+
+
+/************************************************************
+Message severity images
+************************************************************/
+.severity {
+ font-size: 0.8em;
+ text-transform: uppercase;
+}
+
+
+/************************************************************
+Header for the list of failure/warning messages
+************************************************************/
+.msgHeader {
+ background: #e1e1e1 url("images/header-msg-odd.png") repeat-x scroll left top;
+ padding: 0.5em 0;
+ font-weight: bold;
+ font-size: 0.8em;
+ list-style-type: none;
+}
+
+.msgHeader .sortKey {
+ margin: 0;
+}
+
+.sortKey a {
+ color: inherit;
+ text-decoration: none;
+}
+
+
+/************************************************************
+Specific styles for failure/warning messages
+************************************************************/
+.hd a:link,
+.hd a:visited {
+ text-decoration: none;
+ color: inherit;
+}
+
+.bp {
+ display: none;
+}
+
+.bp a:link,
+.bp a:visited {
+ color: #365D95;
+}
+
+.bp a:hover,
+.bp a:active {
+ color: #1f2126;
+}
+
+
+/************************************************************
+Ad-specific styles on index page
+************************************************************/
+.adtitle {
+ font-size: 1.1em;
+ font-weight: bold;
+}
+
+
+/************************************************************
+Documentation pages
+************************************************************/
+.compact {
+ margin-left: 0.5em;
+ margin-right: 0.5em;
+}
+
+.toc {
+ font-size: .85em;
+ font-weight: bold;
+ margin-bottom: 2em;
+ margin-left: 0.5em;
+}
+
+/* The following styles trigger the "bold" effect on the marker */
+.toc li {
+ font-weight: bold;
+}
+
+.toc li span {
+ font-weight: normal;
+}
+
+
+/************************************************************
+Intro text on home page and documentation pages
+************************************************************/
+div.intro {
+ margin: 0em 2em;
+ padding: 0.5em 0 0.3em;	
+}
+
+div.intro p {
+ margin-bottom: .5em;
+}
+
+div.intro ul li {
+ list-style-type: square;
+ margin-left:2em;
+}
+
+
+/************************************************************
+Warning on the home page for alpha/beta/test versions
+************************************************************/
+.alpha {
+ text-align: left;
+ margin: 0 3em 1em 3em;
+ padding: 1em;
+ background-color: #FFFF99;
+ border: 1px solid red;
+}
+
+.alpha div,
+.alpha a,
+.alpha strong,
+.alpha p { 
+ background-color: inherit;
+}
+
+
+/************************************************************
+Global classes (mostly used on results page)
+************************************************************/
+.notabene {
+ margin-top: 1em;
+ margin-bottom: 1em;
+}
+
+.moreinfo {
+}
+
+.moreinfo dt {
+ margin: 0;
+ font-weight: normal;
+}
+
+
+
+.backtop {
+ color: #bbc;
+ font-size: x-small;
+ text-transform: uppercase;
+ font-weight: bold;
+ text-align: right;
+ clear: both;
+}
+
+.backtop:before {
+ content: "↑ ";
+}
+
+.backtop a:link,
+.backtop a:hover,
+.backtop a:visited {
+ color: #bbc;
+ text-decoration: none;
+}
+
+.err_pos {
+ font-size: smaller;
+ padding: 0;
+ margin-bottom: 0.65em;
+}
+
+
+/************************************************************
+Please wait page: please wait message
+************************************************************/
+p#pendingmsg {
+ padding: 2em;
+ padding-bottom: 0;
+ text-align: center;
+}
+
+p#pendingmsg span {
+ font-weight: bold;
+}
+
+p#pendingmsg img {
+ margin: 1em 0;
+}
+
+
+/************************************************************
+Results page: score section
+************************************************************/
+.mobileSevere,
+.mobileLow,
+.mobileOK {
+ display: none;
+}
+
+.scorebg {
+ margin: 0;
+}
+
+.scorefg {
+ position: relative;
+ top: inherit;
+ margin-right: 0;
+}
+
+.percent0,
+.percent20,
+.percent40,
+.percent60,
+.percent80 {
+ display: none;
+}
+
+.score {
+ background: none;
+ padding-top: 0;
+ font-weight: bold;
+ font-size: 1.3em;
+ width: auto;
+ margin-bottom: 0.5em;
+ text-align: center;
+}
+
+.score span {
+ display: inline;
+}
+
+.wow {
+ font-size: 1.3em;
+ text-align: left;
+ font-weight: bold;
+}
+
+.p0,
+.p5,
+.p10,
+.p15,
+.p20,
+.p25,
+.p30,
+.p35,
+.p40,
+.p45,
+.p50,
+.p55,
+.p60,
+.p65,
+.p70,
+.p75,
+.p80,
+.p85,
+.p90,
+.p95,
+.p100 {
+ margin-left: 0;
+}
+
+
+/************************************************************
+Results page: tables
+************************************************************/
+.details {
+ width: 100%;
+ font-size: small;
+}
+
+.number {
+ text-align: right;
+}
+
+.details td,
+.details th {
+ border: 1px solid #ccc;
+ padding: .4em;
+}
+
+.details th {
+ background-color: #EAEBEE;
+}
+
+
+/************************************************************
+Results page: summary table
+************************************************************/
+.header textarea { 
+ width: 70%;
+}
+
+
+/************************************************************
+Results page: source code display
+************************************************************/
+.source ol {
+ font-family: "Bitstream Vera Sans Mono", monospace;
+ font-size: smaller;
+ padding-left: 0;
+ list-style-position: inside;
+ list-style-type: decimal;
+}
+
+.source ol li {
+ margin: .5em 1em;
+ line-height: 150%;  
+ white-space: pre-wrap;
+}
+
+.source ol li a {
+ color: inherit;
+ background-color: transparent;
+ text-decoration: none;
+}
+
+
+/************************************************************
+Javascript-enabled rules.
+(The "js" class gets added to the body element when
+Javascript is up and running)
+************************************************************/
+.js .expand_title {
+ background: transparent url("images/ico-minus.png") no-repeat left center;
+ padding-left: 1.2em;
+ cursor: pointer;
+}
+
+.expandedtitle {
+ background: transparent url("images/ico-minus.png") no-repeat left center;
+ padding-left: 1.2em;
+ cursor: pointer;
+}
+
+.closedtitle {
+ background: transparent url("images/ico-plus.png") no-repeat left center;
+ padding-left: 1.2em;
+ cursor: pointer;
+}
+
+.js .closed .expand_title {
+ background-image: url("images/ico-plus.png");
+}
+
+.js .closed .section {
+ background: #92a7b2 url("images/header-closed.png") repeat-x scroll left top;
+}
+
+.js .closed .warningSection {
+ background: #ee8406 url("images/header-warning-closed.png") repeat-x scroll left top;
+}
+
+.js .msg .expand_title {
+ background: transparent url("images/ico-minus-sub.png") no-repeat left 0.1em;
+}
+
+.js .msgHeader {
+ padding-left: 2.2em;
+}
+
+.js .sortKey:hover {
+ cursor: pointer;
+}
+
+.js .sortKey abbr {
+ border-bottom: none;
+}
+.js .sortKey abbr:hover {
+ cursor: pointer;
+}
+
+.js #details .msg .expand_title {
+ background-position: left 8px;
+}
+
+.js .closed .msg .expand_title {
+ background-image: url("images/ico-plus-sub.png");
+}
+
+.js .explain .expand_title {
+ background: transparent url("images/ico-minus-sub.png") no-repeat left center;
+}
+
+.js .closed .explain .expand_title {
+ background: transparent url("images/ico-plus-sub.png") no-repeat left center;
+}
+
+.js .closed .expand_content {
+ display: none;
+}
+
+/** Section that is not shown by default, and only appears
+    when Javascript is on. This may be useful to reduce the
+    size of some sections when Javascript is off. */
+.jsActivated {
+ display: none; 
+}
+
+
+/************************************************************
+Donation section (very specific styles that need to be kept
+as is because markup is generated by a script that is common
+amongst validators)
+************************************************************/
+#don_program {
+ border: 1px solid #55B05A;
+ line-height: 150%;
+ margin: 10px;
+ padding: 0.5em;
+ text-align: center;
+}
+
+#don_program #don_program_img {
+ display: none;
+}
+
+#don_program #don_program_text a {
+ font-weight:bold;
+}
+
+
+/* MY STUFF */
+
+.result { font-size: 140%; color:white; background-color:#F93; padding: 0 5px 0 5px; }
+.noissues { background-color: #0F0; color: white; font-size: 130%; font-weight: bold; text-align: center; padding: 5px; }
+.someissues {  text-align: center; font-size: 200%; line-height: 1em; }
+.someissues img { vertical-align: middle; }
+#summaryresults strong+img { margin-left: 2em; }
+
+
+.sectiontitle {
+	background-color: #92a7b2;
+	background-image: url('images/header.png');
+	background-repeat: repeat-x;
+	background-attachment: scroll;
+	background-position: left bottom;
+	padding: 0.5em;
+	color: inherit;
+	background-color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	margin-top: inherit;
+	margin-right: inherit;
+	margin-bottom: inherit;
+	margin-left: inherit;
+	font-style: inherit;
+	font-weight: inherit;
+	}
+.h3right {
+	float: right;
+	}
+	
+.desctitle {
+	border-bottom: 1px solid #ccc;
+	padding-top: 1em;
+	font-size: 100%;
+	font-weight: bold;
+	font-style: italic;
+	}
