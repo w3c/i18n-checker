@@ -318,7 +318,7 @@ textarea {
  border: 1px solid #bbb;
  border-top: 1px solid #777;
  border-bottom: 1px solid #ddd;
- background: #fefefe url("/images/textbg.png") no-repeat top left;
+ background: #fefefe url("../images/textbg.png") no-repeat top left;
  padding: 0.2em 0.2em;
  max-width: 1000px;
  font-variant: normal;
@@ -498,14 +498,14 @@ Index page's forms
  padding: 1em 0;
  text-align: center;
  border: 0;
- background: url("/images/button-left.png") no-repeat center left;
+ background: url("../images/button-left.png") no-repeat center left;
  text-decoration: none;
 }
 
 .submitSpan input {
  color: #365D95;
  padding: .6em 2em;
- background: url("/images/button-right.png") no-repeat center right;
+ background: url("../images/button-right.png") no-repeat center right;
 }
 
 
@@ -800,7 +800,7 @@ Module headers
 
 /** Report section header. */
 .section {
- background: #92a7b2 url("/images/header.png") repeat-x scroll left bottom;
+ background: #92a7b2 url("../images/header.png") repeat-x scroll left bottom;
  padding: 0.5em;
 }
 
@@ -831,7 +831,7 @@ Module headers
 
 /** Warning section header. Background shows as orange. */
 .warningSection {
- background: #ee8406 url("/images/header-warning.png") repeat-x scroll left bottom;
+ background: #ee8406 url("../images/header-warning.png") repeat-x scroll left bottom;
 }
 
 /** Implicit section header. Not displayed. */
@@ -841,19 +841,19 @@ Module headers
 
 /** Failure/Warning message section header. */
 .msg {
- background: #e1e1e1 url("/images/header-msg-odd.png") repeat-x scroll left top;
+ background: #e1e1e1 url("../images/header-msg-odd.png") repeat-x scroll left top;
  padding: 0.5em 0 0.5em;
  font-weight: bold;
 }
 
 .even .msg {
- background: #ededed url("/images/header-msg-even.png") repeat-x scroll left top;
+ background: #ededed url("../images/header-msg-even.png") repeat-x scroll left top;
 }
 
 
 /** Explanation sections (why? where? how?) */
 .explain {
- background: #e2edfe url("/images/header-sub.png") repeat-x scroll left top;
+ background: #e2edfe url("../images/header-sub.png") repeat-x scroll left top;
  padding-left: 0;
 }
 
@@ -868,7 +868,7 @@ Module bodies
 }
 
 .keypadbd {
- background: #0B5B9D url("/images/color_keys.png") no-repeat 99% 50%;
+ background: #0B5B9D url("../images/color_keys.png") no-repeat 99% 50%;
  color: white;
  font-size: 1.1em;
  padding: 0.3em;
@@ -891,7 +891,7 @@ Module bodies
 	}
 	
 .resultScore {
- background: white url("/images/score-bg.png") repeat-x left top;
+ background: white url("../images/score-bg.png") repeat-x left top;
  padding: 0.5em;
 }
 
@@ -918,7 +918,7 @@ Message severity images
 Header for the list of failure/warning messages
 ************************************************************/
 .msgHeader {
- background: #e1e1e1 url("/images/header-msg-odd.png") repeat-x scroll left top;
+ background: #e1e1e1 url("../images/header-msg-odd.png") repeat-x scroll left top;
  padding: 0.5em 0;
  font-weight: bold;
  font-size: 0.8em;
@@ -1226,37 +1226,37 @@ Javascript-enabled rules.
 Javascript is up and running)
 ************************************************************/
 .js .expand_title {
- background: transparent url("/images/ico-minus.png") no-repeat left center;
+ background: transparent url("../images/ico-minus.png") no-repeat left center;
  padding-left: 1.2em;
  cursor: pointer;
 }
 
 .expandedtitle {
- background: transparent url("/images/ico-minus.png") no-repeat left center;
+ background: transparent url("../images/ico-minus.png") no-repeat left center;
  padding-left: 1.2em;
  cursor: pointer;
 }
 
 .closedtitle {
- background: transparent url("/images/ico-plus.png") no-repeat left center;
+ background: transparent url("../images/ico-plus.png") no-repeat left center;
  padding-left: 1.2em;
  cursor: pointer;
 }
 
 .js .closed .expand_title {
- background-image: url("/images/ico-plus.png");
+ background-image: url("../images/ico-plus.png");
 }
 
 .js .closed .section {
- background: #92a7b2 url("/images/header-closed.png") repeat-x scroll left top;
+ background: #92a7b2 url("../images/header-closed.png") repeat-x scroll left top;
 }
 
 .js .closed .warningSection {
- background: #ee8406 url("/images/header-warning-closed.png") repeat-x scroll left top;
+ background: #ee8406 url("../images/header-warning-closed.png") repeat-x scroll left top;
 }
 
 .js .msg .expand_title {
- background: transparent url("/images/ico-minus-sub.png") no-repeat left 0.1em;
+ background: transparent url("../images/ico-minus-sub.png") no-repeat left 0.1em;
 }
 
 .js .msgHeader {
@@ -1279,15 +1279,15 @@ Javascript is up and running)
 }
 
 .js .closed .msg .expand_title {
- background-image: url("/images/ico-plus-sub.png");
+ background-image: url("../images/ico-plus-sub.png");
 }
 
 .js .explain .expand_title {
- background: transparent url("/images/ico-minus-sub.png") no-repeat left center;
+ background: transparent url("../images/ico-minus-sub.png") no-repeat left center;
 }
 
 .js .closed .explain .expand_title {
- background: transparent url("/images/ico-plus-sub.png") no-repeat left center;
+ background: transparent url("../images/ico-plus-sub.png") no-repeat left center;
 }
 
 .js .closed .expand_content {
