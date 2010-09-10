@@ -12,7 +12,7 @@ include('includes/head.html.php');
 		</ul>
 
 		<div id="fields">
-			<form action="check.php" method="get" id="validate-by-uri" class="ucn_form">
+			<form action="check" method="get" id="validate-by-uri" class="ucn_form">
 				<fieldset>
 					<legend><?php _lang('legend-by-uri') ?></legend>
 					<div class="input">
