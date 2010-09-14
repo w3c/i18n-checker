@@ -889,3 +889,13 @@ div.intro {
 div.intro p {
 	margin: 0.5em 0;
 }
+.w3cLarge {
+	background:url("../images/sitetitle.gif") no-repeat scroll left top transparent;
+	display:block;
+	float:left;
+	height:49px;
+	width:324px;
+}
+.w3cLarge span {
+	display:none;
+}
