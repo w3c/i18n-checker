@@ -70,9 +70,8 @@ include('includes/head.html.php');
 		</div>
 	</div>
 <div class="intro">
-			<p>This checker performs various tests on a Web Page to determine its level of internationalisation-friendliness.  It also summarises key internationalization information about a page, such as character encoding and language declarations, etc. Please refer to the <a href="about.html">About</a> page for more details. </p>
-			<p>If you wish to validate specific content such as <a title="W3C Markup Validation Service" href="http://validator.w3.org/">markup validation</a>,   <a title="W3C mobileOK Checker" href="http://validator.w3.org/mobile/">mobileOK</a>,  <a title="Feed validator, hosted at W3C" href="http://validator.w3.org/feed/">RSS/Atom feeds</a>,  <a title="W3C CSS Validation Service" href="http://jigsaw.w3.org/css-validator/">CSS stylesheets</a>, or to <a title="W3C Link Checker" href="http://validator.w3.org/checklink">find broken links</a>, there are <a href="http://www.w3.org/QA/Tools/">other validators and 
-				tools</a> available.</p>
+			<p><?php _lang('intro') ?></p>
+			<p><?php _lang('intro_links') ?></p>
 	</div>
 	<div id="don_program">
 		<script type="text/javascript" src="http://www.w3.org/QA/Tools/don_prog.js"></script>

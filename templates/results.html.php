@@ -10,10 +10,7 @@ include('includes/head.html.php');
  ?>
 
 <div id="summary" class="mod raw">
-	<div class="hd implicit">
-		<h2><a href="#summary"><?php _lang('report') ?></a></h2>
-		</div>
-	
+
 	<div class="bd">
 		<div id="address" class="mod square">
 			<div class="hd section">
@@ -29,16 +26,16 @@ include('includes/head.html.php');
 					</form>
 				<?php echo $failuremessage; //----------------------------------> put in message?>
 				</div>
-			</div>
 		</div>
+	</div>
 	
 	<?php if (!$fail) { ?>
 		<div id="summaryresults">
 			<div class="hd section">
 				<div>
 					<h3><a href="#summaryresults"><?php _lang('results') ?></a><span>: </span></h3>
-					</div>
 				</div>
+			</div>
 			<div class="bd text expand_content">
 				<?php 
 				if (count($errors)+count($warnings)+count($comments) == 0) { 
@@ -53,223 +50,218 @@ include('includes/head.html.php');
 					}
 				?>
 				</div>
-			</div>
+		</div>
 			
 		<div class="line">
-<div id="pagesize" class="mod square">
-					<div class="hd section">
-						<div>
-							<h3><a href="#pagesize"><?php _lang('information') ?></a><span>: </span><strong><?php echo $doctypename;?> :: <?php echo $mimetypename;?></strong></h3>
-							</div>
-						</div>
-					<div class="bd expand_content">
-						<!--div class="text">Doctype of the page: <strong><?php echo $doctypename;?></strong><br />Served as: <strong>HTML</strong></div-->
-						<div>
-								<table class="details">
-									<tr>
-										<th style="width: 25%;"><?php _lang('character_encoding') ?></th>
-										<th style="min-width:15%;">&nbsp;</th>
-										<th><?php _lang('code') ?></th>
-									</tr>
-									<tr>
-										<td class="number"><?php _lang('content_type') ?></td>
-										<td><?php
-										if (! isset($result['headers']['Content-Type'])) { _lang('none_found'); }
-										else if ($char_encoding['http']['value'] != '') { print "<span class='result'>".$char_encoding['http']['value']."</span>"; }
-										else { _lang('no_charset_found'); } 
-										//if ($httpcharsetValue=='nocharset') { print "No charset found."; }
-										//else if ($httpcharsetValue=='') { print "None found."; }
-										//else { print "<span class='result'>".$httpcharsetValue."</span>"; } ?>
-										</td>
-										<td><?php
-										if (! isset($result['headers']['Content-Type'])) { print "&nbsp;"; }
-										else { print '<code>'.$char_encoding['http']['code'].'</code>'; } 
-										//if ($httpcontenttypeHeader=='') { print "&nbsp;"; }
-										//else { print '<code>'.$httpcontenttypeHeader.'</code>'; } ?>
-										</td>
-									</tr>
-									<tr>
-										<td class="number"><?php _lang('bom') ?></td>
-										<td><?php
-											if ($char_encoding['bom']['value'] != '') { print "<span class='result'>{$char_encoding['bom']['value']}</span>"; }
-											else { _lang('no'); } ?>
-										</td>
-										<td>&nbsp;
-										</td>
-								</tr>
-									<tr>
-										<td class="number"><?php _lang('xml_declaration') ?></td>
-										<td><?php
-										if ($xmldeclTag == '') { _lang('none_found'); }
-										else if ($char_encoding['xmldecl']['value'] != '') { print "<span class='result'>".$char_encoding['xmldecl']['value']."</span>"; }
-										else { _lang('no_encoding_found'); } 
-										//if ($char_encoding['xmldecl']['value']=='noinfo') { print "No encoding information found."; }
-										//else if ($xmlcharsetValue=='') { print "None found."; }
-										//else { print "<span class='result'>".$xmlcharsetValue."</span>"; } ?>
-										</td>
-										<td><?php
-										if ($xmldeclTag=='') { print "&nbsp;"; }
-										else { print '<code>'.$xmldeclTag.'</code>'; } ?>
-										</td>
-									</tr>
-									<tr>
-									<td class="number"><?php _lang('content_type_meta') ?></td>
-									<td><?php
-										if ($char_encoding['httpequiv']['value']=='') { _lang('none_found'); }
-										else { print "<span class='result'>".$char_encoding['httpequiv']['value']."</span>"; } ?>
-									</td>
-									<td><?php
-										if ($char_encoding['httpequiv']['code']=='') { print "&nbsp;"; }
-										else { print '<code>'.$char_encoding['httpequiv']['code'].'</code>'; } ?>
-									</td>
-									</tr>
-									<tr>
-										<td class="number"><?php _lang('html5_meta_charset') ?></td>
-										<td><?php
-											if ($char_encoding['html5']['value']=='') { _lang('none_found'); }
-											else { print "<span class='result'>".$char_encoding['html5']['value']."</span>"; } ?>
-										</td>
-										<td><?php
-											if ($char_encoding['html5']['code']=='') { print "&nbsp;"; }
-											else { print '<code>'.$char_encoding['html5']['code'].'</code>'; } ?>
-										</td>
-									</tr>
-								</table>
-								<table class="details">
-									<tr>
-										<th style="width: 25%;"><?php _lang('language') ?></th>
-										<th style="min-width: 15%;">&nbsp;</th>
-										<th><?php _lang('code') ?></th>
-										</tr>
-									<tr>
-										<td class="number">&lt;html lang=</td>
-										<td><?php
-										if ($htmltag=='') { _lang('no_html_tag_found'); }
-										else if ($htmllangValue=='') { _lang('none'); }
-										else { print "<span class='result'>".$htmllangValue."</span>"; } ?>
-										</td>
-										<td><?php
-										if ($htmltag=='') { print "&nbsp;"; }
-										else { print '<code>'.$htmltag.'</code>'; } ?>
-										</td>
-										</tr>
-									<tr>
-										<td class="number">&lt;html xml:lang=</td>
-										<td><?php
-										if ($htmltag=='') { _lang('no_html_tag_found'); }
-										else if ($htmlxmllangValue=='') { _lang('none'); }
-										else { print "<span class='result'>".$htmlxmllangValue."</span>"; } ?>
-										</td>
-										<td><?php
-										if ($htmltag=='') { print "&nbsp;"; }
-										else { print '<code>'.$htmltag.'</code>'; } ?>
-										</td>
-										</tr>
-									<tr>
-										<td class="number"><?php _lang('http_content_language') ?></td>
-										<td><?php
-										if ($httpcontentlangHeader=='') { _lang('none_found'); }
-										else if ($httpcontentlangValue=='') { _lang('none'); }
-										else { print "<span class='result'>".$httpcontentlangValue."</span>"; } ?>
-										</td>
-										<td><?php
-										if ($httpcontentlangHeader=='') { print "&nbsp;"; }
-										else { print '<code>'.$httpcontentlangHeader.'</code>'; } ?>
-										</td>
-									</tr>
-									<tr>
-										<td class="number"><?php _lang('meta_content_language') ?></td>
-										<td><?php
-										if ($metacontentlangTag=='') { _lang('none_found'); }
-										else if ($metacontentlangValue=='') { _lang('none'); }
-										else { print "<span class='result'>".$metacontentlangValue."</span>"; } ?>
-										</td>
-										<td><?php
-										if ($metacontentlangTag=='') { print "&nbsp;"; }
-										else { print '<code>'.$metacontentlangTag.'</code>'; } ?>
-										</td>
-									</tr>
-									<tr>
-										<td class="number"><?php _lang('detected_language') ?></td>
-										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-										</tr>
-							</table>
-								<table class="details">
-									<tr>
-										<th style="width: 25%;"><?php _lang('text_direction') ?></th>
-										<th style="min-width: 15%;">&nbsp;</th>
-										<th><?php _lang('code') ?></th>
-										</tr>
-									<tr>
-										<td class="number"><?php _lang('default_direction') ?></td>
-										<td><?php
-										if ($htmltag=='') { _lang('none'); }
-										else if ($htmldirValue=='') { _lang('ltr_default'); }
-										else { print "<span class='result'>".$htmldirValue."</span>"; } ?>
-										</td>
-										<td><?php
-										if ($htmltag=='') { print "&nbsp;"; }
-										else { print '<code>'.$htmltag.'</code>'; } ?>
-										</td>
-										</tr>
-							</table>
-							<table class="details">
-									<tr>
-										<th style="width: 25%;"><?php _lang('class_and_id') ?></th>
-										<th style="min-width: 15%;">&nbsp;</th>
-										<th><?php _lang('code') ?></th>
-								</tr>
-									<tr>
-										<td class="number"><?php _lang('class_and_id_non_ascii') ?></td>
-										<td><?php
-										if ($nonasciinamectr==0) { _lang('none'); }
-										else { print "<span class='result'>".$nonasciinamectr."</span>"; } ?>
-										</td>
-										<td><?php
-										if ($nonasciinamectr==0) { print "&nbsp;"; }
-										else { print "<p><button id='classdisplaybuttonChart' onclick='document.getElementById(\"nonasciiclassoridChart\").style.display = \"block\"; this.style.display = \"none\"; return false;'>Show list</button></p><ol id='nonasciiclassoridChart' style='display:none;' class='detail'>".$nonasciinames."</ol>"; } ?>
-										</td>
-										
-								</tr>
-									<tr>
-										<td class="number"><?php _lang('class_and_id_non_nfc') ?></td>
-										<td><?php
-										if ($nonnfcnamectr==0) { _lang('none'); }
-										else { print "<span class='result'>".$nonnfcnamectr."</span>"; } ?>
-										</td>
-										<td><?php
-										if ($nonnfcnamectr==0) { print "&nbsp;"; }
-										else { print "<p><button id='nfcdisplaybuttonChart' onclick='document.getElementById(\"nonnfcclassoridChart\").style.display = \"block\"; this.style.display = \"none\"; return false;'>Show list</button></p><ol id='nonnfcclassoridChart' style='display:none;' class='detail'>".$nonnfcnames."</ol>"; } ?>
-										</td>
-									</tr>
-							</table>
-								<table class="details">
-									<tr>
-										<th style="width: 25%;"><?php _lang('request_headers') ?></th>
-										<th>&nbsp;</th>
-										</tr>
-									<tr>
-										<td class="number"><?php _lang('accept_Language') ?></td>
-										<?php 
-						if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) { echo "<td class='resultdiv'><span class='result'>".$_SERVER['HTTP_ACCEPT_LANGUAGE'].'</span></td>'; }
-							else { ?> <td> <?php _lang('none_found'); ?> </td><?php }?>
-										</tr>
-									<tr>
-										<td class="number"><?php _lang('accept_charset') ?></td>
-										<?php if (isset($_SERVER['HTTP_ACCEPT_CHARSET'])) { echo "<td class='resultdiv'><span class='result'>".$_SERVER['HTTP_ACCEPT_CHARSET'].'</span></td>'; }
-							else { echo "<td>"; _lang('none_found'); echo "</td>"; }
-							?>
-										</tr>
-							</table>
-						</div>
-							<p class="backtop"><a href="#banner"><?php _lang('top') ?></a></p>
+			<div id="pagesize" class="mod square">
+				<div class="hd section">
+					<div>
+						<h3><a href="#pagesize"><?php _lang('information') ?></a><span>: </span><strong><?php echo $doctypename;?> :: <?php echo $mimetypename;?></strong></h3>
 					</div>
 				</div>
+				<div class="bd expand_content">
+					<!--div class="text">Doctype of the page: <strong><?php echo $doctypename;?></strong><br />Served as: <strong>HTML</strong></div-->
+					<div>
+						<table class="details">
+							<tr>
+								<th style="width: 25%;"><?php _lang('character_encoding') ?></th>
+								<th style="min-width:15%;">&nbsp;</th>
+								<th><?php _lang('code') ?></th>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('content_type') ?></td>
+								<td><?php
+								if (! isset($result['headers']['Content-Type'])) { _lang('none_found'); }
+								else if ($char_encoding['http']['value'] != '') { print "<span class='result'>".$char_encoding['http']['value']."</span>"; }
+								else { _lang('no_charset_found'); } 
+								//if ($httpcharsetValue=='nocharset') { print "No charset found."; }
+								//else if ($httpcharsetValue=='') { print "None found."; }
+								//else { print "<span class='result'>".$httpcharsetValue."</span>"; } ?>
+								</td>
+								<td><?php
+								if (! isset($result['headers']['Content-Type'])) { print "&nbsp;"; }
+								else { print '<code>'.$char_encoding['http']['code'].'</code>'; } 
+								//if ($httpcontenttypeHeader=='') { print "&nbsp;"; }
+								//else { print '<code>'.$httpcontenttypeHeader.'</code>'; } ?>
+								</td>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('bom') ?></td>
+								<td><?php
+									if ($char_encoding['bom']['value'] != '') { print "<span class='result'>{$char_encoding['bom']['value']}</span>"; }
+									else { _lang('token_no'); } ?>
+								</td>
+								<td>&nbsp;
+								</td>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('xml_declaration') ?></td>
+								<td><?php
+								if ($xmldeclTag == '') { _lang('none_found'); }
+								else if ($char_encoding['xmldecl']['value'] != '') { print "<span class='result'>".$char_encoding['xmldecl']['value']."</span>"; }
+								else { _lang('no_encoding_found'); } 
+								//if ($char_encoding['xmldecl']['value']=='noinfo') { print "No encoding information found."; }
+								//else if ($xmlcharsetValue=='') { print "None found."; }
+								//else { print "<span class='result'>".$xmlcharsetValue."</span>"; } ?>
+								</td>
+								<td><?php
+								if ($xmldeclTag=='') { print "&nbsp;"; }
+								else { print '<code>'.$xmldeclTag.'</code>'; } ?>
+								</td>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('content_type_meta') ?></td>
+								<td><?php
+									if ($char_encoding['httpequiv']['value']=='') { _lang('none_found'); }
+									else { print "<span class='result'>".$char_encoding['httpequiv']['value']."</span>"; } ?>
+								</td>
+								<td><?php
+									if ($char_encoding['httpequiv']['code']=='') { print "&nbsp;"; }
+									else { print '<code>'.$char_encoding['httpequiv']['code'].'</code>'; } ?>
+								</td>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('html5_meta_charset') ?></td>
+								<td><?php
+									if ($char_encoding['html5']['value']=='') { _lang('none_found'); }
+									else { print "<span class='result'>".$char_encoding['html5']['value']."</span>"; } ?>
+								</td>
+								<td><?php
+									if ($char_encoding['html5']['code']=='') { print "&nbsp;"; }
+									else { print '<code>'.$char_encoding['html5']['code'].'</code>'; } ?>
+								</td>
+							</tr>
+						</table>
+						<table class="details">
+							<tr>
+								<th style="width: 25%;"><?php _lang('language') ?></th>
+								<th style="min-width: 15%;">&nbsp;</th>
+								<th><?php _lang('code') ?></th>
+							</tr>
+							<tr>
+								<td class="number">&lt;html lang=</td>
+								<td><?php
+								if ($htmltag=='') { _lang('no_html_tag_found'); }
+								else if ($htmllangValue=='') { _lang('token_none'); }
+								else { print "<span class='result'>".$htmllangValue."</span>"; } ?>
+								</td>
+								<td><?php
+								if ($htmltag=='') { print "&nbsp;"; }
+								else { print '<code>'.$htmltag.'</code>'; } ?>
+								</td>
+							</tr>
+							<tr>
+								<td class="number">&lt;html xml:lang=</td>
+								<td><?php
+								if ($htmltag=='') { _lang('no_html_tag_found'); }
+								else if ($htmlxmllangValue=='') { _lang('token_none'); }
+								else { print "<span class='result'>".$htmlxmllangValue."</span>"; } ?>
+								</td>
+								<td><?php
+								if ($htmltag=='') { print "&nbsp;"; }
+								else { print '<code>'.$htmltag.'</code>'; } ?>
+								</td>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('http_content_language') ?></td>
+								<td><?php
+								if ($httpcontentlangHeader=='') { _lang('none_found'); }
+								else if ($httpcontentlangValue=='') { _lang('token_none'); }
+								else { print "<span class='result'>".$httpcontentlangValue."</span>"; } ?>
+								</td>
+								<td><?php
+								if ($httpcontentlangHeader=='') { print "&nbsp;"; }
+								else { print '<code>'.$httpcontentlangHeader.'</code>'; } ?>
+								</td>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('meta_content_language') ?></td>
+								<td><?php
+								if ($metacontentlangTag=='') { _lang('none_found'); }
+								else if ($metacontentlangValue=='') { _lang('token_none'); }
+								else { print "<span class='result'>".$metacontentlangValue."</span>"; } ?>
+								</td>
+								<td><?php
+								if ($metacontentlangTag=='') { print "&nbsp;"; }
+								else { print '<code>'.$metacontentlangTag.'</code>'; } ?>
+								</td>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('detected_language') ?></td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+						</table>
+						<table class="details">
+							<tr>
+								<th style="width: 25%;"><?php _lang('text_direction') ?></th>
+								<th style="min-width: 15%;">&nbsp;</th>
+								<th><?php _lang('code') ?></th>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('default_direction') ?></td>
+								<td><?php
+								if ($htmltag=='') { _lang('token_none'); }
+								else if ($htmldirValue=='') { _lang('ltr_default'); }
+								else { print "<span class='result'>".$htmldirValue."</span>"; } ?>
+								</td>
+								<td><?php
+								if ($htmltag=='') { print "&nbsp;"; }
+								else { print '<code>'.$htmltag.'</code>'; } ?>
+								</td>
+							</tr>
+						</table>
+						<table class="details">
+							<tr>
+								<th style="width: 25%;"><?php _lang('class_and_id') ?></th>
+								<th style="min-width: 15%;">&nbsp;</th>
+								<th><?php _lang('code') ?></th>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('class_and_id_non_ascii') ?></td>
+								<td><?php
+								if ($nonasciinamectr==0) { _lang('token_none'); }
+								else { print "<span class='result'>".$nonasciinamectr."</span>"; } ?>
+								</td>
+								<td><?php
+								if ($nonasciinamectr==0) { print "&nbsp;"; }
+								else { print "<p><button id='classdisplaybuttonChart' onclick='document.getElementById(\"nonasciiclassoridChart\").style.display = \"block\"; this.style.display = \"none\"; return false;'>Show list</button></p><ol id='nonasciiclassoridChart' style='display:none;' class='detail'>".$nonasciinames."</ol>"; } ?>
+								</td>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('class_and_id_non_nfc') ?></td>
+								<td><?php
+								if ($nonnfcnamectr==0) { _lang('token_none'); }
+								else { print "<span class='result'>".$nonnfcnamectr."</span>"; } ?>
+								</td>
+								<td><?php
+								if ($nonnfcnamectr==0) { print "&nbsp;"; }
+								else { print "<p><button id='nfcdisplaybuttonChart' onclick='document.getElementById(\"nonnfcclassoridChart\").style.display = \"block\"; this.style.display = \"none\"; return false;'>Show list</button></p><ol id='nonnfcclassoridChart' style='display:none;' class='detail'>".$nonnfcnames."</ol>"; } ?>
+								</td>
+							</tr>
+						</table>
+						<table class="details">
+							<tr>
+								<th style="width: 25%;"><?php _lang('request_headers') ?></th>
+								<th>&nbsp;</th>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('accept_Language') ?></td>
+								<?php if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) { echo "<td class='resultdiv'><span class='result'>".$_SERVER['HTTP_ACCEPT_LANGUAGE'].'</span></td>'; }
+								else { ?> <td> <?php _lang('none_found'); ?> </td><?php }?>
+							</tr>
+							<tr>
+								<td class="number"><?php _lang('accept_charset') ?></td>
+								<?php if (isset($_SERVER['HTTP_ACCEPT_CHARSET'])) { echo "<td class='resultdiv'><span class='result'>".$_SERVER['HTTP_ACCEPT_CHARSET'].'</span></td>'; }
+								else { echo "<td>"; _lang('none_found'); echo "</td>"; } ?>
+							</tr>
+						</table>
+					</div>
+					<p class="backtop"><a href="#banner"><?php _lang('top') ?></a></p>
+				</div>
+			</div>
 	</div>
-		</div>
-
-
+</div>
 
 	<?php // only show this section if there are issues to report
 	if (count($errors)+count($warnings)+count($comments) > 0) { 
