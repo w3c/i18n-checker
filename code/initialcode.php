@@ -92,13 +92,13 @@ while ($status != 'ok' and $counter++<10) { // check a maximum of 10 times for r
 		$url = $headers['Location'];
 		$status = 'redirected'; 
 		
-		print "<p class='redirect'>Redirected to ".$headers['Location']."</p>";
+		//print "<p class='redirect'>Redirected to ".$headers['Location']."</p>";
 		}
 	else { #print "<h1>Not redirected.</h1>"; 
 		$status = 'ok'; 
 		}
 	}
-    if($options['return_info']) return array('headers' => $headers, 'body' => $body, 'info' => $info);
+    if($options['return_info']) return array('headers' => $headers, 'body' => $body, 'info' => $info, 'url' => $url);
     return $body;
 	
 }
