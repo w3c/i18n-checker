@@ -87,6 +87,53 @@ else { print $char_encoding['html5']['value']; }
 ?></description>
 </message>
 
+<message type="info" group="language">
+<?php if ($htmltag!='') { ?>
+	<context><?php print $htmltag; ?></context>
+<?php } ?>
+	<title>&lt;html lang=</title>
+	<description><?php
+if ($htmltag=='') { _lang('no_html_tag_found'); }
+else if ($htmllangValue=='') { _lang('token_none'); }
+else { print $htmllangValue; } ?></description>
+</message>
 
+<message type="info" group="language">
+<?php if ($htmltag!='') { ?>
+	<context><?php print $htmltag; ?></context>
+<?php } ?>
+	<title>&lt;html xml:lang=</title>
+	<description><?php
+if ($htmltag=='') { _lang('no_html_tag_found'); }
+else if ($htmlxmllangValue=='') { _lang('token_none'); }
+else { print $htmlxmllangValue; } ?></description>
+</message>
+
+<message type="info" group="language">
+<?php if ($httpcontentlangHeader!='') { ?>
+	<context><?php print $httpcontentlangHeader; ?></context>
+<?php } ?>
+	<title><?php _lang('http_content_language') ?></title>
+	<description><?php
+if ($httpcontentlangHeader=='') { _lang('none_found'); }
+else if ($httpcontentlangValue=='') { _lang('token_none'); }
+else { print $httpcontentlangValue; } ?></description>
+</message>
+
+<message type="info" group="language">
+<?php if ($metacontentlangTag!='') { ?>
+	<context><?php print $metacontentlangTag; ?></context>
+<?php } ?>
+	<title><?php _lang('meta_content_language') ?></title>
+	<description><?php
+if ($metacontentlangTag=='') { _lang('none_found'); }
+else if ($metacontentlangValue=='') { _lang('token_none'); }
+else { print $metacontentlangValue; } ?></description>
+</message>
+
+<message type="info" group="language">
+	<title><?php _lang('detected_language') ?></title>
+	<description></description>
+</message>
 
 </observationresponse>
