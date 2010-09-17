@@ -37,8 +37,8 @@ $s_explanation
 $s_whattodo
 <p>Add information to indicate the character encoding of the page.</p>
 $s_furtherreading
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gscharset'>Character encodings explained</a><br />
-<a target='ref' href='/International/techniques/authoring-html#indoc'>Declaring the character encoding in an X/HTML document</a>
+<a href='http://www.w3.org/International/techniques/authoring-html#gscharset'>Character encodings explained</a><br />
+<a href='/International/techniques/authoring-html#indoc'>Declaring the character encoding in an X/HTML document</a>
 eot;
 
 		
@@ -54,9 +54,9 @@ $nonUTF8
 $s_whattodo
 <p>Save your content as UTF-8, and change the encoding declarations.</p>
 $s_furtherreading
-<p><a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gscharset'>Character encodings explained</a><br />
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#choosing'>Choosing a character encoding</a><br />
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#changing'>Changing the encoding of a document</a></p>
+<p><a href='http://www.w3.org/International/techniques/authoring-html#gscharset'>Character encodings explained</a><br />
+<a href='http://www.w3.org/International/techniques/authoring-html#choosing'>Choosing a character encoding</a><br />
+<a href='http://www.w3.org/International/techniques/authoring-html#changing'>Changing the encoding of a document</a></p>
 eot;
 
 		
@@ -72,9 +72,9 @@ $encodingslist
 $s_whattodo
 <p>Change the character encoding declarations so that they match.  Ensure that your document is actually saved in the encoding you choose.</p>
 $s_furtherreading
-<p><a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gscharset'>Character encodings explained</a><br />
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#choosing'>Choosing a character encoding</a><br />
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#changing'>Changing the encoding of a document</a></p>
+<p><a href='http://www.w3.org/International/techniques/authoring-html#gscharset'>Character encodings explained</a><br />
+<a href='http://www.w3.org/International/techniques/authoring-html#choosing'>Choosing a character encoding</a><br />
+<a href='http://www.w3.org/International/techniques/authoring-html#changing'>Changing the encoding of a document</a></p>
 eot;
 $http_conflict_msg = <<<eot
 <p>Note, in particular, that the character encoding is declared in the HTTP header is <code>{$char_encoding['http']['value']}</code>.  This declaration will override all others.  To find out how to change the HTTP header declaration, see XXX.</p>
@@ -92,8 +92,8 @@ $s_whattodo
 <p>Edit the markup to remove all but one meta element.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gscharset'>Character encodings explained</a><br />
-<a target='ref' href='/International/techniques/authoring-html#indoc'>Declaring the character encoding in an X/HTML document</a>
+<a href='http://www.w3.org/International/techniques/authoring-html#gscharset'>Character encodings explained</a><br />
+<a href='/International/techniques/authoring-html#indoc'>Declaring the character encoding in an X/HTML document</a>
 </p>
 eot;
 
@@ -106,7 +106,7 @@ $s_whattodo
 <p>Using an editor or an appropriate tool, remove the byte order mark from the beginning of the file. This can often be achieved by saving the document with the appropriate settings in the editor. On the other hand, some editors (such as Notepad on Windows) do not give you a choice, and always add the byte order mark. In this case you may need to use a different editor.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='/International/techniques/authoring-html#bomhandling'>Handling the byte-order mark</a><br />
+<a href='/International/techniques/authoring-html#bomhandling'>Handling the byte-order mark</a><br />
 </p>
 eot;
 
@@ -120,7 +120,7 @@ $s_whattodo
 <p>Using an editor or an appropriate tool, remove the byte order mark from the beginning of the file or chunk of content where it appears. This can often be achieved by saving the content with appropriate settings in the editor. On the other hand, some editors (such as Notepad on Windows) do not give you a choice, and always add the byte order mark. In this case you may need to use a different editor.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='/International/techniques/authoring-html#bomhandling'>Handling the byte-order mark</a><br />
+<a href='/International/techniques/authoring-html#bomhandling'>Handling the byte-order mark</a><br />
 </p>
 eot;
 
@@ -134,8 +134,8 @@ $s_whattodo
 <p>Add information to indicate the character encoding of the page inside the page itself.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gscharset'>Character encodings explained</a><br />
-<a target='ref' href='/International/techniques/authoring-html#indoc'>Declaring the character encoding in an X/HTML document</a>
+<a href='http://www.w3.org/International/techniques/authoring-html#gscharset'>Character encodings explained</a><br />
+<a href='/International/techniques/authoring-html#indoc'>Declaring the character encoding in an X/HTML document</a>
 </p>
 eot;
 
@@ -169,9 +169,9 @@ eot;
 $html_no_lang_msg05 = <<<eot
 $s_furtherreading
 <p>
-<a target='ref' href='/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
-<a target='ref' href='/International/techniques/authoring-html#textprocessing'>Using attributes to declare language</a><br />
-<a target='ref' href='/International/techniques/authoring-html#langvalues'>Choosing language values</a>
+<a href='/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
+<a href='/International/techniques/authoring-html#textprocessing'>Using attributes to declare language</a><br />
+<a href='/International/techniques/authoring-html#langvalues'>Choosing language values</a>
 </p>
 eot;
 
@@ -185,8 +185,8 @@ $s_whattodo
 <p>Change one of the values by editing the markup.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
-<a target='ref' href='/International/techniques/authoring-html#textprocessing'>Using attributes to declare language</a><br />
+<a href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
+<a href='/International/techniques/authoring-html#textprocessing'>Using attributes to declare language</a><br />
 </p>
 eot;
 
@@ -202,8 +202,8 @@ $s_whattodo
 <p>Remove the xml:lang attributes from the markup, replacing them, where appropriate, with lang attributes.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#langvalues'>Choosing language values</a></p>
+<a href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
+<a href='http://www.w3.org/International/techniques/authoring-html#langvalues'>Choosing language values</a></p>
 eot;
 
 // A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
@@ -216,8 +216,8 @@ $s_whattodo
 <p>Change one of the values by editing the markup.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#langvalues'>Choosing language values</a></p>
+<a href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
+<a href='http://www.w3.org/International/techniques/authoring-html#langvalues'>Choosing language values</a></p>
 eot;
 
 // A language attribute value was incorrectly formed.
@@ -230,8 +230,8 @@ $s_whattodo
 <p>Change the attribute values to conform to BCP47 syntax rules.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#langvalues'>Choosing language values</a></p>
+<a href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
+<a href='http://www.w3.org/International/techniques/authoring-html#langvalues'>Choosing language values</a></p>
 eot;
 
 
@@ -247,8 +247,8 @@ $s_whattodo
 <p>Add an xml:lang attribute to each of the above tags, with the same value as the lang attribute.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
-<a target='ref' href='/International/techniques/authoring-html#textprocessing'>Using attributes to declare language</a>
+<a href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
+<a href='/International/techniques/authoring-html#textprocessing'>Using attributes to declare language</a>
 </p>
 eot;
 
@@ -264,8 +264,8 @@ $s_whattodo
 <p>Add a lang attribute to each of the above tags, with the same value as the xml:lang attribute.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
-<a target='ref' href='/International/techniques/authoring-html#textprocessing'>Using attributes to declare language</a>
+<a href='http://www.w3.org/International/techniques/authoring-html#gslang'>Language declarations explained</a><br />
+<a href='/International/techniques/authoring-html#textprocessing'>Using attributes to declare language</a>
 </p>
 eot;
 
@@ -291,10 +291,10 @@ $s_whattodo
 <p>Correct the attribute values.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='/International/techniques/authoring-html#gsdirection'>Markup for text direction explained</a><br />
-<a target='ref' href='/International/techniques/authoring-html#using'>Setting up a right-to-left page</a><br />
-<a target='ref' href='/International/techniques/authoring-html#blocks'>Changing the direction of a block element</a><br />
-<a target='ref' href='/International/techniques/authoring-html#inline'>Mixing text direction inline</a>
+<a href='/International/techniques/authoring-html#gsdirection'>Markup for text direction explained</a><br />
+<a href='/International/techniques/authoring-html#using'>Setting up a right-to-left page</a><br />
+<a href='/International/techniques/authoring-html#blocks'>Changing the direction of a block element</a><br />
+<a href='/International/techniques/authoring-html#inline'>Mixing text direction inline</a>
 </p>
 eot;
 
@@ -314,7 +314,7 @@ $s_whattodo
 <p>It is recommended to save all content as Unicode Normalization Form C (NFC).</p>
 $s_furtherreading
 <p>
-<a target='ref' href='/International/tutorials/tutorial-char-enc/temp#n11n'>Unicode normalization forms</a>
+<a href='/International/tutorials/tutorial-char-enc/temp#n11n'>Unicode normalization forms</a>
 </p>
 eot;
 
@@ -330,7 +330,7 @@ $s_whattodo
 <p>You should not use &lt;b> tags if there is a more descriptive and relevant tag available. If you do use them, it is usually better to add class attributes that describe the intended meaning of the markup, so that you can distinguish one use from another.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='http://www.w3.org/International/questions/qa-b-and-i-tags.en.php'>Using &lt;b> and &lt;i> tags</a>
+<a href='http://www.w3.org/International/questions/qa-b-and-i-tags.en.php'>Using &lt;b> and &lt;i> tags</a>
 </p>
 eot;
 
@@ -346,7 +346,7 @@ $s_whattodo
 <p>You should not use &lt;i> tags if there is a more descriptive and relevant tag available. If you do use them, it is usually better to add class attributes that describe the intended meaning of the markup, so that you can distinguish one use from another.</p>
 $s_furtherreading
 <p>
-<a target='ref' href='http://www.w3.org/International/questions/qa-b-and-i-tags.en.php'>Using &lt;b> and &lt;i> tags</a>
+<a href='http://www.w3.org/International/questions/qa-b-and-i-tags.en.php'>Using &lt;b> and &lt;i> tags</a>
 </p>
 eot;
 
