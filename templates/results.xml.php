@@ -32,7 +32,7 @@ echo $xml;
 	<title><?php _lang('detailed_report') ?></title>
 </group>
 
-<message type="info" groupe="encoding">
+<message type="info" group="encoding">
 <?php
 if (isset($result['headers']['Content-Type'])) {?>
 	<context><?php print $char_encoding['http']['code'] ?></context>
@@ -45,7 +45,7 @@ else { _lang('no_charset_found'); }
 ?></description>
 </message>
 
-<message type="info" groupe="encoding">
+<message type="info" group="encoding">
 	<title><?php _lang('bom') ?></title>
 	<description><?php
 if ($char_encoding['bom']['value'] != '') { print $char_encoding['bom']['value']; }
@@ -53,7 +53,7 @@ else { _lang('token_no'); }
 ?></description>
 </message>
 
-<message type="info" groupe="encoding">
+<message type="info" group="encoding">
 <?php if ($xmldeclTag!='') { ?>
 	<context><?php  print $xmldeclTag ?></context>
 <?php } ?>
@@ -65,7 +65,7 @@ else { _lang('no_encoding_found'); }
 ?></description>
 </message>
 
-<message type="info" groupe="encoding">
+<message type="info" group="encoding">
 <?php if ($char_encoding['httpequiv']['code']!='') { ?>
 	<context><?php print $char_encoding['httpequiv']['code'] ?></context>
 <?php } ?>
@@ -76,7 +76,7 @@ else { print $char_encoding['httpequiv']['value']; }
 ?></description>
 </message>
 
-<message type="info" groupe="encoding">
+<message type="info" group="encoding">
 <?php if ($char_encoding['html5']['code']!='') { ?>
 	<context><?php print $char_encoding['html5']['code'] ?></context>
 <?php } ?>
