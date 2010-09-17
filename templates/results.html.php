@@ -22,7 +22,7 @@ include('includes/head.html.php');
 				<form method="get" action="">
 					<div>
 						<input type="text" id="docAddr" name="docAddr" onclick="this.select();" value="<?php echo htmlspecialchars($hint);?>" size="30" /> 
-						</a><input type="submit" style="font-size: small; background-color: rgb(238, 238, 238); color: rgb(17, 17, 26); border: 1px solid rgb(204, 204, 204); padding: 0.2em 0.5em; margin-left: 0.5em;" value="<?php _lang('run_another_check') ?>" title="<?php _lang('run_another_check') ?>" /></div>
+						<input type="submit" style="font-size: small; background-color: rgb(238, 238, 238); color: rgb(17, 17, 26); border: 1px solid rgb(204, 204, 204); padding: 0.2em 0.5em; margin-left: 0.5em;" value="<?php _lang('run_another_check') ?>" title="<?php _lang('run_another_check') ?>" /></div>
 					</form>
 				<?php echo $failuremessage; //----------------------------------> put in message?>
 				</div>
@@ -315,37 +315,13 @@ include('includes/head.html.php');
 				$reportcount++;
 				}
 				?>
-				
-		<?php } ?>
-<!--						<li id="d6e197" class="mod noborder even">
-							<div class="hd msg">
-								<div class="expand_title">
-									<div class="line"><span class="impl"> Severity: </span><span class="unit min1of10 severity"><img width="32" height="32" src="images/error.png" alt="error"  /></span><span class="impl"> ; description: </span><span class="unit min7of10 desc">Table contains less than two td elements</span></div>
-									</div>
-								</div>
-							<div class="bd expand_content">
-								<div id="d4e2011-why" class="mod noborder expandable why">
-									<div class="bd explanation">A table with only one column is either the sign that the table is used:
-										<ul>
-											<li>to represent a list of items</li>
-											<li>to control the relative position of various sections of the page</li>
-											</ul>
-										Both uses imply a layout based on tables. While most mobile devices support basic tables, they are rendered quite differently by different 
-										mobile browsers, and cannot be reliably used for layout. The <code>table</code> element should only be used - with care -  to represent tabular 
-										data.</div>
-									</div>
-								<p class="backtop"><a href="#banner">Top</a></p>
-								</div>
-							</li> -->
-	<?php // only show this section if there are issues to report
-	if (count($errors)+count($warnings)+count($comments) > 0) { 
-	?>
 							
 						</ol>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	<?php } ?>
 
 
