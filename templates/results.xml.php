@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?php 
+$xml = '<?xml version="1.0" encoding="UTF-8"?>';
+echo $xml;
+ ?>
+
 <observationresponse xmlns="http://www.w3.org/2009/10/unicorn/observationresponse" ref="<?php echo htmlspecialchars($result['url']); ?>" xml:lang="en">
 
 <?php if ($fail) { ?>
