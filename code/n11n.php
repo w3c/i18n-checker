@@ -133,10 +133,10 @@ function nfc ($string) {
 	$composed = '';	
 	$string .= 'X';
 	// replace non-starter decompositions
-	$string = str_replace('́', '́', $string);
+	$string = str_replace('�?', '�?', $string);
 	$string = str_replace('̀', '̀', $string);
 	$string = str_replace('̓', '̓', $string);
-	$string = str_replace('̈́', '̈́', $string);
+	$string = str_replace('̈�?', '̈�?', $string);
 	$string = str_replace('ཱི', 'ཱི', $string);
 	$i=-1; 
 	$str = toArray($string);
@@ -258,7 +258,4 @@ function composeHangul ($str) {
 	
 // DATA
 include('n11ndata.php');
-
-
 ?>
-

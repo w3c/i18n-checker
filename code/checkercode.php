@@ -566,4 +566,3 @@ if (! $fail) {
 	//var_dump( $detectedlanguage ); 
 }
 ?>
-
