@@ -8,7 +8,8 @@ include('includes/head.html.php');
 
 	<div id="frontforms">
 		<ul id="tabset_tabs">
-			<li><a href="#validate-by-uri"><?php _lang('validate-by-uri') ?></a></li><li><a href="#validate-by-upload"><?php _lang('validate-by-upload') ?></a></li><li><a href="#validate-by-input"><?php _lang('validate-by-input') ?></a></li>
+			<li><a href="#validate-by-uri"><?php _lang('validate-by-uri') ?></a></li>
+			<?php /* <li><a href="#validate-by-upload"><?php _lang('validate-by-upload') ?></a></li><li><a href="#validate-by-input"><?php _lang('validate-by-input') ?></a></li> */ ?> 
 		</ul>
 
 		<div id="fields">
@@ -31,7 +32,7 @@ include('includes/head.html.php');
 					</div>
 				</fieldset>
 			</form>
-			<form action="check" method="post" enctype="multipart/form-data" id="validate-by-upload" class="ucn_form">
+			<?php /*  <form action="check" method="post" enctype="multipart/form-data" id="validate-by-upload" class="ucn_form">
 				<fieldset>
 					<legend><?php _lang('legend-by-upload') ?></legend>
 					<div class="input">
@@ -56,7 +57,7 @@ include('includes/head.html.php');
 					<div class="input">
 						<p class="instructions"><?php _lang('instruction-by-input') ?></p>
 						<p>
-							<textarea id="ucn_text" name="text" rows="12" cols="70"><?php /*$!param_text*/ ?></textarea>
+							<textarea id="ucn_text" name="text" rows="12" cols="70"><?php #$!param_text ?></textarea>
 						</p> 
 					</div>
 					<div class="submit">
@@ -66,7 +67,7 @@ include('includes/head.html.php');
 						<input type="submit" value="<?php _lang('submit') ?>" />
 					</div>
 				</fieldset>
-			</form>
+			</form> */ ?>
 		</div>
 	</div>
 <div class="intro">
