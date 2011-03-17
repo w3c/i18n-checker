@@ -2,7 +2,7 @@
 			<li><a href="<?php echo $baseUri ?>" title="<?php _lang('footer_home_title') ?>"><?php _lang('footer_home') ?></a></li>
 			<li><a href="<?php echo $baseUri ?>about.html" title="<?php _lang('footer_about_title') ?>"><?php _lang('footer_about') ?></a></li>
 			<li><a href="http://dvcs.w3.org/hg/" title="<?php _lang('footer_download_title') ?>"><?php _lang('footer_download') ?></a></li>
-			<li><a href="<?php echo $baseUri ?>translation.html" hreflang="en" title="<?php _lang('footer_translation_title') ?>"><?php _lang('footer_translation') ?></a></li>
+			<!-- <li><a href="<?php echo $baseUri ?>translation.html" hreflang="en" title="<?php _lang('footer_translation_title') ?>"><?php _lang('footer_translation') ?></a></li> -->
 			<li><a href="<?php echo $baseUri ?>feedback.html" hreflang="en" title="<?php _lang('footer_feedback_title') ?>"><?php _lang('footer_feedback') ?></a></li>
 	</ul>
 	

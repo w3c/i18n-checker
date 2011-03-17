@@ -1,8 +1,6 @@
 <?php
 
-if (! $fail) {
 
-	
 	if ($doctype=='xhtml11' && $mimetype=='xml') {
 		$errors[][0] = 'XHTML 1.1 not yet supported. View detailed report with care.';
 			$errors[count($errors)-1][1] = '<p>The I18n Checker has not yet been adapted to deliver detailed advice for XHTML 1.1 files.  You may see more errors, warnings or comments below but they may not be relevant, or some important point for this format may be missing. Please use with care.</p><p>On the other hand, the information panel at the top of this page should be accurate.</p>'; 
@@ -11,7 +9,6 @@ if (! $fail) {
 		$errors[][0] = 'XHTML5 not yet supported. View detailed report with care.';
 			$errors[count($errors)-1][1] = '<p>The I18n Checker has not yet been adapted to deliver detailed advice for XHTML5 files, ie. HTML5 served as XML.  You may see more errors, warnings or comments below but they may not be relevant, or some important point for this format may be missing. Please use with care.</p><p>On the other hand, the information panel at the top of this page should be accurate.</p>'; 
 		}
-
 
 #============================== CHARACTER ENCODINGS =================================
 
@@ -61,7 +58,7 @@ if (! $fail) {
 		}
 	
 	//BOM in content
-	$fileremainder = substr($result['body'],3);
+	$fileremainder = substr($content,3);
 	if (preg_match('/ï»¿/',$fileremainder)) { 
 		$warnings[][0] = $bom_in_content_title;
 		$warnings[count($warnings)-1][1] = $bom_in_content_msg;
@@ -199,6 +196,6 @@ if (! $fail) {
 		
 		
 		
-	}
+
 
 ?>

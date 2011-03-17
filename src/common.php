@@ -1,0 +1,1 @@
+<?php //$dir = dirname(__FILE__);$conf = parse_ini_file('conf/i18n.conf');require('message.php');require('lang.php');$_REQUEST['messages'] = array();$messages = &$_REQUEST['messages'];$languages = getListOfAvailableLanguages('../languages');$lang = resolveLanguage();$language = loadLanguage($lang, '../languages');$baseUri = $conf['base_uri'];

@@ -15,21 +15,20 @@ include('includes/head.html.php');
 		<div id="address" class="mod square">
 			<div class="hd section">
 				<div>
-					<h3><a href="#address"><label title="<?php _lang('address_title') ?>" for="docAddr"><?php _lang('address') ?></label></a><span>: </span><strong class="advin"><?php echo htmlspecialchars($uri); ?></strong></h3>
+					<h3><a href="#address"><label title="<?php _lang('address_title') ?>" for="uri"><?php _lang('address') ?></label></a><span>: </span><strong class="advin"><?php echo htmlspecialchars($uri); ?></strong></h3>
 					</div>
 				</div>
 			<div class="bd text expand_content">
 				<form method="get" action="">
 					<div>
-						<input type="text" id="docAddr" name="docAddr" onclick="this.select();" value="<?php echo htmlspecialchars($hint);?>" size="30" /> 
+						<input type="text" id="uri" name="uri" size="30" value="<?php echo htmlspecialchars($uri); ?>" /> 
 						<input type="submit" style="font-size: small; background-color: rgb(238, 238, 238); color: rgb(17, 17, 26); border: 1px solid rgb(204, 204, 204); padding: 0.2em 0.5em; margin-left: 0.5em;" value="<?php _lang('run_another_check') ?>" title="<?php _lang('run_another_check') ?>" /></div>
 					</form>
-				<?php echo $failuremessage; //----------------------------------> put in message?>
 				</div>
 		</div>
 	</div>
 	
-	<?php if (!$fail) { ?>
+
 		<div id="summaryresults">
 			<div class="hd section">
 				<div>
@@ -322,30 +321,30 @@ include('includes/head.html.php');
 			</div>
 		</div>
 	</div>
+
 	<?php } ?>
 
-
-<!-- SHOW SOURCE -->
+<!-- SHOW SOURCE --><!--
 	<div class="bd">
 		<div id="source" class="mod square">
 			<div class="hd section">
 				<div>
-					<h3><a href="#source"><label title="Source code checked." for="docAddr"><?php _lang('source_code') ?></label></a><span>: </span></h3>
+					<h3><a href="#source"><label title="Source code checked." for="docAddr"><?php //_lang('source_code') ?></label></a><span>: </span></h3>
 					</div>
 				</div>
 			<div class="bd text expand_content">
-					<pre style="font-size: 80%;"><?php echo htmlspecialchars($result['body']); ?></pre>
+					<pre style="font-size: 80%;"><?php //echo htmlspecialchars($content); ?></pre>
 				</div>
 			</div>
 		</div>
 
 
 
-	<!--
+	--><!--
 	print '<iframe id="iframepage" style="width: 100%;" src="'.htmlspecialchars($uri).'">The page itself.</iframe>';
 	-->
 	
-	<?php } ?>
+
 	
 	<script type="text/javascript">
 		window.onload=function(){initialiseMain('mybody', 'h3',''); initialiseReport('results','div','expand_title');}

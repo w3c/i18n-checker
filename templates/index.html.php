@@ -20,7 +20,7 @@ include('includes/head.html.php');
 						<p class="instructions"><?php _lang('instruction-by-uri') ?></p>
 						<p>
 							<label title="<?php _lang('uri_title') ?>" for="ucn_uri"><span><?php _lang('uri_label') ?></span>
-								<input type="text" name="docAddr" id="ucn_uri" size="45" value="<?php /*#if($param_uri && $param_uri!='referer')$!param_uri#end*/ ?>"/>
+								<input type="text" name="uri" id="ucn_uri" size="45" value="<?php if (isset($_GET['uri'])) echo $_GET['uri']; ?>"/>
 							</label>
 						</p>
 					</div>
@@ -70,13 +70,12 @@ include('includes/head.html.php');
 			</form> */ ?>
 		</div>
 	</div>
-<div class="intro">
-			<p><?php _lang('intro') ?></p>
-			<p><?php _lang('intro_links') ?></p>
+	<div class="intro">
+		<p><?php _lang('intro') ?></p>
+		<p><?php _lang('intro_links') ?></p>
 	</div>
 	<div id="don_program">
 		<script type="text/javascript" src="http://www.w3.org/QA/Tools/don_prog.js"></script>
 	</div>
-	
 
 <?php include('includes/footer.html.php');

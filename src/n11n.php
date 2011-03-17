@@ -18,7 +18,6 @@ function int2char ($int) {
 	$int = mb_decode_numericentity('&#'.$int.';', $convmap, "UTF-8");
 	return $int;
 	}
-
 	
 function decomposeHangul ($ch) {
 	$chIndex = char2dec($ch);
@@ -37,7 +36,6 @@ function decomposeHangul ($ch) {
 	return $result;
 	}
 
-
 function nfd ($str) { 
 	$str = decompose($str); 
 	$str = reorder($str); 
@@ -48,7 +46,7 @@ function toArray ($string) {
     $strlen = mb_strlen($string);
     while ($strlen) {
 		$ch = mb_substr($string,0,1,"UTF-8");
-		if ($ch >= 'í €' && $ch <= 'í¯¿') { $width = 2; }
+		if ($ch >= '?' && $ch <= '?') { $width = 2; }
 		else { 	$width = 1; }
 
         $array[] = mb_substr($string,0,$width,"UTF-8");
@@ -56,8 +54,7 @@ function toArray ($string) {
         $strlen = mb_strlen($string);
 		}
     return $array;
-	}	
-	
+	}
 
 function decompose ($string) { 
 	GLOBAL $decomposable;		
@@ -78,7 +75,6 @@ function decompose ($string) {
 	return $decomposed;
 	}
 
-
 function isort ($array) {
 	GLOBAL $nonzerocc; 
 	for ($i=1;$i<count($array);$i++) {
@@ -93,8 +89,6 @@ function isort ($array) {
 		}
 	return $array;
 	}
-
-
 
 function reorder ($string) { 
 	GLOBAL $nonzerocc; 
@@ -123,8 +117,6 @@ function reorder ($string) {
 	return $reordered;
 	}
 
-
-
 function nfc ($string) { 
 	GLOBAL $decomposable;
 	GLOBAL $composable;
@@ -133,10 +125,10 @@ function nfc ($string) {
 	$composed = '';	
 	$string .= 'X';
 	// replace non-starter decompositions
-	$string = str_replace('Ì?', 'Ì?', $string);
+	$string = str_replace('ï¿½?', 'ï¿½?', $string);
 	$string = str_replace('Ì€', 'Ì€', $string);
 	$string = str_replace('Ì“', 'Ì“', $string);
-	$string = str_replace('ÌˆÌ?', 'ÌˆÌ?', $string);
+	$string = str_replace('Ìˆï¿½?', 'Ìˆï¿½?', $string);
 	$string = str_replace('à½±à½²', 'à½±à½²', $string);
 	$i=-1; 
 	$str = toArray($string);
@@ -189,7 +181,6 @@ function nfc ($string) {
 	return $composed;
 	}
 
-
 function compose ($str) { 
 	// takes a base character followed by combining characters in the right order and produces nfc
 	GLOBAL $nonzerocc;
@@ -215,7 +206,6 @@ function compose ($str) {
 		}
 	return $base.$store;
 	}
-
 
 function composeHangul ($str) {
 	$strlength = mb_strlen($str);
@@ -254,7 +244,6 @@ function composeHangul ($str) {
 	for ($j=0;$j<count($result);$j++){ $resultstr .= $result[$j]; }
 	return $resultstr;
 	}
-
 	
 // DATA
 include('n11ndata.php');

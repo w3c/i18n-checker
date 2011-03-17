@@ -5,11 +5,13 @@ class Message
 	const warning = 1;
 	const error = 2;
 	
+	public $title;
 	public $message;
 	public $type = Message::info;
 	
-	function __construct($type, $message) {
+	function __construct($type, $message, $title='') {
 		$this->type = $type;
+		$this->title = $title;
 		$this->message = $message;
 	}
 	
