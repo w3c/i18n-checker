@@ -1,6 +1,6 @@
 <?php
-function get_url( $url,  $javascript_loop = 0, $timeout = 5 )
-{
+
+function fetchDocument($url, $javascript_loop = 0, $timeout = 5) {
 	global $conf;
 	$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 
@@ -17,38 +17,42 @@ function get_url( $url,  $javascript_loop = 0, $timeout = 5 )
 	curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $conf['curl_connect_timeout'] );
 	curl_setopt( $ch, CURLOPT_TIMEOUT, $conf['curl_timeout'] );
 	curl_setopt( $ch, CURLOPT_MAXREDIRS, $conf['curl_maxredirs'] );
+	curl_setopt( $ch, CURLOPT_HEADERFUNCTION, 'getLanguageHeader' );
 	
 	$header = array();
 	if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		$header[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 	if (isset($_SERVER['HTTP_ACCEPT_CHARSET']))
 		$header[] = $_SERVER['HTTP_ACCEPT_CHARSET'];
-	curl_setopt( $ch, CURLOPT_HTTPHEADER, $header); 
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $header); 
 	
-	$content = curl_exec( $ch );
-	$response = curl_getinfo( $ch );
+	$content = curl_exec($ch);
+	$response = curl_getinfo($ch);
 	$code = curl_errno($ch);
 	$error = curl_error($ch);
-	curl_close ( $ch );
+	curl_close($ch);
 
-	if ($response['http_code'] == 301 || $response['http_code'] == 302) {
-		ini_set("user_agent", $conf['user_agent']);
+//	if ($response['http_code'] == 301 || $response['http_code'] == 302) {
+//		ini_set("user_agent", $conf['user_agent']);
+//
+//		if ( $headers = get_headers($response['url']) ) {
+//			foreach( $headers as $value ) {
+//				if ( substr( strtolower($value), 0, 9 ) == "location:" )
+//					return get_url( trim( substr( $value, 9, strlen($value) ) ) );
+//			}
+//		}
+//	}
 
-		if ( $headers = get_headers($response['url']) ) {
-			foreach( $headers as $value ) {
-				if ( substr( strtolower($value), 0, 9 ) == "location:" )
-					return get_url( trim( substr( $value, 9, strlen($value) ) ) );
-			}
-		}
-	}
-
-	if (( preg_match("/>[[:space:]]+window\.location\.replace\('(.*)'\)/i", $content, $value)
-	   || preg_match("/>[[:space:]]+window\.location\=\"(.*)\"/i", $content, $value)) 
-	   && $javascript_loop > 0 && $javascript_loop < 5) {
-		return get_url( $value[1], $javascript_loop+1 );
-	} else {
-		return array( $url, $content, $response, $code, $error );
-	}
+// Follow JavaScript redirection ?
+//	if (( preg_match("/>[[:space:]]+window\.location\.replace\('(.*)'\)/i", $content, $value)
+//	   || preg_match("/>[[:space:]]+window\.location\=\"(.*)\"/i", $content, $value)) 
+//	   && $javascript_loop > 0 && $javascript_loop < 5) {
+//		return fetchDocument( $value[1], $javascript_loop+1 );
+//	} else {
+//		return array( $url, $content, $response, $code, $error );
+//	}
+	
+	return array( $url, $content, $response, $code, $error );
 }
 
 function getDocumentByUri($uri) {
@@ -63,7 +67,7 @@ function getDocumentByUri($uri) {
 	}
 	
 	// Check the scheme of the uri, must be http or https
-	$scheme = parse_url($_GET['uri'], PHP_URL_SCHEME);
+	$scheme = parse_url($uri, PHP_URL_SCHEME);
 	if ($scheme == null)
 		$uri = 'http://'.$uri;
 	elseif ($scheme != "http" && $scheme != "https") {
@@ -78,11 +82,17 @@ function getDocumentByUri($uri) {
 	}
 	
 	// Get the content and headers of the submitted document
-	$result = get_url($uri);
+	$result = fetchDocument($uri);
 	$uri = $result[0];
 	$content = $result[1];
 	$headers = $result[2];
 	$curl_error = $result[3];
+	
+	// Add the content-language header value that we parsed before to $headers
+	if (isset($_REQUEST['doc_content_language'])) {
+		$headers['content_language'] = $_REQUEST['doc_content_language'];
+		unset($_REQUEST['doc_content_language']);
+	} 
 	
 	// Report errors to the user. Most common cases should be internationalized.
 	if ($curl_error != 0) {
@@ -134,4 +144,17 @@ function getDocumentByUri($uri) {
 	return array($uri, $headers, $content);
 }
 
-?>
+function getDocumentByFileUpload($file) {
+	
+}
+
+// Curl does not parse the Content-Language header so we need a callback function (cf CURLOPT_HEADERFUNCTION)
+function getLanguageHeader($ch, $headers) {
+	$pattern = '/Content-Language:(.*?)\n/';
+	if (preg_match($pattern, $headers, $result)) {
+		// Let's stock the value in $_REQUEST. Wouldn't be necessary is this file was a class
+		$_REQUEST['doc_content_language'] = trim($result[1]);
+	}
+	//print_r($GLOBALS);
+	return strlen($headers);
+}

@@ -1,4 +1,5 @@
 <?php 
+header('Content-Type: application/xml; charset=UTF-8');
 $xml = '<?xml version="1.0" encoding="UTF-8"?>';
 echo $xml;
  ?>
