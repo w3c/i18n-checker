@@ -1142,15 +1142,17 @@ body > .section {
 .section h1 a {
 	color: white;
 }
-.section .content {
+
+.section .block {
 	font-size: small;
 }
-.section .content table {
+
+#infos table {
 	width: 100%;
 	border-collapse: collapse;
 }
 
-.section .content table th {
+#infos th {
 	background-color: #EAEBEE;
 	font-weight: bold;
 	padding: 0.4em;
@@ -1159,11 +1161,23 @@ body > .section {
 	border: 1px solid #CCC;
 }
 
-.section .content table td {
+#infos td {
 	padding: 0.4em;
 	vertical-align: middle;
 	white-space: nowrap;
 	border: 1px solid #CCC;
+}
+
+#infos tr td:first-child {
+	text-align:right;
+}
+
+#infos td strong {
+	background-color:#FF9933;
+	
+	font-size:18px;
+	padding:0 5px;
+	color:white;
 }
 
 .backtop {
@@ -1172,7 +1186,7 @@ body > .section {
 	font-weight: bold;
 	text-align: right;
 	text-transform: uppercase;
-	padding-top: 0.5em;
+	/*padding-top: 0.5em;*/
 }
 
 .backtop:before {
@@ -1235,36 +1249,67 @@ body > .section {
 	margin-right: 4px;
 }
 
-.section h1.title span.icons a.infos span.legend {
-	background: url(../images/unicons_sprite.png) no-repeat 0 -48px;
-}
-
-.section h1.title span.icons a.errors span.legend {
-	background: url(../images/unicons_sprite.png) no-repeat -18px -48px;
-}
-
-.section h1.title span.icons a.warnings span.legend	{
-	background: url(../images/unicons_sprite.png) no-repeat 0 -68px;
-}
-
-.section h1.title span.icons img {
-	vertical-align: -20%;
-	padding: 0 0.2em;
-}
-#results .content {
+#results .block {
     border-left: 1px solid #365D95;
     padding-left: 0.5em;
+    text-align: center;
+    padding-top: 10px
 }
-#results .errors h3.title {
-    color: #AA1D1D;
+
+#results .block strong {
+    font-weight: bold;
+    font-size: 32px;
+    margin-right: 20px;
 }
-#results .warnings h3.title {
-    color: #b48700;
+
+#results .block img {
+    vertical-align: text-bottom;
 }
-#results .infos h3.title {
-    color: #4778BC;
+
+#report h2.title {
+	font-weight: bold;
+	padding:8px 0 8px 8px;
 }
-#results h3.title {
-    border-bottom: 1px solid #CCCCCC;
-    padding: 0.3em 0;
+
+#report h2.title .arrow {
+	background: url("../images/unicons_sprite.png") no-repeat scroll -36px 0 transparent;
+}
+#report h2.title.toggled .arrow {
+	background: url("../images/unicons_sprite.png") no-repeat scroll -36px -11px transparent;
+}
+
+#report h2.title img {
+	vertical-align:middle;
+	margin:0 5px;
+}
+
+#report li.section div.block {
+	padding: 0 0 10px 10px;	
+}
+
+#report li.section div.block h3 {
+	font-weight:bold;
+	font-style: italic;	
+	border-bottom: 1px solid #CCC;
+	margin:10px 0;
+}
+
+#report li:nth-of-type(2n+1) h2.title {
+	background-color: #EDEDED;
+}
+
+#report li:nth-of-type(2n) h2.title {
+	background-color: #E1E1E1;
+}
+
+code {
+  background-color:#EAEBEE;
+  border:1px dotted #CCCCCC;
+  color:black;
+  display:inline;
+  font-family:Monaco, 'Courier New', monospace;
+  font-size:small;
+  padding-left:0.2em;
+  padding-right:0.2em;
+  white-space:normal;
 }
