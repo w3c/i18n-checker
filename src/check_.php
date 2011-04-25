@@ -12,7 +12,7 @@ function checkDocument($headers, $content) {
 function checkEncoding($headers, $content) {
 	
 	// Create character_encoding information category 
-	global $results;
+	global $results, $doc;
 	$char_encoding = &$results['infos']["character_encoding"];
 	
 	// INFO: HTTP CONTENT-TYPE HEADER
@@ -20,12 +20,12 @@ function checkEncoding($headers, $content) {
 	if (isset($headers['content_type'])) {
 		$charset = strpos($headers['content_type'], 'charset=');
 		if ($charset === false)
-			$char_encoding['content_type']['value'] = lang('no_charset_found');
+			$char_encoding['content_type']['display'] = lang('no_charset_found');
 		else
 			$char_encoding['content_type']['value'] = substr($headers['content_type'],$charset+8);
 		$char_encoding['content_type']['code'] = 'Content-Type: '.$headers['content_type'];
 	} else {
-		$char_encoding['content_type']['value'] = lang('none_found');
+		$char_encoding['content_type']['display'] = lang('none_found');
 	}
 	
 	// INFO: BYTE ORDER MARK.
@@ -48,7 +48,7 @@ function checkEncoding($headers, $content) {
 			$content = mb_convert_encoding($content, 'UTF-8', 'UTF-16BE');
 		$char_encoding['bom']['code'] = "Byte-order mark: {$char_encoding['bom']['value']}";
 	} else {
-		$char_encoding['bom']['value'] = lang('token_no');
+		$char_encoding['bom']['display'] = lang('token_no');
 	}
 	
 	// INFO: XML DECLARATION
@@ -59,10 +59,10 @@ function checkEncoding($headers, $content) {
 			$char_encoding['xml_declaration']['value'] = str_replace('\'','',$xmldecltagA[1][count($xmldecltagA[0])-1]);
 			$char_encoding['xml_declaration']['value'] = str_replace('"','',$char_encoding['xml_declaration']['value']);
 		} else {
-			$char_encoding['xml_declaration']['value'] = lang('no_encoding_found');
+			$char_encoding['xml_declaration']['display'] = lang('no_encoding_found');
 		}
 	} else {
-		$char_encoding['xml_declaration']['value'] = lang('none_found');
+		$char_encoding['xml_declaration']['display'] = lang('none_found');
 	}
 	
 	// INFO: META CHARSET ELEMENT
@@ -74,7 +74,7 @@ function checkEncoding($headers, $content) {
 			$char_encoding['content_type_meta']['value'] = str_replace('\'','',$encvalueA[1][0]); 
 			$char_encoding['content_type_meta']['value'] = str_replace('"','',$char_encoding['content_type_meta']['value']);
 		} else
-			$char_encoding['content_type_meta']['value'] = lang('no_charset_found');
+			$char_encoding['content_type_meta']['display'] = lang('no_charset_found');
 // TODO
 //		if (count($metatagA[0])>1) {
 //			for ($i=0;$i<count($metatagA[0]);$i++) {
@@ -82,7 +82,7 @@ function checkEncoding($headers, $content) {
 //			}
 //		} 
 	} else {
-		$char_encoding['content_type_meta']['value'] = lang('none_found');
+		$char_encoding['content_type_meta']['display'] = lang('none_found');
 	}
 	
 	// INFO: HTML5 CHARSET META
@@ -94,7 +94,7 @@ function checkEncoding($headers, $content) {
 			$char_encoding['html5_meta_charset']['value'] = str_replace('\'','',$encvalueA[1][0]); 
 			$char_encoding['html5_meta_charset']['value'] = str_replace('"','',$char_encoding['html5']['value']);
 		} else {
-			$char_encoding['html5_meta_charset']['value'] = lang('no_charset_found');
+			$char_encoding['html5_meta_charset']['display'] = lang('no_charset_found');
 		}
 		
 		// if multiple meta charset declarations, add to morehttpequivs list
@@ -104,7 +104,7 @@ function checkEncoding($headers, $content) {
 //				}
 //			} 
 	} else {
-		$char_encoding['html5_meta_charset']['value'] = lang('none_found');
+		$char_encoding['html5_meta_charset']['display'] = lang('none_found');
 	}
 	
 	
@@ -145,12 +145,12 @@ function checkLanguage($headers, $content) {
 		if (preg_match("/\slang=[\"\']?([^\s\"\'\\>]+)[\s\"\'\/>]/i", $htmltag, $match)) 
 			$language['html_lang']['value'] = $match[1];
 		else
-			$language['html_lang']['value'] = lang('token_none');
+			$language['html_lang']['display'] = lang('token_none');
 		// INFO: HTML XML:LANG
 		if (preg_match("/\sxml:lang=[\"\']?([^\s\"\'\\>]+)[\s\"\'\/>]/i", $htmltag, $match)) 
 			$language['html_xmllang']['value'] = $match[1];
 		else
-			$language['html_xmllang']['value'] = lang('token_none');
+			$language['html_xmllang']['display'] = lang('token_none');
 	} else {
 		$language['html_lang']['value'] = lang('no_html_tag_found');
 		$language['html_xmllang']['value'] = lang('no_html_tag_found');
@@ -162,7 +162,7 @@ function checkLanguage($headers, $content) {
 		$language['http_content_language']['value'] = $headers['content_language'] == '' ? lang('token_none') : $headers['content_language'];
 		$language['http_content_language']['code'] = "Content-Language: ".$headers['content_language'];
 	} else {
-		$language['http_content_language']['value'] = lang('none_found');
+		$language['http_content_language']['display'] = lang('none_found');
 	}
 	
 	// INFO: META CONTENT-LANGUAGE
@@ -171,7 +171,7 @@ function checkLanguage($headers, $content) {
 		$language['meta_content_language']['code'] = $match[0];
 		$language['meta_content_language']['value'] = $match[1];
 	} else {
-		$language['meta_content_language']['value'] = lang('none_found');
+		$language['meta_content_language']['display'] = lang('none_found');
 	}
 	
 }
@@ -192,7 +192,7 @@ function checkMisc($headers, $content) {
 		if (preg_match("/<html[^>]*>/i", $content, $match)) {
 			$direction['default_direction']['code'] = $match[0];
 		} else {
-			$direction['default_direction']['code'] = lang('no_html_tag_found');
+			$direction['default_direction']['display'] = lang('no_html_tag_found');
 		}
 	}
 	
@@ -246,9 +246,9 @@ function checkMisc($headers, $content) {
 		}
 	}
 	if ($class['class_and_id_non_ascii']['value'] == 0)
-		$class['class_and_id_non_ascii']['value'] = lang('token_none');
+		$class['class_and_id_non_ascii']['display'] = lang('token_none');
 	if ($class['class_and_id_non_nfc']['value'] == 0)
-		$class['class_and_id_non_nfc']['value'] = lang('token_none');
+		$class['class_and_id_non_nfc']['display'] = lang('token_none');
 		
 	// Create class_and_id information category
 	$headers = &$results['infos']['request_headers'];
