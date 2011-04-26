@@ -4,10 +4,10 @@ $title = "W3C I18n Checker";
 $css[] = "base_ucn.css";
 $js[] = "mootools-1.2.5-core-more-yc.js";
 $js[] = "w3c_unicorn_index.js";
+$lang_action = "";
 include('includes/head.html.php');
 include('includes/form.php');
 ?>
-
 
 	<div class="intro">
 		<p><?php _lang('intro') ?></p>

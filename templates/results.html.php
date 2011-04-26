@@ -5,6 +5,8 @@ $css[] = "base_ucn.css";
 $js[] = "mootools-1.2.5-core-more-yc.js";
 $js[] = "w3c_unicorn_index.js";
 $js[] = "w3c_unicorn_results.js";
+$lang_action = "check";
+if ($conf['show_extension']) { $lang_action .= ".php"; }
 include('includes/head.html.php');
 include('includes/form.php');
 ?>

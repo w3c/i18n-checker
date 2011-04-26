@@ -6,7 +6,7 @@
 			<li><a href="<?php echo $baseUri ?>feedback" hreflang="en" title="<?php _lang('footer_feedback_title') ?>"><?php _lang('footer_feedback') ?></a></li>
 	</ul>
 	
-	<form action="./" method="get" id="lang_choice">
+	<form action="<?php print $lang_action ?>" method="get" id="lang_choice">
 		<fieldset>
 			<label for="lang">Language</label>
 			<select name="lang" id="lang" title="Select language">
@@ -15,6 +15,7 @@
 				<?php } ?>
 			</select>
 			<input id="lang_change" type="submit" value="OK" />
+			<?php if (isset($uri)) { ?><input name="uri" id="uri" type="hidden" value="<?php print $uri ?>" /><?php } ?>
 		</fieldset>
 	</form>
 	
