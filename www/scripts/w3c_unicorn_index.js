@@ -50,7 +50,8 @@ var W3C = {
 		});*/
 		
 		W3C.LanguagesForm.addEvent('change', function(event) {
-			window.location = "./" + W3C.LanguagesForm.getProperty('action') + "?" + this.toQueryString() + window.location.hash;
+			action = W3C.LanguagesForm.getProperty('action') ? W3C.LanguagesForm.getProperty('action') : "";
+			window.location = "./" + action + "?" + this.toQueryString() + window.location.hash;
 		});
 		
 		W3C.TabLinks.each(function(link, i) {
