@@ -3,14 +3,10 @@
 var W3Cr = {
 	
 	start: function() {
-		$$('input#lang_change').setStyle('display', 'none');
-		W3Cr.LanguagesForm = $('lang_choice');
-		W3Cr.LanguagesForm.addEvent('change', function(event) {
-			window.location = "./" + W3Cr.LanguagesForm.getProperty('action') + "?" + this.toQueryString() + window.location.hash;
-		});
 		var slideDuration = 500;
-		var scroller = new Fx.Scroll(document);
+		//var scroller = new Fx.Scroll(document);
 		var instantScroller = new Fx.Scroll(document, {'duration': 0});
+		instantScroller.toElement('results');
 		$$('.section').each(function(section) {
 			var title = section.getElement('.title');
 			var block = section.getElement('.block');
@@ -23,6 +19,9 @@ var W3Cr = {
 				W3Cr.toggle(section);
 			});
 			W3Cr.open(section);
+		});
+		$$('#report .section').each(function(section) {
+			W3Cr.close(section);
 		});
 	},
 	
