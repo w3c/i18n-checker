@@ -1173,10 +1173,10 @@ body > .section {
 }
 
 #infos td strong {
-	background-color:#FF9933;
-	
-	font-size:18px;
-	padding:0 5px;
+	/*background-color:#FF9933;*/
+	background-color:#F17900;
+	font-size:17px;
+	padding:2px 5px;
 	color:white;
 }
 
@@ -1250,7 +1250,7 @@ body > .section {
 }
 
 #results .block {
-    border-left: 1px solid #365D95;
+    /*border-left: 1px solid #365D95;*/
     padding-left: 0.5em;
     text-align: center;
     padding-top: 10px
@@ -1272,10 +1272,12 @@ body > .section {
 }
 
 #report h2.title .arrow {
-	background: url("../images/unicons_sprite.png") no-repeat scroll -36px 0 transparent;
+	background: url("../images/arrow_grey.png") no-repeat scroll 0 0 transparent;
+	vertical-align: middle;
 }
 #report h2.title.toggled .arrow {
-	background: url("../images/unicons_sprite.png") no-repeat scroll -36px -11px transparent;
+	background: url("../images/arrow_grey.png") no-repeat scroll 0 -11px transparent;
+	vertical-align: middle;
 }
 
 #report h2.title img {
@@ -1312,4 +1314,29 @@ code {
   padding-left:0.2em;
   padding-right:0.2em;
   white-space:normal;
+}
+
+fieldset div.input input[type=submit] {
+	font-size: 0.9em;
+	font-family: Helvetica, Arial, Sans-Serif;
+	cursor: pointer;
+	color: #365D95;
+}
+
+fieldset input#ucn_uri {
+	width: 70%;
+}
+
+fieldset div.input input[type=submit] {
+	background: -moz-linear-gradient(top, #FDFDFD 0%, #DADADC 100%);
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FDFDFD), to(#DADADC));
+	border-top: 1px solid #B7B8BA;
+	border-right: 1px solid #9EA0A4;
+	border-bottom: 1px solid #86888E;
+	border-left: 1px solid #9EA0A4;
+	-moz-border-radius: 18px;
+	-webkit-border-radius: 18px;
+	border-radius: 18px;
+	padding: 4px 16px;
+	text-align: center;
 }
