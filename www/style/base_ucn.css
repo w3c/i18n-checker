@@ -1164,7 +1164,7 @@ body > .section {
 #infos td {
 	padding: 0.4em;
 	vertical-align: middle;
-	white-space: nowrap;
+	/*white-space: nowrap;*/
 	border: 1px solid #CCC;
 }
 
@@ -1173,7 +1173,6 @@ body > .section {
 }
 
 #infos td strong {
-	/*background-color:#FF9933;*/
 	background-color:#F17900;
 	font-size:17px;
 	padding:2px 5px;
