@@ -32,7 +32,7 @@ function loadLanguage($lang, $dir) {
 	if ($lang != $conf['default_language']) {
 		$defaultLanguage = parse_ini_file($dir.'/'.$conf['default_language'].'.properties');
 		foreach ($defaultLanguage as $i => $str) {
-			if (!isset($language[$i]))
+			if (!isset($language[$i]) || $language[$i] == "")
 				$language[$i] = $defaultLanguage[$i];
 		}
 	}
