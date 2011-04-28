@@ -17,7 +17,8 @@ function resolveLanguage() {
 		if (array_key_exists($_REQUEST['lang'], $languages)) {
 			return $_REQUEST['lang'];
 		} else {
-			$_REQUEST['messages'][] = new Message(Message::error, "requested_language_not_available");
+			// TODO Add that message to en.properties or remove altogether
+			//$_REQUEST['messages'][] = new Message(Message::error, lang(message_requested_language_not_available));
 			return $conf['default_language'];
 		}
 	} else {
