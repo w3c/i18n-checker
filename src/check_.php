@@ -4,6 +4,14 @@ include('n11n.php');
 function checkDocument($headers, $content) {
 	global $results;
 	
+	// decide which parser to use
+	$dtd = getDoctype($content);
+	if ($dtd == "html5") {
+		//use html5 parser
+	} else {
+		//use html parser
+	}
+	
 	checkEncoding($headers, $content);
 	checkLanguage($headers, $content);
 	checkMisc($headers, $content);
