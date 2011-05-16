@@ -5,7 +5,7 @@
 		</ul>
 
 		<div id="fields">
-			<form action="check<?php if ($conf['show_extension']) print '.php'; ?>" method="get" id="validate-by-uri" class="ucn_form">
+			<form action="check<?php print Conf::get('show_extension') ? '.php' : '' ?>" method="get" id="validate-by-uri" class="ucn_form">
 				<fieldset>
 					<legend><?php _lang('legend-by-uri') ?></legend>
 					<div class="input">
@@ -24,7 +24,7 @@
 					</div>
 				</fieldset>
 			</form>
-			<form action="check<?php if ($conf['show_extension']) print '.php'; ?>" method="post" enctype="multipart/form-data" id="validate-by-upload" class="ucn_form">
+			<form action="check<?php print Conf::get('show_extension') ? '.php' : ''; ?>" method="post" enctype="multipart/form-data" id="validate-by-upload" class="ucn_form">
 				<fieldset>
 					<legend><?php _lang('legend-by-upload') ?></legend>
 					<div class="input">
