@@ -10,7 +10,7 @@
 		<fieldset>
 			<label for="lang">Language</label>
 			<select name="lang" id="lang" title="Select language">
-				<?php foreach ($languages as $langCode => $langName) { ?>
+				<?php foreach (Language::$languages as $langCode => $langName) { ?>
 					<option value="<?php echo $langCode?>" <?php if ($lang == $langCode) { ?>selected="selected"<?php } ?>><?php echo $langName; if ($lang != $langCode) echo ' ('.Locale::getDisplayLanguage($langCode, $lang).')'; ?></option>
 				<?php } ?>
 			</select>
