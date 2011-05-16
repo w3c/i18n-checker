@@ -6,7 +6,7 @@ $js[] = "mootools-1.2.5-core-more-yc.js";
 $js[] = "w3c_unicorn_index.js";
 $js[] = "w3c_unicorn_results.js";
 $lang_action = "check";
-if ($conf['show_extension']) { $lang_action .= ".php"; }
+$lang_action .= Conf::get('show_extension') ? '.php' : '';
 include('includes/head.html.php');
 include('includes/form.php');
 ?>
@@ -78,6 +78,7 @@ include('includes/form.php');
 	</div>
 </div>
 
+<?php if (count($results["infos"]) > 0) { ?>
 <div id="infos" class="section">
 	<h1 class="title">
 		<a href="#infos"><?php _lang('information') ?></a>
@@ -122,6 +123,7 @@ include('includes/form.php');
 		<p class="backtop"><a href="#"><?php _lang('top') ?></a></p>
 	</div>
 </div>
+<?php } ?>
 
 <div id="report" class="section">
 	<h1 class="title">
