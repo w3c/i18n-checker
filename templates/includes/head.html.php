@@ -10,7 +10,7 @@
 	<script type="text/javascript" src="<?php echo $baseUri ?>scripts/<?php echo $script ?>"></script>
 <?php } ?>
 </head>
-<body id="mybody" class="js">
+<body>
 	<div id="banner">
 		<h1>
 			<a href="http://www.w3.org/"><img alt="W3C" width="110" height="61" id="logo" src="<?php echo $baseUri ?>images/w3c.png" /></a>
@@ -19,12 +19,12 @@
 		<p><?php _lang('subtitle') ?></p>
 	</div>
 
-<?php if (count($messages) > 0) { ?>
-<div id="messages">
-	<?php foreach ($messages as $message) { ?>
-	<div class="<?php echo $message->getStringType() ?>">
-		<h4><?php _lang($message->message) ?></h4>
+	<?php if (count(Message::$messages) > 0) { ?>
+	<div id="messages">
+		<?php foreach (Message::$messages as $message) { ?>
+		<div class="<?php echo $message->type ?>">
+			<h4><?php _lang($message->message) ?></h4>
+		</div>
+		<?php } ?>
 	</div>
 	<?php } ?>
-</div>
-<?php } ?>
