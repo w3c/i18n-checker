@@ -1,11 +1,10 @@
 <?php
 require_once('../src/common.php');
-//include('../src/n11n.php');
 include('../src/net.php');
 include('../src/check_.php');
 
 if (!isset($_GET['uri']) && !isset($_POST['file'])) {
-	$messages[] = new Message(Message::error, lang("message_nothing_to_validate"));
+	Message::addMessage(MSG_LEVEL_ERROR, lang("message_nothing_to_validate"));
 	include('../templates/index.html.php');
 	return;
 }
