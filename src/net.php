@@ -1,12 +1,11 @@
 <?php
 
 function fetchDocument($url, $javascript_loop = 0, $timeout = 5) {
-	global $conf;
 	$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 
 	$cookie = tempnam ("/tmp", "CURLCOOKIE");
 	$ch = curl_init();
-	curl_setopt( $ch, CURLOPT_USERAGENT, $conf['user_agent'] );
+	curl_setopt( $ch, CURLOPT_USERAGENT, Conf::get('user_agent') );
 	curl_setopt( $ch, CURLOPT_URL, $url );
 	curl_setopt( $ch, CURLOPT_COOKIEJAR, $cookie );
 	curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
@@ -14,9 +13,9 @@ function fetchDocument($url, $javascript_loop = 0, $timeout = 5) {
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 	curl_setopt( $ch, CURLOPT_AUTOREFERER, true );
 	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );    # required for https urls
-	curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $conf['curl_connect_timeout'] );
-	curl_setopt( $ch, CURLOPT_TIMEOUT, $conf['curl_timeout'] );
-	curl_setopt( $ch, CURLOPT_MAXREDIRS, $conf['curl_maxredirs'] );
+	curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, Conf::get('curl_connect_timeout') );
+	curl_setopt( $ch, CURLOPT_TIMEOUT, Conf::get('curl_timeout') );
+	curl_setopt( $ch, CURLOPT_MAXREDIRS, Conf::get('curl_maxredirs') );
 	curl_setopt( $ch, CURLOPT_HEADERFUNCTION, 'getLanguageHeader' );
 	
 	$header = array();
@@ -31,38 +30,15 @@ function fetchDocument($url, $javascript_loop = 0, $timeout = 5) {
 	$code = curl_errno($ch);
 	$error = curl_error($ch);
 	curl_close($ch);
-
-//	if ($response['http_code'] == 301 || $response['http_code'] == 302) {
-//		ini_set("user_agent", $conf['user_agent']);
-//
-//		if ( $headers = get_headers($response['url']) ) {
-//			foreach( $headers as $value ) {
-//				if ( substr( strtolower($value), 0, 9 ) == "location:" )
-//					return get_url( trim( substr( $value, 9, strlen($value) ) ) );
-//			}
-//		}
-//	}
-
-// Follow JavaScript redirection ?
-//	if (( preg_match("/>[[:space:]]+window\.location\.replace\('(.*)'\)/i", $content, $value)
-//	   || preg_match("/>[[:space:]]+window\.location\=\"(.*)\"/i", $content, $value)) 
-//	   && $javascript_loop > 0 && $javascript_loop < 5) {
-//		return fetchDocument( $value[1], $javascript_loop+1 );
-//	} else {
-//		return array( $url, $content, $response, $code, $error );
-//	}
 	
 	return array( $url, $content, $response, $code, $error );
 }
 
 function getDocumentByUri($uri) {
 	
-	// Messages to be display on top of the page
-	global $messages;
-	
 	// Check that a uri has been submitted
 	if ($uri == "") {
-		$messages[] = new Message(Message::error, lang("message_empty_uri"));
+		Message::addMessage(MSG_LEVEL_ERROR, lang("message_empty_uri"));
 		return false;
 	}
 	
@@ -71,13 +47,13 @@ function getDocumentByUri($uri) {
 	if ($scheme == null)
 		$uri = 'http://'.$uri;
 	elseif ($scheme != "http" && $scheme != "https") {
-		$messages[] = new Message(Message::error, "scheme not allowed: ".$scheme); //TODO
+		Message::addMessage(MSG_LEVEL_ERROR, "scheme not allowed: ".$scheme); //TODO
 		return false;
 	}
 	
 	// Check that the uri is correct (CURLE_URL_MALFORMAT is not enough)
 	if (preg_match('@((https?://)?([-\w]+\.[-\w\.]+)+\w(:\d+)?(/([-\w/_\.]*(\?\S+)?)?)*)@', $uri) == 0) {
-		$messages[] = new Message(Message::error, lang("message_invalid_url_syntax", $uri));
+		Message::addMessage(MSG_LEVEL_ERROR, lang("message_invalid_url_syntax", $uri));
 		return false;
 	}
 	
@@ -97,16 +73,16 @@ function getDocumentByUri($uri) {
 	// Report errors to the user. Most common cases should be internationalized.
 	if ($curl_error != 0) {
 		if ($curl_error == CURLE_URL_MALFORMAT) {
-			$messages[] = new Message(Message::error, lang("message_invalid_url_syntax", $uri));
+			Message::addMessage(MSG_LEVEL_ERROR, lang("message_invalid_url_syntax", $uri));
 		} elseif ($curl_error == CURLE_COULDNT_RESOLVE_HOST) {
-			$messages[] = new Message(Message::error, lang("message_unknown_host", parse_url($uri, PHP_URL_HOST)));
+			Message::addMessage(MSG_LEVEL_ERROR, lang("message_unknown_host", parse_url($uri, PHP_URL_HOST)));
 		} elseif ($curl_error == CURLE_COULDNT_CONNECT) {
-			$messages[] = new Message(Message::error, lang("message_connect_exception"));
+			Message::addMessage(MSG_LEVEL_ERROR, lang("message_connect_exception"));
 		} elseif ($curl_error == 'CURLE_REMOTE_ACCESS_DENIED') {
-			$messages[] = new Message(Message::error, lang("message_unauthorized_access"));
+			Message::addMessage(MSG_LEVEL_ERROR, lang("message_unauthorized_access"));
 		} else {
 			// Otherwise send the curl error message (english)
-			$messages[] = new Message(Message::error, $result[4]);
+			Message::addMessage(MSG_LEVEL_ERROR, $result[4]);
 		}
 		return false;
 	}
@@ -114,15 +90,15 @@ function getDocumentByUri($uri) {
 	// Check the response code. 
 	$response_code = $headers["http_code"];
 	if ($response_code == 404) {
-		$messages[] = new Message(Message::error, lang("message_document_not_found"));
+		Message::addMessage(MSG_LEVEL_ERROR, lang("message_document_not_found"));
 		return false;
 	}
 	//} elseif ($response_code == 500) {
-	//	$messages[] = new Message(Message::error, "received an internal server error (500): ".$uri); //TODO
+	//	Message::addMessage(MSG_LEVEL_ERROR, "received an internal server error (500): ".$uri); //TODO
 	//	return;
 	//}
 	elseif ($response_code != 200) {
-		$messages[] = new Message(Message::error, lang("message_http_error", $response_code));
+		Message::addMessage(MSG_LEVEL_ERROR, lang("message_http_error", $response_code));
 		return false;
 	}
 	
@@ -136,7 +112,7 @@ function getDocumentByUri($uri) {
 	}
 	
 	if ($mimetypename != 'text/html' && $mimetypename != 'application/xhtml+xml') {
-		$messages[] = new Message(Message::error, lang("message_unsupported_mimetype", $mimetypename));
+		Message::addMessage(MSG_LEVEL_ERROR, lang("message_unsupported_mimetype", $mimetypename));
 		return false;
 	}
 	
