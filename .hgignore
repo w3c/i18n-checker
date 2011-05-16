@@ -1,3 +1,4 @@
 syntax: regexp
 ^\.project$
 ^\.settings$
+^\.buildpath$
