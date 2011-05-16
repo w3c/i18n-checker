@@ -1,1 +1,1 @@
-Edit src/conf/log4php.properties to change the directory where log files are stored.
+Edit conf/log4php.properties to change the directory where log files are stored.
