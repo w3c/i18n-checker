@@ -14,13 +14,13 @@ class Language {
 	static public $languages = array(); 
 	
 	public static function init() {
-		Language::$logger = Logger::getLogger('Language');
-		Language::$languages = Language::getListOfAvailableLanguages(Conf::get('path_languages'));
-		Language::$logger->debug("Found languages: ".print_r(Language::$languages, true));
-		Language::$lang = Language::resolveLanguage();
-		Language::$logger->info("Current language resolved to: ".Language::$lang);
-		Language::$language = Language::loadLanguage(Language::$lang, Conf::get('path_languages'));
-		Language::$logger->debug("- Loaded strings: ".print_r(Language::$language, true));
+		self::$logger = Logger::getLogger('Language');
+		self::$languages = self::getListOfAvailableLanguages(Conf::get('path_languages'));
+		self::$logger->debug("Found languages: ".print_r(self::$languages, true));
+		self::$lang = self::resolveLanguage();
+		self::$logger->info("Current language resolved to: ".self::$lang);
+		self::$language = self::loadLanguage(self::$lang, Conf::get('path_languages'));
+		self::$logger->debug("- Loaded strings: ".print_r(self::$language, true));
 	}
 	
 	private static function getListOfAvailableLanguages($dir) {
@@ -36,7 +36,7 @@ class Language {
 	
 	private static function resolveLanguage() {
 		if (isset($_REQUEST['lang'])) {
-			if (array_key_exists($_REQUEST['lang'], Language::$languages)) {
+			if (array_key_exists($_REQUEST['lang'], self::$languages)) {
 				return $_REQUEST['lang'];
 			} else {
 				// TODO Add that message to en.properties or remove altogether
@@ -63,8 +63,8 @@ class Language {
 	
 	public static function lang($str) {
 		$result = '';
-		if (isset(Language::$language[$str])) {
-			$result = Language::$language[$str];
+		if (isset(self::$language[$str])) {
+			$result = self::$language[$str];
 		} else if (Conf::get('debug') == true) {
 			$result = "[[[".$str."]]]";
 		} else {
@@ -77,12 +77,13 @@ class Language {
 		        $result = str_replace("%".$i, func_get_arg($i), $result);
 		    }
 	    }
-	    Language::$logger->debug($result);
+	    self::$logger->debug($result);
 	    return $result;
 	}
 	
 	public static function _lang($str) {
 		print call_user_func_array('lang', func_get_args());
 	}
-
 }
+
+Language::init();

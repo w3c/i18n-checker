@@ -6,25 +6,26 @@ class Conf {
 	static private $configuration;
 	
 	static function init() {
-		Conf::$logger = Logger::getLogger('Configuration');
+		self::$logger = Logger::getLogger('Configuration');
 		$confFile = realpath(dirname(__FILE__).'/../conf/i18n.conf');
-		Conf::$logger->info("Loading configuration file: ".$confFile);
-		Conf::$configuration = parse_ini_file($confFile);
-		foreach (Conf::$configuration as $key => $value) {
+		self::$logger->info("Loading configuration file: ".$confFile);
+		self::$configuration = parse_ini_file($confFile);
+		foreach (self::$configuration as $key => $value) {
 			if (strpos($key, "path_") === 0 && strpos($value, "/") !== 0) {
-				Conf::$configuration[$key] = realpath(dirname(__FILE__).'/../'.$value);
-				Conf::$logger->debug("Found path property: ".$key." = ".$value." -> resolved to ".Conf::get($key));
+				self::$configuration[$key] = realpath(dirname(__FILE__).'/../'.$value);
+				self::$logger->debug("Found path property: ".$key." = ".$value." -> resolved to ".self::get($key));
 			}
 		}
 	}
 	
 	static function get($key) {
-		if (array_key_exists($key, Conf::$configuration)) {
-			return Conf::$configuration[$key];
+		if (array_key_exists($key, self::$configuration)) {
+			return self::$configuration[$key];
 		} else {
-			Conf::$logger->warn("Unknow configuration key: ".$key.". Look for Conf::get('".$key."') in the code or add it to the configuration file.");
+			self::$logger->warn("Unknow configuration key: ".$key.". Look for Conf::get('".$key."') in the code or add that key to the configuration file.");
 			return null;
 		}
 	}
-	
 }
+
+Conf::init();
