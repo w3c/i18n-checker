@@ -24,10 +24,15 @@ class Language {
 	}
 	
 	private static function getListOfAvailableLanguages($dir) {
+		self::$logger->debug("Scanning language directory: ".$dir);
 		$langFiles = scandir($dir);
 		foreach ($langFiles as $fileName) {
 			if ($fileName == "." || $fileName == "..")
 				continue;
+			if (!preg_match("/[^\.]+\.properties/", $fileName)) {
+				self::$logger->warn("Invalid language filename syntax: ".$fileName);
+				continue;
+			}
 			$langCode = preg_split('/\./', $fileName);
 			$languages[$langCode[0]] = Locale::getDisplayLanguage($langCode[0], $langCode[0]);
 		}
@@ -36,11 +41,13 @@ class Language {
 	
 	private static function resolveLanguage() {
 		if (isset($_REQUEST['lang'])) {
+			self::$logger->debug("Found lang parameter: ".$_REQUEST['lang']);
 			if (array_key_exists($_REQUEST['lang'], self::$languages)) {
 				return $_REQUEST['lang'];
 			} else {
 				// TODO Add that message to en.properties or remove altogether
 				//Message::addMessage(MSG_LEVEL_WARNING, lang(message_requested_language_not_available));
+				self::$logger->debug("Language ".$_REQUEST['lang']." is not available");
 				return Conf::get('default_language');
 			}
 		} else {
@@ -50,13 +57,21 @@ class Language {
 	
 	// $dir: directory where languages files are located
 	private static function loadLanguage($lang, $dir) {
+		self::$logger->debug("Loading language file: ".$dir.'/'.$lang.'.properties');
 		$language = parse_ini_file($dir.'/'.$lang.'.properties');
 		if ($lang != Conf::get('default_language')) {
 			$defaultLanguage = parse_ini_file($dir.'/'.Conf::get('default_language').'.properties');
+			$n = 0;
 			foreach ($defaultLanguage as $i => $str) {
-				if (!isset($language[$i]) || $language[$i] == "")
+				if (!isset($language[$i]) || $language[$i] == "") {
 					$language[$i] = $defaultLanguage[$i];
+					$n++;
+				}
 			}
+			if ($n !== 0)
+				self::$logger->debug("- The language file lacks ".$n." strings");
+			else
+				self::$logger->debug("- The language file is complete");
 		}
 		return $language;
 	}
@@ -77,7 +92,6 @@ class Language {
 		        $result = str_replace("%".$i, func_get_arg($i), $result);
 		    }
 	    }
-	    self::$logger->debug($result);
 	    return $result;
 	}
 	
