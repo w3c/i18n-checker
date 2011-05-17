@@ -13,9 +13,10 @@ class Conf {
 		foreach (self::$configuration as $key => $value) {
 			if (strpos($key, "path_") === 0 && strpos($value, "/") !== 0) {
 				self::$configuration[$key] = realpath(dirname(__FILE__).'/../'.$value);
-				self::$logger->debug("Found path property: ".$key." = ".$value." -> resolved to ".self::get($key));
+				self::$logger->debug("- Found path property: ".$key." = ".$value." -> resolved to ".self::get($key));
 			}
 		}
+		self::$logger->debug("- Loaded configuration: ".print_r(self::$configuration, true));
 	}
 	
 	static function get($key) {

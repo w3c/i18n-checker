@@ -9,10 +9,12 @@ class Net {
 	}
 	
 	public static function getDocumentByUri($uri) {
+		self::$logger->info("Check by URI initiated for: ".$uri);
 		
 		// Check that a uri has been submitted
 		if ($uri == "") {
 			Message::addMessage(MSG_LEVEL_ERROR, lang("message_empty_uri"));
+			self::$logger->info("- Aborted: URI is empty");
 			return false;
 		}
 		
@@ -22,12 +24,14 @@ class Net {
 			$uri = 'http://'.$uri;
 		elseif ($scheme != "http" && $scheme != "https") {
 			Message::addMessage(MSG_LEVEL_ERROR, "scheme not allowed: ".$scheme); //TODO
+			self::$logger->info("- Aborted: ".$scheme." scheme is not allowed");
 			return false;
 		}
 		
 		// Check that the uri is correct (CURLE_URL_MALFORMAT is not enough)
 		if (preg_match('@((https?://)?([-\w]+\.[-\w\.]+)+\w(:\d+)?(/([-\w/_\.]*(\?\S+)?)?)*)@', $uri) == 0) {
 			Message::addMessage(MSG_LEVEL_ERROR, lang("message_invalid_url_syntax", $uri));
+			self::$logger->info("- Aborted: incorrect syntax");
 			return false;
 		}
 		
@@ -38,10 +42,14 @@ class Net {
 		$headers = $result[2];
 		$curl_error = $result[3];
 		
+		self::$logger->info("- Effective URI: ".$uri);
+		self::$logger->debug("- Curl Info: ".print_r($headers, true));
+		
 		// Add the content-language header value that we parsed before to $headers
 		if (isset($_REQUEST['doc_content_language'])) {
 			$headers['content_language'] = $_REQUEST['doc_content_language'];
 			unset($_REQUEST['doc_content_language']);
+			self::$logger->info("- Found Content-Language header: ".$headers['content_language']);
 		} 
 		
 		// Report errors to the user. Most common cases should be internationalized.
@@ -58,6 +66,7 @@ class Net {
 				// Otherwise send the curl error message (english)
 				Message::addMessage(MSG_LEVEL_ERROR, $result[4]);
 			}
+			self::$logger->info("- Curl ERROR: ".$result[4]);
 			return false;
 		}
 		
@@ -65,6 +74,7 @@ class Net {
 		$response_code = $headers["http_code"];
 		if ($response_code == 404) {
 			Message::addMessage(MSG_LEVEL_ERROR, lang("message_document_not_found"));
+			self::$logger->info("- Aborted: 404 HTTP error code");
 			return false;
 		}
 		//} elseif ($response_code == 500) {
@@ -73,6 +83,7 @@ class Net {
 		//}
 		elseif ($response_code != 200) {
 			Message::addMessage(MSG_LEVEL_ERROR, lang("message_http_error", $response_code));
+			self::$logger->info("- Aborted: 200 HTTP error code");
 			return false;
 		}
 		
@@ -87,6 +98,7 @@ class Net {
 		
 		if ($mimetypename != 'text/html' && $mimetypename != 'application/xhtml+xml') {
 			Message::addMessage(MSG_LEVEL_ERROR, lang("message_unsupported_mimetype", $mimetypename));
+			self::$logger->info("- Aborted: ".$mimetypename." mime-type not supported");
 			return false;
 		}
 		
@@ -99,14 +111,14 @@ class Net {
 		return;
 	}
 	
-	private static function fetchDocument($url, $javascript_loop = 0, $timeout = 5) {
+	private static function fetchDocument($url) {
 		$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
-	
-		$cookie = tempnam ("/tmp", "CURLCOOKIE");
+		
 		$ch = curl_init();
-		curl_setopt( $ch, CURLOPT_USERAGENT, Conf::get('user_agent') );
+		curl_setopt( $ch, CURLOPT_USERAGENT, Conf::get('curl_user_agent') );
 		curl_setopt( $ch, CURLOPT_URL, $url );
-		curl_setopt( $ch, CURLOPT_COOKIEJAR, $cookie );
+		if (Conf::get('curl_cookiejar_enabled'))
+			curl_setopt( $ch, CURLOPT_COOKIEJAR, Conf::get('curl_cookiejar_path') );
 		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
 		curl_setopt( $ch, CURLOPT_ENCODING, "" );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
@@ -116,6 +128,9 @@ class Net {
 		curl_setopt( $ch, CURLOPT_TIMEOUT, Conf::get('curl_timeout') );
 		curl_setopt( $ch, CURLOPT_MAXREDIRS, Conf::get('curl_maxredirs') );
 		curl_setopt( $ch, CURLOPT_HEADERFUNCTION, 'self::getLanguageHeader' );
+		
+		self::$logger->debug("CURL Options: \n\t\t User-Agent: ".Conf::get('curl_user_agent')."\n\t\t CookieJar: ".Conf::get('curl_cookiejar_path')." - Enabled: ".Conf::get('curl_cookiejar_enabled').
+			"\n\t\t Connexion Timeout: ".Conf::get('curl_connect_timeout')."\n\t\t Timeout: ".Conf::get('curl_timeout')."\n\t\t Max redirections: ".Conf::get('curl_maxredirs'));
 		
 		$header = array();
 		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
@@ -143,5 +158,6 @@ class Net {
 		//print_r($GLOBALS);
 		return strlen($headers);
 	}
-
 }
+
+Net::init();
