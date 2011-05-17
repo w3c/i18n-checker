@@ -1,15 +1,22 @@
 <?php
-include('n11n.php');
+include_once('class.N11n.php');
+require_once('lib/phpQuery-onefile.php');
+
+function isHTML5($content) {
+	return preg_match("/^<!DOCTYPE HTML>/i", $content);
+}
 
 function checkDocument($headers, $content) {
 	global $results;
 	
 	// decide which parser to use
-	$dtd = getDoctype($content);
-	if ($dtd == "html5") {
-		//use html5 parser
+	if (isHTML5($content)) {
+		Message::addMessage(MSG_LEVEL_ERROR, lang("html5 is not yet supported"));
+		return;
 	} else {
-		//use html parser
+		phpQuery::newDocument($content);
+		
+		
 	}
 	
 	checkEncoding($headers, $content);
@@ -233,7 +240,7 @@ function checkMisc($headers, $content) {
 			if (preg_match("/[!-~\s]*[^!-~\s]+.*/", $name)) {
 				$class['class_and_id_non_ascii']['value'] += 1;
 				$class['class_and_id_non_ascii']['code'][] = $classesA[0][$key];
-				if (nfc($name) != $name) {
+				if (N11n::nfc($name) != $name) {
 					$class['class_and_id_non_nfc']['value'] += 1;
 					$class['class_and_id_non_nfc']['code'][] = $classesA[0][$key];
 				}
@@ -246,7 +253,7 @@ function checkMisc($headers, $content) {
 			if (preg_match("/[!-~\s]*[^!-~\s]+.*/", $name)) {
 				$class['class_and_id_non_ascii']['value'] += 1;
 				$class['class_and_id_non_ascii']['code'][] = $idsA[0][$key];
-				if (nfc($name) != $name) {
+				if (N11n::nfc($name) != $name) {
 					$class['class_and_id_non_nfc']['value'] += 1;
 					$class['class_and_id_non_nfc']['code'][] = $idsA[0][$key];
 				}
