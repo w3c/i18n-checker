@@ -1,5 +1,5 @@
 <?php
-require_once('../src/common.php');
+require_once(realpath(dirname(__FILE__).'/../src/common.php'));
 $title = "W3C I18n Checker";
 $css[] = "base_ucn.css";
 $css[] = "minimum.css";

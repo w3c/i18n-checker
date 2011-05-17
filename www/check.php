@@ -1,6 +1,6 @@
 <?php
-require_once('../src/common.php');
-include('../src/net.php');
+require_once(realpath(dirname(__FILE__).'/../src/common.php'));
+require_once(realpath(dirname(__FILE__).'/../src/class.Net.php'));
 include('../src/check_.php');
 
 if (!isset($_GET['uri']) && !isset($_POST['file'])) {
@@ -10,9 +10,9 @@ if (!isset($_GET['uri']) && !isset($_POST['file'])) {
 }
 // Get the document either by URI or attached as a file
 if (isset($_GET['uri']))
-	$document = getDocumentByUri($_GET['uri']);
+	$document = Net::getDocumentByUri($_GET['uri']);
 elseif (isset($_POST['file']))
-	$document = getDocumentByFileUpload($_POST['file']);
+	$document = Net::getDocumentByFileUpload($_POST['file']);
 // If no doc found or something went wrong redirect to home page with error messages
 if ($document == false) {
 	include('../templates/index.html.php');
