@@ -12,7 +12,7 @@
 						<p class="instructions"><?php _lang('instruction-by-uri') ?></p>
 						<p>
 							<label title="<?php _lang('uri_title') ?>" for="ucn_uri"><span><?php _lang('uri_label') ?></span>
-								<input type="text" name="uri" id="ucn_uri" size="45" value="<?php if (isset($_GET['uri'])) echo $_GET['uri']; ?>"/>
+								<input type="text" name="uri" id="ucn_uri" size="45" value="<?php if (isset($uri)) echo $uri; ?>"/>
 							</label>
 						</p>
 					</div>

@@ -13,7 +13,7 @@ include('includes/form.php');
 
 <div id="results" class="section">
 	<h1 class="title">
-		<a href="#result"><?php _lang('results') ?></a>
+		<a href="#result"><?php _lang('results', $uri) ?></a>
 <!--		<span class="icons">-->
 <!--			<a title="Erreurs (19)" href="#css21-validator_error" class="errors">-->
 <!--				<span class="legend">Errors</span>-->

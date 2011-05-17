@@ -130,7 +130,7 @@ class Net {
 		$error = curl_error($ch);
 		curl_close($ch);
 		
-		return array( $url, $content, $response, $code, $error );
+		return array( $response['url'], $content, $response, $code, $error );
 	}
 	
 	// Curl does not parse the Content-Language header so we need a callback function (cf CURLOPT_HEADERFUNCTION)
