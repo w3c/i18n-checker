@@ -39,18 +39,19 @@ class Net {
 		$result = self::fetchDocument($uri);
 		$uri = $result[0];
 		$content = $result[1];
-		$headers = $result[2];
+		$curl_info = $result[2];
 		$curl_error = $result[3];
 		
 		self::$logger->info("- Effective URI: ".$uri);
-		self::$logger->debug("- Curl Info: ".print_r($headers, true));
 		
-		// Add the content-language header value that we parsed before to $headers
+		// Add the content-language header value that we parsed before to $curl_info
 		if (isset($_REQUEST['doc_content_language'])) {
-			$headers['content_language'] = $_REQUEST['doc_content_language'];
+			$curl_info['content_language'] = $_REQUEST['doc_content_language'];
 			unset($_REQUEST['doc_content_language']);
-			self::$logger->info("- Found Content-Language header: ".$headers['content_language']);
+			self::$logger->info("- Found Content-Language header: ".$curl_info['content_language']);
 		} 
+		
+		self::$logger->debug("- Curl Info: ".print_r($curl_info, true));
 		
 		// Report errors to the user. Most common cases should be internationalized.
 		if ($curl_error != 0) {
@@ -71,7 +72,7 @@ class Net {
 		}
 		
 		// Check the response code. 
-		$response_code = $headers["http_code"];
+		$response_code = $curl_info["http_code"];
 		if ($response_code == 404) {
 			Message::addMessage(MSG_LEVEL_ERROR, lang("message_document_not_found"));
 			self::$logger->info("- Aborted: 404 HTTP error code");
@@ -83,17 +84,17 @@ class Net {
 		//}
 		elseif ($response_code != 200) {
 			Message::addMessage(MSG_LEVEL_ERROR, lang("message_http_error", $response_code));
-			self::$logger->info("- Aborted: 200 HTTP error code");
+			self::$logger->info("- Aborted: HTTP response code != 200 (".$response_code.")");
 			return false;
 		}
 		
 		// Check that the document mimetype is either text/html or application/xhtml+xml
 		$mimetypename = 'Unknown';
-		if (strpos($headers['content_type'], ';')) {
-			$parts = explode(';', $headers['content_type']);
+		if (strpos($curl_info['content_type'], ';')) {
+			$parts = explode(';', $curl_info['content_type']);
 			$mimetypename = $parts[0];
 		} else { 
-			$mimetypename = $headers['content_type']; 
+			$mimetypename = $curl_info['content_type']; 
 		}
 		
 		if ($mimetypename != 'text/html' && $mimetypename != 'application/xhtml+xml') {
@@ -103,7 +104,7 @@ class Net {
 		}
 		
 		// Returns the headers and the content of the document
-		return array($uri, $headers, $content);
+		return array($uri, $curl_info, $content);
 	}
 	
 	public static function getDocumentByFileUpload($file) {
@@ -129,8 +130,12 @@ class Net {
 		curl_setopt( $ch, CURLOPT_MAXREDIRS, Conf::get('curl_maxredirs') );
 		curl_setopt( $ch, CURLOPT_HEADERFUNCTION, 'self::getLanguageHeader' );
 		
-		self::$logger->debug("CURL Options: \n\t\t User-Agent: ".Conf::get('curl_user_agent')."\n\t\t CookieJar: ".Conf::get('curl_cookiejar_path')." - Enabled: ".Conf::get('curl_cookiejar_enabled').
-			"\n\t\t Connexion Timeout: ".Conf::get('curl_connect_timeout')."\n\t\t Timeout: ".Conf::get('curl_timeout')."\n\t\t Max redirections: ".Conf::get('curl_maxredirs'));
+		self::$logger->debug("CURL Options: ".
+				"\n\t\t User-Agent: ".Conf::get('curl_user_agent').
+				"\n\t\t CookieJar: ".Conf::get('curl_cookiejar_path')." - Enabled: ".Conf::get('curl_cookiejar_enabled').
+				"\n\t\t Connexion Timeout: ".Conf::get('curl_connect_timeout').
+				"\n\t\t Timeout: ".Conf::get('curl_timeout').
+				"\n\t\t Max redirections: ".Conf::get('curl_maxredirs'));
 		
 		$header = array();
 		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
@@ -149,14 +154,12 @@ class Net {
 	}
 	
 	// Curl does not parse the Content-Language header so we need a callback function (cf CURLOPT_HEADERFUNCTION)
-	private static function getLanguageHeader($ch, $headers) {
+	private static function getLanguageHeader($ch, $curl_info) {
 		$pattern = '/Content-Language:(.*?)\n/';
-		if (preg_match($pattern, $headers, $result)) {
-			// Let's stock the value in $_REQUEST. Wouldn't be necessary is this file was a class
+		if (preg_match($pattern, $curl_info, $result)) {
 			$_REQUEST['doc_content_language'] = trim($result[1]);
 		}
-		//print_r($GLOBALS);
-		return strlen($headers);
+		return strlen($curl_info);
 	}
 }
 
