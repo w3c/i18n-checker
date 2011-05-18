@@ -1,9 +1,9 @@
 	<ul id="menu">
-			<li><a href="<?php echo $baseUri ?>" title="<?php _lang('footer_home_title') ?>"><?php _lang('footer_home') ?></a></li>
-			<li><a href="<?php echo $baseUri ?>about" title="<?php _lang('footer_about_title') ?>"><?php _lang('footer_about') ?></a></li>
+			<li><a href="<?php echo Conf::get('base_uri') ?>" title="<?php _lang('footer_home_title') ?>"><?php _lang('footer_home') ?></a></li>
+			<li><a href="<?php echo Conf::get('base_uri') ?>about" title="<?php _lang('footer_about_title') ?>"><?php _lang('footer_about') ?></a></li>
 			<li><a href="http://dvcs.w3.org/hg/" title="<?php _lang('footer_download_title') ?>"><?php _lang('footer_download') ?></a></li>
-			<!-- <li><a href="<?php echo $baseUri ?>translation.html" hreflang="en" title="<?php _lang('footer_translation_title') ?>"><?php _lang('footer_translation') ?></a></li> -->
-			<li><a href="<?php echo $baseUri ?>feedback" hreflang="en" title="<?php _lang('footer_feedback_title') ?>"><?php _lang('footer_feedback') ?></a></li>
+			<!-- <li><a href="<?php echo Conf::get('base_uri') ?>translation.html" hreflang="en" title="<?php _lang('footer_translation_title') ?>"><?php _lang('footer_translation') ?></a></li> -->
+			<li><a href="<?php echo Conf::get('base_uri') ?>feedback" hreflang="en" title="<?php _lang('footer_feedback_title') ?>"><?php _lang('footer_feedback') ?></a></li>
 	</ul>
 	
 	<form action="<?php print $lang_action ?>" method="get" id="lang_choice">
@@ -28,7 +28,7 @@
 		
 		<p id="support_logo">
 			<a href="http://www.w3.org/QA/Tools/Donate" title="$donation_program">
-				<img src="<?php echo $baseUri ?>images/I_heart_validator.png" alt="I heart Validator logo"/>
+				<img src="<?php echo Conf::get('base_uri') ?>images/I_heart_validator.png" alt="I heart Validator logo"/>
 			</a>
 		</p>
 		<p class="copyright" xml:lang="en" lang="en" dir="ltr">

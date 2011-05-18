@@ -3,18 +3,18 @@
 <head>
 	<title><?php echo $title ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rev="start" href="<?php echo $baseUri ?>" title="Home Page" />
+	<link rev="start" href="<?php echo Conf::get('base_uri') ?>" title="Home Page" />
 <?php if (isset($css)) foreach($css as $sheet) { ?>
-	<link href="<?php echo $baseUri ?>style/<?php echo $sheet ?>" type="text/css" media="screen" rel="stylesheet" />
+	<link href="<?php echo Conf::get('base_uri') ?>style/<?php echo $sheet ?>" type="text/css" media="screen" rel="stylesheet" />
 <?php } if (isset($js)) foreach($js as $script) { ?>
-	<script type="text/javascript" src="<?php echo $baseUri ?>scripts/<?php echo $script ?>"></script>
+	<script type="text/javascript" src="<?php echo Conf::get('base_uri') ?>scripts/<?php echo $script ?>"></script>
 <?php } ?>
 </head>
 <body>
 	<div id="banner">
 		<h1>
-			<a href="http://www.w3.org/"><img alt="W3C" width="110" height="61" id="logo" src="<?php echo $baseUri ?>images/w3c.png" /></a>
-			<a href="<?php echo $baseUri ?>"><span><?php _lang('title') ?></span></a>
+			<a href="http://www.w3.org/"><img alt="W3C" width="110" height="61" id="logo" src="<?php echo Conf::get('base_uri') ?>images/w3c.png" /></a>
+			<a href="<?php echo Conf::get('base_uri') ?>"><span><?php _lang('title') ?></span></a>
 		</h1>
 		<p><?php _lang('subtitle') ?></p>
 	</div>
