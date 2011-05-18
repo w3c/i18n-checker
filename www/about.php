@@ -3,7 +3,7 @@ require_once(realpath(dirname(__FILE__).'/../src/common.php'));
 $title = "W3C I18n Checker";
 $css[] = "base_ucn.css";
 $css[] = "minimum.css";
-include('../templates/includes/head.html.php');
+include(PATH_TEMPLATES.'/includes/head.html.php');
 ?>
 <div style="margin: 1.5em 2.3em 1em;">
 
@@ -132,4 +132,4 @@ include('../templates/includes/head.html.php');
 
 </div>
 
-<?php include('../templates/includes/footer.html.php');
+<?php include(PATH_TEMPLATES.'/includes/footer.html.php');
