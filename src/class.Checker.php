@@ -6,6 +6,13 @@ class Checker {
 
 	private static $logger;
 	
+	private $document;
+	//private $
+	
+	public function __construct($curl_info, $content) {
+		
+	}
+	
 	public static function init() {
 		self::$logger = Logger::getLogger('Checker');
 	}
@@ -14,7 +21,7 @@ class Checker {
 		return preg_match("/^<!DOCTYPE HTML>/i", $content);
 	}
 	
-	public static function checkDocument($headers, $content) {
+	public static function checkDocument($curl_info, $content) {
 		
 		// decide which parser to use
 		if (isHTML5($content)) {
@@ -26,12 +33,12 @@ class Checker {
 			
 		}
 		
-		checkEncoding($headers, $content);
-		checkLanguage($headers, $content);
-		checkMisc($headers, $content);
+		checkEncoding($curl_info, $content);
+		checkLanguage($curl_info, $content);
+		checkMisc($curl_info, $content);
 	}
 	
-	function checkEncoding($headers, $content) {
+	function checkEncoding($curl_info, $content) {
 		
 		// Create character_encoding information category 
 		global $results, $doc;
@@ -39,13 +46,13 @@ class Checker {
 		
 		// INFO: HTTP CONTENT-TYPE HEADER
 		$char_encoding['content_type'] = array();
-		if (isset($headers['content_type'])) {
-			$charset = strpos($headers['content_type'], 'charset=');
+		if (isset($curl_info['content_type'])) {
+			$charset = strpos($curl_info['content_type'], 'charset=');
 			if ($charset === false)
 				$char_encoding['content_type']['display'] = lang('no_charset_found');
 			else
-				$char_encoding['content_type']['value'] = substr($headers['content_type'],$charset+8);
-			$char_encoding['content_type']['code'] = 'Content-Type: '.$headers['content_type'];
+				$char_encoding['content_type']['value'] = substr($curl_info['content_type'],$charset+8);
+			$char_encoding['content_type']['code'] = 'Content-Type: '.$curl_info['content_type'];
 		} else {
 			$char_encoding['content_type']['display'] = lang('none_found');
 		}
@@ -146,7 +153,7 @@ class Checker {
 		
 	}
 	
-	function checkLanguage($headers, $content) {
+	function checkLanguage($curl_info, $content) {
 		// lang attr on --><html>
 		// lang != xml:lang ?
 		// lang present but not xml:lang
@@ -180,9 +187,9 @@ class Checker {
 		
 		// INFO: HTTP CONTENT-LANGUAGE
 		$language['http_content_language'] = array();
-		if (isset($headers['content_language'])) {
-			$language['http_content_language']['value'] = $headers['content_language'] == '' ? lang('token_none') : $headers['content_language'];
-			$language['http_content_language']['code'] = "Content-Language: ".$headers['content_language'];
+		if (isset($curl_info['content_language'])) {
+			$language['http_content_language']['value'] = $curl_info['content_language'] == '' ? lang('token_none') : $curl_info['content_language'];
+			$language['http_content_language']['code'] = "Content-Language: ".$curl_info['content_language'];
 		} else {
 			$language['http_content_language']['display'] = lang('none_found');
 		}
@@ -198,7 +205,7 @@ class Checker {
 		
 	}
 	
-	function checkMisc($headers, $content) {
+	function checkMisc($curl_info, $content) {
 		
 		// Create language information category 
 		global $results;
