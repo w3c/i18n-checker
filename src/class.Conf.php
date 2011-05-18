@@ -14,8 +14,10 @@ class Conf {
 			if (strpos($key, "path_") === 0 && strpos($value, "/") !== 0) {
 				self::$configuration[$key] = realpath(dirname(__FILE__).'/../'.$value);
 				self::$logger->debug("- Found path property: ".$key." = ".$value." -> resolved to ".self::get($key));
+				define(strtoupper($key), self::get($key));
 			}
 		}
+		define("PATH_SRC", realpath(dirname(__FILE__)));
 		self::$logger->debug("- Loaded configuration: ".print_r(self::$configuration, true));
 	}
 	
