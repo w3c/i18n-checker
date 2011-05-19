@@ -1,88 +1,97 @@
 <?php
 require_once('class.N11n.php');
-require_once('lib/phpQuery-onefile.php');
+require_once('class.Parser.php');
+require_once('class.Information.php');
+//require_once('lib/phpQuery-onefile.php');
 
 class Checker {
 
 	private static $logger;
 	
-	private $document;
-	//private $
-	
-	public function __construct($curl_info, $content) {
-		
-	}
+	private $parser;
+	private $curl_info;
+	private $content;
+	private $is_html5;
 	
 	public static function init() {
 		self::$logger = Logger::getLogger('Checker');
 	}
 	
-	private function isHTML5($content) {
-		return preg_match("/^<!DOCTYPE HTML>/i", $content);
+	public function __construct($curl_info, $content) {
+		$this->content = $content;
+		$this->curl_info = $curl_info;
 	}
 	
-	public static function checkDocument($curl_info, $content) {
-		
-		// decide which parser to use
-		if (isHTML5($content)) {
-			Message::addMessage(MSG_LEVEL_ERROR, lang("html5 is not yet supported"));
-			return;
-		} else {
-			phpQuery::newDocument($content);
-			
-			
+	public function checkDocument() {
+		try {
+			$this->parser = Parser::getParser($this->content);
+		} catch (Exception $e) {
+			Message::addMessage(MSG_LEVEL_ERROR, $e);
 		}
-		
-		checkEncoding($curl_info, $content);
-		checkLanguage($curl_info, $content);
-		checkMisc($curl_info, $content);
+		$this->getInfoHTTPCharset();
+		$this->getInfoBom();
+		//$this->getInfoXMLDeclaration();
 	}
 	
-	function checkEncoding($curl_info, $content) {
-		
-		// Create character_encoding information category 
-		global $results, $doc;
-		$char_encoding = &$results['infos']["character_encoding"];
-		
-		// INFO: HTTP CONTENT-TYPE HEADER
-		$char_encoding['content_type'] = array();
-		if (isset($curl_info['content_type'])) {
-			$charset = strpos($curl_info['content_type'], 'charset=');
+	// INFO: HTTP CONTENT-TYPE HEADER
+	private function getInfoHTTPCharset() { 
+		$category = 'character_encoding';
+		$title = 'content_type';
+		$value = null;
+		$display_value = null;
+		$code = null;
+		if (array_key_exists('content_type', $this->curl_info)) {
+			$charset = strpos($this->curl_info['content_type'], 'charset=');
 			if ($charset === false)
-				$char_encoding['content_type']['display'] = lang('no_charset_found');
+				$display_value = 'no_charset_found';
 			else
-				$char_encoding['content_type']['value'] = substr($curl_info['content_type'],$charset+8);
-			$char_encoding['content_type']['code'] = 'Content-Type: '.$curl_info['content_type'];
+				$value = substr($this->curl_info['content_type'],$charset+8);
+			$code = 'Content-Type: '.$this->curl_info['content_type'];
 		} else {
-			$char_encoding['content_type']['display'] = lang('none_found');
+			$display_value = 'none_found';
 		}
-		
-		// INFO: BYTE ORDER MARK.
-		$char_encoding['bom'] = array();
-		$filestart = substr($content,0,3);
+		Information::addInfo($category, $title, $value, $display_value, $code);
+	}
+	
+	// INFO: BYTE ORDER MARK.
+	private function getInfoBom() {
+		$category = 'character_encoding';
+		$title = 'bom';
+		$value = null;
+		$display_value = null;
+		$code = null;
+		$filestart = substr($this->content,0,3);
 		if (ord($filestart{0})== 239 && ord($filestart{1})== 187 && ord($filestart{2})== 191) 
-			$char_encoding['bom']['value'] = 'UTF-8';
+			$value = 'UTF-8';
 		else { 
-			$filestart = substr($content,0,2);
+			$filestart = substr($this->content,0,2);
 			if (ord($filestart{0})== 254 && ord($filestart{1})== 255)
-				$char_encoding['bom']['value'] = 'UTF-16BE';
+				$value = 'UTF-16BE';
 			elseif (ord($filestart{0})== 255 && ord($filestart{1})== 254)
-				$char_encoding['bom']['value'] = 'UTF-16LE';
+				$value = 'UTF-16LE';
 		}
-		if (isset($char_encoding['bom']['value'])) {
+		if ($value != null) {
 			// Convert to UTF-8
-			if ($char_encoding['bom']['value'] == 'UTF-16LE')
-				$content = mb_convert_encoding($content, 'UTF-8', 'UTF-16LE');
-			elseif ($char_encoding['bom']['value'] == 'UTF-16BE')
-				$content = mb_convert_encoding($content, 'UTF-8', 'UTF-16BE');
-			$char_encoding['bom']['code'] = "Byte-order mark: {$char_encoding['bom']['value']}";
+			if ($value == 'UTF-16LE')
+				$this->content = mb_convert_encoding($content, 'UTF-8', 'UTF-16LE');
+			elseif ($value == 'UTF-16BE')
+				$this->content = mb_convert_encoding($content, 'UTF-8', 'UTF-16BE');
+			$code = "Byte-order mark: {$value}";
 		} else {
-			$char_encoding['bom']['display'] = lang('token_no');
+			$display_value = lang('token_no');
 		}
-		
-		// INFO: XML DECLARATION
-		$char_encoding['xml_declaration'] = array();
-		if (preg_match_all("/<\?xml.*? encoding=([\"\'][^\"\'>]*[\"\']|[^ \"\'>]+)[^>]*>/i", $content, $xmldecltagA)) {
+		Information::addInfo($category, $title, $value, $display_value, $code);
+	}
+	
+	// INFO: XML DECLARATION
+	private function getInfoXMLDeclaration() {
+		$category = 'character_encoding';
+		$title = 'xml_declaration';
+		$value = null;
+		$display_value = null;
+		$code = null;
+		print_r($this->parser->getXMLDeclaration());
+		/*if (preg_match("/^\h*<\?xml\h* encoding=([\"\'][^\"\'>]*[\"\']|[^ \"\'>]+)[^>]*>/i", $content, $xmldecltagA)) {
 			$char_encoding['xml_declaration']['code'] = $xmldecltagA[0][count($xmldecltagA[0])-1];
 			if (count($xmldecltagA[1]>0)) {
 				$char_encoding['xml_declaration']['value'] = str_replace('\'','',$xmldecltagA[1][count($xmldecltagA[0])-1]);
@@ -93,8 +102,23 @@ class Checker {
 		} else {
 			$char_encoding['xml_declaration']['display'] = lang('none_found');
 		}
+		//$char_encoding['xml_declaration'] = array();
+		if (preg_match_all("/<\?xml.*? encoding=([\"\'][^\"\'>]*[\"\']|[^ \"\'>]+)[^>]*>/i", $content, $xmldecltagA)) {
+			$char_encoding['xml_declaration']['code'] = $xmldecltagA[0][count($xmldecltagA[0])-1];
+			if (count($xmldecltagA[1]>0)) {
+				$char_encoding['xml_declaration']['value'] = str_replace('\'','',$xmldecltagA[1][count($xmldecltagA[0])-1]);
+				$char_encoding['xml_declaration']['value'] = str_replace('"','',$char_encoding['xml_declaration']['value']);
+			} else {
+				$char_encoding['xml_declaration']['display'] = lang('no_encoding_found');
+			}
+		} else {
+			$char_encoding['xml_declaration']['display'] = lang('none_found');
+		}*/
+	}
+	
+	// INFO: META CHARSET ELEMENT
+	private function getInfoMetaCharset() {
 		
-		// INFO: META CHARSET ELEMENT
 		$char_encoding['content_type_meta'] = array();
 		if (preg_match_all("/<meta.*? http-equiv=[\"\']?Content-Type[^>]*>/i", $content, $metatagA)) {
 			$char_encoding['content_type_meta']['code'] = $metatagA[0][count($metatagA[0])-1];
@@ -289,7 +313,12 @@ class Checker {
 		$headers['accept_charset']['value'] = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? $_SERVER['HTTP_ACCEPT_CHARSET'] : lang('none_found');
 		
 	}
-
+	
+	/*public function isHTML5($content) {
+		if ($this->is_html5 == null)
+			$this->is_html5 = preg_match("/^<!DOCTYPE HTML>/i", $content);
+		return $this->is_html5;
+	}*/
 }
 
 Checker::init();
