@@ -36,6 +36,7 @@ class Checker {
 		if ($this->doc->isXHTML()) // TODO: need an isXML() function + how about issuing a warning/comment if xml:lang is found in a non-xml doc?
 			$this->addInfoXMLLangAttr();
 		$this->addInfoLangHTTP();
+		$this->addInfoLangMeta();
 	}
 	
 	// INFO: CHARSET FROM HTTP CONTENT-TYPE HEADER
@@ -96,7 +97,7 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
-	// INFO: CHARSET FROM META ELEMENTS
+	// INFO: CHARSET FROM META CONTENT-TYPE OR META CHARSET (HTML5)
 	private function addInfoCharsetMeta() {
 		$category = 'character_encoding';
 		$title = 'content_type_meta';
@@ -144,22 +145,23 @@ class Checker {
 		$title = 'http_content_language';
 		$value = isset($this->curl_info['content_language']) ? $this->curl_info['content_language'] : null;
 		$display_value = null;
-		$code = isset($this->curl_info['content_language']) ? 'Content-Language: '.$this->curl_info['content_language'] : null;;
+		$code = isset($this->curl_info['content_language']) ? 'Content-Language: '.$this->curl_info['content_language'] : null;
 		if ($value == null)
 			$display_value = 'none_found';
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
-	private function oth() {
-		// INFO: META CONTENT-LANGUAGE
-		$language['meta_content_language'] = array();
-		if (preg_match("/<meta.*? http-equiv=[\"\']?Content-Language[^>]* content=[\"\']?([a-zA-Z0-9\-\s\=,]+)[^>]*>/i", $markup, $match)) { 
-			$language['meta_content_language']['code'] = $match[0];
-			$language['meta_content_language']['value'] = $match[1];
-		} else {
-			$language['meta_content_language']['display'] = lang('none_found');
-		}
-		
+	// INFO: LANGUAGE FROM META CONTENT-LANGUAGE
+	// XXX: HTML5 content-language deprecated (http://www.w3.org/TR/html-markup/meta.http-equiv.content-language.html), consider adding a warning if used?
+	private function addInfoLangMeta() {
+		$category = 'language';
+		$title = 'meta_content_language';
+		$value = $this->doc->langsFromMeta();
+		$display_value = null;
+		$code = $this->doc->metaLangTags();
+		if ($value == null)
+			$display_value = 'none_found';
+		Information::addInfo($category, $title, $value, $display_value, $code);		
 	}
 	
 	function checkMisc($curl_info, $markup) {
