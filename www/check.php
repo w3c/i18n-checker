@@ -15,7 +15,7 @@ elseif (isset($_POST['file']))
 	$document = Net::getDocumentByFileUpload($_POST['file']);
 // If no doc found or something went wrong redirect to home page with error messages
 if ($document == false) {
-	include(PATH_TEMPLATES.'/index.html.php');
+	include(PATH_WEBDIR.'/index.php');
 	return;
 }
 // Final uri (after redirections) or false if file upload
@@ -25,9 +25,13 @@ $curl_info = $document[1];
 // The content of the document
 $content = $document[2];
 // Validate the document. Information is stored in $results[infos] and report messages in $results[reports]
-$results['infos'] = array();
-$results['reports'] = array();
-Checker::checkDocument($curl_info, $content);
+//$results['infos'] = array();
+//$results['reports'] = array();
+//Checker::checkDocument($curl_info, $content);
+
+$checker = new Checker($curl_info, $content);
+$checker->checkDocument();
+
 // Check the format parameter to determine output template
 if (isset($_REQUEST['format']) && $_REQUEST['format'] == 'xml') {
 	include(PATH_TEMPLATES.'/results.xml.php');
