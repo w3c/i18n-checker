@@ -6,13 +6,13 @@ require_once('class.Utils.php');
 abstract class Parser {
 	
 	private static $logger;
-	private $markup;
+	protected $markup;
 	// HTTP Content-Type Header 
-	private $contentType;
+	protected $contentType;
 	// TODO: What if no dtd is declared? What about XHTML5 ?
-	private $isHTML;
-	private $isHTML5;
-	private $isXHTML;
+	protected $isHTML;
+	protected $isHTML5;
+	protected $isXHTML;
 	// DOMDocument
 	protected $document;
 	// Meta charset tags
@@ -121,16 +121,12 @@ abstract class Parser {
 	public function langFromHTML() {
 		// Use getNamedItemNS(null,'lang') so that it does not match xml:lang attributes
 		$lang = $this->document->getElementsByTagName('html')->item(0)->attributes->getNamedItemNS(null,'lang');
-		if ($lang != null)
-			return $lang->value;
-		return null;
+		return ($lang != null) ? $lang->value : null;
 	}
 	
 	public function xmlLangFromHTML() {
 		$lang = $this->document->getElementsByTagName('html')->item(0)->attributes->getNamedItemNS('http://www.w3.org/XML/1998/namespace','lang');
-		if ($lang != null)
-			return $lang->value;
-		return null;
+		return ($lang != null) ? $lang->value : null;
 	}
 	
 	public function HTMLTag() {
