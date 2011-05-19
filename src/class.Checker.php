@@ -32,6 +32,10 @@ class Checker {
 		if ($this->doc->isXHTML() || $this->doc->mimetypeFromHTTP() == 'application/xhtml+xml')
 			$this->addInfoCharsetXMLDeclaration();
 		$this->addInfoCharsetMeta();
+		$this->addInfoLangAttr();
+		if ($this->doc->isXHTML()) // TODO: need an isXML() function + how about issuing a warning/comment if xml:lang is found in a non-xml doc?
+			$this->addInfoXMLLangAttr();
+		$this->addInfoLangHTTP();
 	}
 	
 	// INFO: CHARSET FROM HTTP CONTENT-TYPE HEADER
@@ -82,7 +86,7 @@ class Checker {
 	private function addInfoCharsetXMLDeclaration() {
 		$category = 'character_encoding';
 		$title = 'xml_declaration';
-		$value = strtoupper($this->doc->charsetFromXML());
+		$value = $this->doc->charsetFromXML();
 		$display_value = null;
 		$code = $this->doc->XMLDeclaration();
 		if ($code != null && $value == null)
@@ -92,7 +96,7 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
-	// INFO: META CHARSET ELEMENT
+	// INFO: CHARSET FROM META ELEMENTS
 	private function addInfoCharsetMeta() {
 		$category = 'character_encoding';
 		$title = 'content_type_meta';
@@ -106,88 +110,47 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
-	function oth() {
-		
-		// INFO: HTML5 CHARSET META
-		$char_encoding['html5_meta_charset'] = array();
-		if (preg_match_all("/<meta\s+charset\=[a-zA-Z0-9\-\s\"\'\=\:\_\.]+(\/)?>/i", $markup, $match)) {
-			$char_encoding['html5_meta_charset']['code'] = $match[0][count($match[0])-1];
-			preg_match_all("/charset=[\"\'>\s]*([^\"\'>\s]+)/i", $char_encoding['html5_meta_charset']['code'], $encvalueA);
-			if (count($encvalueA)>0) {
-				$char_encoding['html5_meta_charset']['value'] = str_replace('\'','',$encvalueA[1][0]); 
-				$char_encoding['html5_meta_charset']['value'] = str_replace('"','',$char_encoding['html5']['value']);
-			} else {
-				$char_encoding['html5_meta_charset']['display'] = lang('no_charset_found');
-			}
-			
-			// if multiple meta charset declarations, add to morehttpequivs list
-	//		if (count($metatagA[0])>1) {
-	//			for ($i=0;$i<count($match[0]);$i++) {
-	//				$morehttpequivs .= '<li><code>'.str_replace('<','&lt;',$match[0][$i]).'</code></li>';
-	//				}
-	//			} 
-		} else {
-			$char_encoding['html5_meta_charset']['display'] = lang('none_found');
-		}
-		
-		
-		// COMMENT: NON UTF8
-		// check for non-UTF8 encodings
-	//	$nonUTF8 = '';
-	//	foreach ($char_encoding as $enctype){
-	//		if (strtolower($enctype['value']) != 'utf-8' && $enctype['value'] != '') {
-	//			$nonUTF8 .= '<li><code>'.$enctype['code'].'</code></li>';
-	//		}
-	//	}
-	//	// is utf-8 not used?
-	//	if ($nonUTF8 != '') {
-	//		$comments[][0] = $utf8_not_used_title;
-	//		$comments[count($comments)-1][1] = $utf8_not_used_msg;
-	//	}
-		
+	// INFO: LANGUAGE FROM HTML LANG ATTRIBUTE
+	private function addInfoLangAttr() {
+		$category = 'language';
+		$title = 'html_lang';
+		$value = $this->doc->langFromHTML();
+		$display_value = null;
+		$code = $this->doc->HTMLTag();
+		if ($code != null && $value == null)
+			$display_value = 'token_none';
+		if ($code == null && $value == null)
+			$display_value = 'no_html_tag_found'; // Can this really happen ? Parsing should fail without an html tag
+		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
-	function checkLanguage($curl_info, $markup) {
-		// lang attr on --><html>
-		// lang != xml:lang ?
-		// lang present but not xml:lang
-		// lang attr well formed ?
-		
-		// Create language information category 
-		global $results;
-		$language = &$results['infos']['language'];
-		
-		// html lang attributes
-		$language['html_lang'] = array();
-		$language['html_xmllang'] = array();
-		if (preg_match("/<html[^>]*>/i", $markup, $match)) {
-			$htmltag = $match[0];
-			$language['html_lang']['code'] = $match[0];
-			$language['html_xmllang']['code'] = $match[0];
-			// INFO: HTML LANG
-			if (preg_match("/\slang=[\"\']?([^\s\"\'\\>]+)[\s\"\'\/>]/i", $htmltag, $match)) 
-				$language['html_lang']['value'] = $match[1];
-			else
-				$language['html_lang']['display'] = lang('token_none');
-			// INFO: HTML XML:LANG
-			if (preg_match("/\sxml:lang=[\"\']?([^\s\"\'\\>]+)[\s\"\'\/>]/i", $htmltag, $match)) 
-				$language['html_xmllang']['value'] = $match[1];
-			else
-				$language['html_xmllang']['display'] = lang('token_none');
-		} else {
-			$language['html_lang']['value'] = lang('no_html_tag_found');
-			$language['html_xmllang']['value'] = lang('no_html_tag_found');
-		}
-		
-		// INFO: HTTP CONTENT-LANGUAGE
-		$language['http_content_language'] = array();
-		if (isset($curl_info['content_language'])) {
-			$language['http_content_language']['value'] = $curl_info['content_language'] == '' ? lang('token_none') : $curl_info['content_language'];
-			$language['http_content_language']['code'] = "Content-Language: ".$curl_info['content_language'];
-		} else {
-			$language['http_content_language']['display'] = lang('none_found');
-		}
-		
+	// INFO: LANGUAGE FROM HTML XML:LANG ATTRIBUTE
+	private function addInfoXMLLangAttr() {
+		$category = 'language';
+		$title = 'html_xmllang';
+		$value = $this->doc->xmlLangFromHTML();
+		$display_value = null;
+		$code = $this->doc->HTMLTag();
+		if ($code != null && $value == null)
+			$display_value = 'token_none';
+		if ($code == null && $value == null)
+			$display_value = 'no_html_tag_found';
+		Information::addInfo($category, $title, $value, $display_value, $code);
+	}
+	
+	// INFO: LANGUAGE FROM HTTP CONTENT-LANGUAGE
+	private function addInfoLangHTTP() {
+		$category = 'language';
+		$title = 'http_content_language';
+		$value = isset($this->curl_info['content_language']) ? $this->curl_info['content_language'] : null;
+		$display_value = null;
+		$code = isset($this->curl_info['content_language']) ? 'Content-Language: '.$this->curl_info['content_language'] : null;;
+		if ($value == null)
+			$display_value = 'none_found';
+		Information::addInfo($category, $title, $value, $display_value, $code);
+	}
+	
+	private function oth() {
 		// INFO: META CONTENT-LANGUAGE
 		$language['meta_content_language'] = array();
 		if (preg_match("/<meta.*? http-equiv=[\"\']?Content-Language[^>]* content=[\"\']?([a-zA-Z0-9\-\s\=,]+)[^>]*>/i", $markup, $match)) { 
