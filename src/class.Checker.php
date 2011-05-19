@@ -2,69 +2,64 @@
 require_once('class.N11n.php');
 require_once('class.Parser.php');
 require_once('class.Information.php');
-//require_once('lib/phpQuery-onefile.php');
+require_once('class.Report.php');
 
 class Checker {
 
 	private static $logger;
-	
-	private $parser;
 	private $curl_info;
-	private $content;
-	private $is_html5;
+	private $markup;
+	private $doc;
 	
 	public static function init() {
 		self::$logger = Logger::getLogger('Checker');
 	}
 	
-	public function __construct($curl_info, $content) {
-		$this->content = $content;
+	public function __construct($curl_info, $markup) {
+		$this->markup = $markup;
 		$this->curl_info = $curl_info;
 	}
 	
 	public function checkDocument() {
 		try {
-			$this->parser = Parser::getParser($this->content);
+			$this->doc = Parser::getParser($this->markup, isset($this->curl_info['content_type']) ? $this->curl_info['content_type'] : null);
 		} catch (Exception $e) {
 			Message::addMessage(MSG_LEVEL_ERROR, $e);
+			return;
 		}
-		$this->getInfoHTTPCharset();
-		$this->getInfoBom();
-		//$this->getInfoXMLDeclaration();
+		$this->addInfoCharsetHTTP();
+		$this->addInfoCharsetBom();
+		if ($this->doc->isXHTML() || $this->doc->mimetypeFromHTTP() == 'application/xhtml+xml')
+			$this->addInfoCharsetXMLDeclaration();
+		$this->addInfoCharsetMeta();
 	}
 	
-	// INFO: HTTP CONTENT-TYPE HEADER
-	private function getInfoHTTPCharset() { 
+	// INFO: CHARSET FROM HTTP CONTENT-TYPE HEADER
+	private function addInfoCharsetHTTP() { 
 		$category = 'character_encoding';
 		$title = 'content_type';
-		$value = null;
+		$value = strtoupper($this->doc->charsetFromHTTP());
 		$display_value = null;
-		$code = null;
-		if (array_key_exists('content_type', $this->curl_info)) {
-			$charset = strpos($this->curl_info['content_type'], 'charset=');
-			if ($charset === false)
-				$display_value = 'no_charset_found';
-			else
-				$value = substr($this->curl_info['content_type'],$charset+8);
-			$code = 'Content-Type: '.$this->curl_info['content_type'];
-		} else {
+		$code = 'Content-Type: '.$this->curl_info['content_type'];
+		if ($code != null && $value == null)
+			$display_value = 'no_charset_found';
+		if ($code == null && $value == null)
 			$display_value = 'none_found';
-		}
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
 	// INFO: BYTE ORDER MARK.
-	private function getInfoBom() {
+	private function addInfoCharsetBom() {
 		$category = 'character_encoding';
 		$title = 'bom';
 		$value = null;
 		$display_value = null;
 		$code = null;
-		$filestart = substr($this->content,0,3);
+		$filestart = substr($this->markup,0,3);
 		if (ord($filestart{0})== 239 && ord($filestart{1})== 187 && ord($filestart{2})== 191) 
 			$value = 'UTF-8';
 		else { 
-			$filestart = substr($this->content,0,2);
+			$filestart = substr($this->markup,0,2);
 			if (ord($filestart{0})== 254 && ord($filestart{1})== 255)
 				$value = 'UTF-16BE';
 			elseif (ord($filestart{0})== 255 && ord($filestart{1})== 254)
@@ -73,9 +68,9 @@ class Checker {
 		if ($value != null) {
 			// Convert to UTF-8
 			if ($value == 'UTF-16LE')
-				$this->content = mb_convert_encoding($content, 'UTF-8', 'UTF-16LE');
+				$this->markup = mb_convert_encoding($markup, 'UTF-8', 'UTF-16LE');
 			elseif ($value == 'UTF-16BE')
-				$this->content = mb_convert_encoding($content, 'UTF-8', 'UTF-16BE');
+				$this->markup = mb_convert_encoding($markup, 'UTF-8', 'UTF-16BE');
 			$code = "Byte-order mark: {$value}";
 		} else {
 			$display_value = lang('token_no');
@@ -83,64 +78,39 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
-	// INFO: XML DECLARATION
-	private function getInfoXMLDeclaration() {
+	// INFO: CHARSET FROM XML DECLARATION
+	private function addInfoCharsetXMLDeclaration() {
 		$category = 'character_encoding';
 		$title = 'xml_declaration';
-		$value = null;
+		$value = strtoupper($this->doc->charsetFromXML());
 		$display_value = null;
-		$code = null;
-		print_r($this->parser->getXMLDeclaration());
-		/*if (preg_match("/^\h*<\?xml\h* encoding=([\"\'][^\"\'>]*[\"\']|[^ \"\'>]+)[^>]*>/i", $content, $xmldecltagA)) {
-			$char_encoding['xml_declaration']['code'] = $xmldecltagA[0][count($xmldecltagA[0])-1];
-			if (count($xmldecltagA[1]>0)) {
-				$char_encoding['xml_declaration']['value'] = str_replace('\'','',$xmldecltagA[1][count($xmldecltagA[0])-1]);
-				$char_encoding['xml_declaration']['value'] = str_replace('"','',$char_encoding['xml_declaration']['value']);
-			} else {
-				$char_encoding['xml_declaration']['display'] = lang('no_encoding_found');
-			}
-		} else {
-			$char_encoding['xml_declaration']['display'] = lang('none_found');
-		}
-		//$char_encoding['xml_declaration'] = array();
-		if (preg_match_all("/<\?xml.*? encoding=([\"\'][^\"\'>]*[\"\']|[^ \"\'>]+)[^>]*>/i", $content, $xmldecltagA)) {
-			$char_encoding['xml_declaration']['code'] = $xmldecltagA[0][count($xmldecltagA[0])-1];
-			if (count($xmldecltagA[1]>0)) {
-				$char_encoding['xml_declaration']['value'] = str_replace('\'','',$xmldecltagA[1][count($xmldecltagA[0])-1]);
-				$char_encoding['xml_declaration']['value'] = str_replace('"','',$char_encoding['xml_declaration']['value']);
-			} else {
-				$char_encoding['xml_declaration']['display'] = lang('no_encoding_found');
-			}
-		} else {
-			$char_encoding['xml_declaration']['display'] = lang('none_found');
-		}*/
+		$code = $this->doc->XMLDeclaration();
+		if ($code != null && $value == null)
+			$display_value = 'no_encoding_found';
+		if ($code == null && $value == null)
+			$display_value = 'none_found';
+		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
 	// INFO: META CHARSET ELEMENT
-	private function getInfoMetaCharset() {
-		
-		$char_encoding['content_type_meta'] = array();
-		if (preg_match_all("/<meta.*? http-equiv=[\"\']?Content-Type[^>]*>/i", $content, $metatagA)) {
-			$char_encoding['content_type_meta']['code'] = $metatagA[0][count($metatagA[0])-1];
-			preg_match_all("/charset=([^\"\'>\s]+)/i", $char_encoding['content_type_meta']['code'], $encvalueA);
-			if (count($encvalueA)>0) {
-				$char_encoding['content_type_meta']['value'] = str_replace('\'','',$encvalueA[1][0]); 
-				$char_encoding['content_type_meta']['value'] = str_replace('"','',$char_encoding['content_type_meta']['value']);
-			} else
-				$char_encoding['content_type_meta']['display'] = lang('no_charset_found');
-	// TODO
-	//		if (count($metatagA[0])>1) {
-	//			for ($i=0;$i<count($metatagA[0]);$i++) {
-	//				$morehttpequivs .= '<li><code>'.str_replace('<','&lt;',$metatagA[0][$i]).'</code></li>';
-	//			}
-	//		} 
-		} else {
-			$char_encoding['content_type_meta']['display'] = lang('none_found');
-		}
+	private function addInfoCharsetMeta() {
+		$category = 'character_encoding';
+		$title = 'content_type_meta';
+		$value = $this->doc->charsetsFromHTML();
+		$display_value = null;
+		$code = $this->doc->metaCharsetTags();
+		if ($code != null && $value == null)
+			$display_value = 'no_charset_found';
+		if ($code == null && $value == null)
+			$display_value = 'none_found';
+		Information::addInfo($category, $title, $value, $display_value, $code);
+	}
+	
+	function oth() {
 		
 		// INFO: HTML5 CHARSET META
 		$char_encoding['html5_meta_charset'] = array();
-		if (preg_match_all("/<meta\s+charset\=[a-zA-Z0-9\-\s\"\'\=\:\_\.]+(\/)?>/i", $content, $match)) {
+		if (preg_match_all("/<meta\s+charset\=[a-zA-Z0-9\-\s\"\'\=\:\_\.]+(\/)?>/i", $markup, $match)) {
 			$char_encoding['html5_meta_charset']['code'] = $match[0][count($match[0])-1];
 			preg_match_all("/charset=[\"\'>\s]*([^\"\'>\s]+)/i", $char_encoding['html5_meta_charset']['code'], $encvalueA);
 			if (count($encvalueA)>0) {
@@ -177,7 +147,7 @@ class Checker {
 		
 	}
 	
-	function checkLanguage($curl_info, $content) {
+	function checkLanguage($curl_info, $markup) {
 		// lang attr on --><html>
 		// lang != xml:lang ?
 		// lang present but not xml:lang
@@ -190,7 +160,7 @@ class Checker {
 		// html lang attributes
 		$language['html_lang'] = array();
 		$language['html_xmllang'] = array();
-		if (preg_match("/<html[^>]*>/i", $content, $match)) {
+		if (preg_match("/<html[^>]*>/i", $markup, $match)) {
 			$htmltag = $match[0];
 			$language['html_lang']['code'] = $match[0];
 			$language['html_xmllang']['code'] = $match[0];
@@ -220,7 +190,7 @@ class Checker {
 		
 		// INFO: META CONTENT-LANGUAGE
 		$language['meta_content_language'] = array();
-		if (preg_match("/<meta.*? http-equiv=[\"\']?Content-Language[^>]* content=[\"\']?([a-zA-Z0-9\-\s\=,]+)[^>]*>/i", $content, $match)) { 
+		if (preg_match("/<meta.*? http-equiv=[\"\']?Content-Language[^>]* content=[\"\']?([a-zA-Z0-9\-\s\=,]+)[^>]*>/i", $markup, $match)) { 
 			$language['meta_content_language']['code'] = $match[0];
 			$language['meta_content_language']['value'] = $match[1];
 		} else {
@@ -229,7 +199,7 @@ class Checker {
 		
 	}
 	
-	function checkMisc($curl_info, $content) {
+	function checkMisc($curl_info, $markup) {
 		
 		// Create language information category 
 		global $results;
@@ -237,12 +207,12 @@ class Checker {
 		
 		// INFO: HTML DIR ATTRIBUTE
 		$direction['default_direction'] = array();
-		if (preg_match("/<html[^>]*dir=[\'\"]?([^ >\'\"]+)[\'\"]?[^>]*>/i", $content, $match)) {
+		if (preg_match("/<html[^>]*dir=[\'\"]?([^ >\'\"]+)[\'\"]?[^>]*>/i", $markup, $match)) {
 			$direction['default_direction']['value'] = $match[1];
 			$direction['default_direction']['code'] = $match[0];
 		} else {
 			$direction['default_direction']['value'] = lang('ltr_default');
-			if (preg_match("/<html[^>]*>/i", $content, $match)) {
+			if (preg_match("/<html[^>]*>/i", $markup, $match)) {
 				$direction['default_direction']['code'] = $match[0];
 			} else {
 				$direction['default_direction']['display'] = lang('no_html_tag_found');
@@ -251,7 +221,7 @@ class Checker {
 		
 	//	// find all dir attributes
 	//	$dirtagctr=0; $dirmismatchctr=0; $dirmismatches='';
-	//	if (preg_match_all("/<[^>]+? dir=([\"\'][^\"\'>]*[\"\']|[^ \"\'>]+)[^>]*>/i", $content, $dirtagsA)) {
+	//	if (preg_match_all("/<[^>]+? dir=([\"\'][^\"\'>]*[\"\']|[^ \"\'>]+)[^>]*>/i", $markup, $dirtagsA)) {
 	//		$dirtagctr = count($dirtagsA[0]);
 	//		for ($i=0; $i<$dirtagctr; $i++) { 
 	//			$dirvalue = $dirtagsA[1][$i]; $dirvalue = str_replace('\'','',$dirvalue); $dirvalue = str_replace('"','',$dirvalue);
@@ -266,8 +236,8 @@ class Checker {
 		$class = &$results['infos']['class_and_id'];
 		
 		// INFO: NON-ASCII AND NFC NAMES
-		$classfound = preg_match_all("/<[^>]*? class=[\'\"]?([^>\'\"]+)[\'\"]?[^>]*>/i", $content, $classesA);
-		$idsfound = preg_match_all("/<[^>]*? id=[\'\"]?([^>\'\"]+)[\'\"]?[^>]*>/i", $content, $idsA);
+		$classfound = preg_match_all("/<[^>]*? class=[\'\"]?([^>\'\"]+)[\'\"]?[^>]*>/i", $markup, $classesA);
+		$idsfound = preg_match_all("/<[^>]*? id=[\'\"]?([^>\'\"]+)[\'\"]?[^>]*>/i", $markup, $idsA);
 		$class['class_and_id_non_ascii'] = array();
 		$class['class_and_id_non_ascii']['value'] = 0;
 		$class['class_and_id_non_nfc'] = array();
@@ -314,9 +284,9 @@ class Checker {
 		
 	}
 	
-	/*public function isHTML5($content) {
+	/*public function isHTML5($markup) {
 		if ($this->is_html5 == null)
-			$this->is_html5 = preg_match("/^<!DOCTYPE HTML>/i", $content);
+			$this->is_html5 = preg_match("/^<!DOCTYPE HTML>/i", $markup);
 		return $this->is_html5;
 	}*/
 }
