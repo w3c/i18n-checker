@@ -1,6 +1,6 @@
 <?php 
-require_once('class.Parser_PHPQuery.php');
-require_once('class.Parser_HTML5Lib.php');
+require_once('class.Parser.PHPQuery.php');
+require_once('class.Parser.HTML5Lib.php');
 require_once('class.Utils.php');
 
 abstract class Parser {
@@ -25,10 +25,10 @@ abstract class Parser {
 	public static function getParser($markup, $contentType) {
 		if (self::is_HTML5($markup)) {
 			self::$logger->debug(sprintf("Creating HTML5 parser. Content-type is: %s", $contentType == null ? 'null' : $contentType));
-			return new Parser_HTML5Lib($markup, $contentType);
+			return new ParserHTML5Lib($markup, $contentType);
 		} else
 			self::$logger->debug(sprintf("Creating (X)HTML parser. Content-type is: %s", $contentType == null ? 'null' : $contentType));
-			return new Parser_PHPQuery($markup, $contentType);
+			return new ParserPHPQuery($markup, $contentType);
 	}
 	
 	private static function is_HTML5($markup) {

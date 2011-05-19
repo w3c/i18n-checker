@@ -2,7 +2,7 @@
 require_once('lib/phpQuery.php');
 
 
-class Parser_PHPQuery extends Parser {
+class ParserPHPQuery extends Parser {
 	
 	private static $logger;
 	private $doc;
@@ -42,4 +42,4 @@ class Parser_PHPQuery extends Parser {
 	}
 }
 
-Parser_PHPQuery::init();
+ParserPHPQuery::init();
