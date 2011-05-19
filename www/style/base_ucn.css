@@ -1177,6 +1177,7 @@ body > .section {
 	font-size:17px;
 	padding:2px 5px;
 	color:white;
+	margin-right:4px;
 }
 
 .backtop {
@@ -1313,6 +1314,13 @@ code {
   padding-left:0.2em;
   padding-right:0.2em;
   white-space:normal;
+}
+
+#infos table ol li {
+	margin-bottom:4px;
+}
+#infos table ol li:last-child {
+	margin-bottom:0;
 }
 
 fieldset div.input input[type=submit] {
