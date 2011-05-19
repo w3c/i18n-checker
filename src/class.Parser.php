@@ -1,37 +1,97 @@
 <?php 
 require_once('class.Parser_PHPQuery.php');
 require_once('class.Parser_HTML5Lib.php');
+require_once('class.Utils.php');
 
 abstract class Parser {
 	
+	private static $logger;
 	private $markup;
+	// HTTP Content-Type Header 
+	private $contentType;
+	private $isHTML;
+	private $isHTML5;
+	private $isXHTML;
 	
-	protected function __construct() {
-		
+	public static function init() {
+		self::$logger = Logger::getLogger('Parser');
 	}
 	
-	//public abstract function getXMLDeclaration();
+	protected function __construct($markup, $contentType) {
+		$this->markup = $markup;
+		$this->contentType = $contentType;
+	}
 	
-	public static function getParser($markup) {
-		if (self::isHTML5($markup)) {
-			return new Parser_HTML5Lib($markup);
+	public static function getParser($markup, $contentType) {
+		if (self::is_HTML5($markup)) {
+			self::$logger->debug(sprintf("Creating HTML5 parser. Content-type is: %s", $contentType == null ? 'null' : $contentType));
+			return new Parser_HTML5Lib($markup, $contentType);
 		} else
-			return new Parser_PHPQuery($markup);
+			self::$logger->debug(sprintf("Creating (X)HTML parser. Content-type is: %s", $contentType == null ? 'null' : $contentType));
+			return new Parser_PHPQuery($markup, $contentType);
 	}
 	
-	private static function isHTML5($markup) {
-		return preg_match("/^<!DOCTYPE HTML>/i", $markup) === false;
+	private static function is_HTML5($markup) {
+		return preg_match("/<!DOCTYPE HTML>/i", $markup) == true;
 	}
-	public function charsetFromHTML() {
-		$contentType = $this->contentTypeFromHTML($this->markup);
-		return $contentType[1];
+	
+	public function isHTML5() {
+		if ($this->isHTML5 == null) {
+			$this->isHTML = false;
+			$this->isXHTML = false;
+			$this->isHTML5 = self::is_HTML5($this->markup);
+		}
+		return $this->isHTML5;
 	}
+	
+	public function isXHTML() {
+		if ($this->isXHTML == null) {
+			$this->isHTML = false;
+			$this->isHTML5 = false;
+			$this->isXHTML = preg_match("/<!DOCTYPE [^>]*DTD XHTML/i", $this->markup) == true;
+		}
+		return $this->isXHTML;
+	}
+	
+	public function isHTML() {
+		if ($this->isHTML == null) {
+			$this->isXHTML = false;
+			$this->isHTML5 = false;
+			$this->isHTML = preg_match("/<!DOCTYPE [^>]*DTD HTML/i", $this->markup) == true;
+		}
+		return $this->isHTML;
+	}
+	
+	public function mimetypeFromHTTP() {
+		$contentType = Utils::contentTypeToArray($this->contentType);
+		return $contentType['mimetype'];
+	}
+	
+	public function charsetFromHTTP() {
+		$contentType = Utils::contentTypeToArray($this->contentType);
+		return $contentType['charset'];
+	}
+	
 	public function charsetFromXML() {
 		preg_match('@<'.'?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i', $this->markup, $matches);
 		return isset($matches[2]) ? strtolower($matches[2]) : null;
 	}
 	
-	protected function contentTypeFromHTML() {
+	public function XMLDeclaration() {
+		preg_match('/<\?xml[^>]+encoding\\s*=\\s*(["|\'])[^>]+>/i', $this->markup, $matches);
+		return $matches[0];
+	}
+	
+	public abstract function charsetsFromHTML();
+	
+	public abstract function metaCharsetTags();
+	
+	/*public function charsetFromHTML() {
+		$contentType = $this->contentTypeFromHTML($this->markup);
+		return $contentType['charset'];
+	}*/
+	
+	/*protected function contentTypeFromHTML() {
 		$matches;
 		// find meta tag
 		preg_match('@<meta[^>]+http-equiv\\s*=\\s*(["|\'])Content-Type\\1([^>]+?)>@i', $this->markup, $matches);
@@ -41,20 +101,9 @@ abstract class Parser {
 		preg_match('@content\\s*=\\s*(["|\'])(.+?)\\1@', $matches[0], $matches);
 		if (! isset($matches[0]))
 			return array(null, null);
-		return $this->contentTypeToArray($matches[2]);
-	}
-	
-	protected function contentTypeToArray($contentType) {
-		$matches = explode(';', trim(strtolower($contentType)));
-		if (isset($matches[1])) {
-			$matches[1] = explode('=', $matches[1]);
-			// strip 'charset='
-			$matches[1] = isset($matches[1][1]) && trim($matches[1][1])
-				? $matches[1][1]
-				: $matches[1][0];
-		} else
-			$matches[1] = null;
-		return $matches;
-	}
+		return Utils::contentTypeToArray($matches[2]);
+	}*/
 	
 }
+
+Parser::init();
