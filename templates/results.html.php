@@ -100,7 +100,7 @@ include('includes/form.php');
 					if ($info->display_value != null) {
 						_lang($info->display_value);
 					} else {
-						if (is_array($info->value)) {
+						if (is_array($info->value) && count($info->value) > 0) {
 							foreach ($info->value as $value) {
 								echo "<strong>".$value."</strong>";
 							}
@@ -111,7 +111,7 @@ include('includes/form.php');
 					echo "</td>\n";
 					echo "<td>\n";
 						if ($info->code != null) {
-							if (is_array($info->code)) {
+							if (is_array($info->code) && count($info->code) > 0) {
 								echo '<ol>';
 								foreach ($info->code as $code) {
 									echo "<li><code>".htmlspecialchars($code)."</code></li>";
