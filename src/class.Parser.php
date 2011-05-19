@@ -18,6 +18,9 @@ abstract class Parser {
 	// Meta charset tags
 	protected $metaCharsetTags;
 	protected $charsetsFromHTML;
+	// Meta language tags
+	protected $metaLanguageTags;
+	protected $langsFromMeta;
 	
 	public static function init() {
 		self::$logger = Logger::getLogger('Parser');
@@ -101,16 +104,18 @@ abstract class Parser {
 		return $this->metaCharsetTags;
 	}
 	
-	protected function parseMeta() {
-		$this->charsetsFromHTML = array();
-		$this->metaCharsetTags = array();
-		$metas = $this->document->getElementsByTagName("meta");
-		foreach ($metas as $meta) {
-			if (($charset = $meta->attributes->getNamedItem('charset')) != null) {
-				$this->charsetsFromHTML[] = strtoupper($charset->value);
-				$this->metaCharsetTags[] = $this->dump($meta);
-			}
-		}
+	protected abstract function parseMeta();
+	
+	public function langsFromMeta() {
+		if ($this->langsFromMeta == null)
+			$this->parseMeta();
+		return $this->langsFromMeta;
+	}
+	
+	public function metaLangTags() {
+		if ($this->metaLanguageTags == null)
+			$this->parseMeta();
+		return $this->metaLanguageTags;
 	}
 	
 	public function langFromHTML() {
