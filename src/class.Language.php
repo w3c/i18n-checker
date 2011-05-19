@@ -78,7 +78,8 @@ class Language {
 	
 	public static function lang($str) {
 		$result = '';
-		if (isset(self::$language[$str])) {
+		$str = (string) $str;
+		if (array_key_exists($str, self::$language)) {
 			$result = self::$language[$str];
 		} else if (Conf::get('debug') == true) {
 			$result = "[[[".$str."]]]";
