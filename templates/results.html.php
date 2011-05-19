@@ -78,7 +78,7 @@ include('includes/form.php');
 	</div>
 </div>
 
-<?php if (count($results["infos"]) > 0) { ?>
+<?php if (Information::getCount() > 0) { ?>
 <div id="infos" class="section">
 	<h1 class="title">
 		<a href="#infos"><?php _lang('information') ?></a>
@@ -87,32 +87,33 @@ include('includes/form.php');
 	<div class="block">
 		<table>
 		<?php 
-			foreach ($results["infos"] as $category => $messages) {
+			//foreach ($results["infos"] as $category => $messages) {
+			foreach (Information::getInfoPerCategory() as $category => $infoArray) {
 			    echo "<tr>\n";
 			    	echo "<th>".lang($category)."</th>\n";
 					echo "<th></th>\n";
 					echo "<th>".lang('code')."</th>\n";
 			    echo "</tr>\n";
-			    foreach ($messages as $name => $message) {
+			    foreach ($infoArray as $info) {
 			    echo "<tr>\n";
-			    	echo "<td>".lang($name)."</td>\n";
+			    	echo "<td>".lang($info->title)."</td>\n";
 					echo "<td>";
-					if (isset($message['display'])) {
-						echo $message['display'];
+					if ($info->display_value != null) {
+						_lang($info->display_value);
 					} else {
-						echo "<strong>".$message['value']."</strong>";
+						echo "<strong>".$info->value."</strong>";
 					}
 					echo "</td>\n";
 					echo "<td>\n";
-						if (isset($message['code'])) {
-							if (is_array($message['code'])) {
+						if ($info->code != null) {
+							if (is_array($info->code)) {
 								echo '<ol>';
-								foreach ($message['code'] as $code) {
+								foreach ($info->code as $code) {
 									echo "<li><code>".htmlspecialchars($code)."</code></li>";
 								}
 								echo '</ol>';
 							} else
-								echo "<code>".htmlspecialchars($message['code'])."</code>\n";
+								echo "<code>".htmlspecialchars($info->code)."</code>\n";
 						}
 					echo '</td>';
 			    echo '</tr>';
