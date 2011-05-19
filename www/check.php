@@ -20,14 +20,10 @@ if ($document == false) {
 }
 // Final uri (after redirections) or false if file upload
 $uri = $document[0];
-// Curl information (cf log file)  or false if file upload
+// Curl information (cf log file) or false if file upload
 $curl_info = $document[1];
 // The content of the document
 $content = $document[2];
-// Validate the document. Information is stored in $results[infos] and report messages in $results[reports]
-//$results['infos'] = array();
-//$results['reports'] = array();
-//Checker::checkDocument($curl_info, $content);
 
 $checker = new Checker($curl_info, $content);
 $checker->checkDocument();
