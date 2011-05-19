@@ -1,18 +1,19 @@
 <?php
+require_once('lib/html5lib/Parser.php');
 
-class ParserHTML5Lib extends Parser {
+final class ParserHTML5Lib extends Parser {
+	
+	private static $logger;
+	
+	public static function init() {
+		self::$logger = Logger::getLogger('Parser.PHPQuery');
+	}
 	
 	protected function __construct($markup, $contentType) {
+		$this->document = HTML5_Parser::parse($markup);
 		parent::__construct($markup, $contentType);
 	}
 	
-	public function charsetsFromHTML() {
-		return null;
-	}
-	
-	public function metaCharsetTags() {
-		return null;
-	}
-	
-	
 }
+
+ParserHTML5Lib::init();

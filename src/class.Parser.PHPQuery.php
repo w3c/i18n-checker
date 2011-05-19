@@ -1,13 +1,10 @@
 <?php
 require_once('lib/phpQuery.php');
 
-
-class ParserPHPQuery extends Parser {
+final class ParserPHPQuery extends Parser {
 	
 	private static $logger;
 	private $doc;
-	private $metaCharsetTags = array();
-	private $charsetsFromHTML = array();
 	
 	public static function init() {
 		self::$logger = Logger::getLogger('Parser.PHPQuery');
@@ -16,22 +13,16 @@ class ParserPHPQuery extends Parser {
 	protected function __construct($markup, $contentType) {
 		//phpQuery::$debug = 2;
 		$this->doc = phpQuery::newDocument($markup);
+		$this->document = $this->doc->document;
 		parent::__construct($markup, $contentType);
 	}
 	
-	public function charsetsFromHTML() {
-		// attr(name) accesses the property on the first matched element
-		$contentType = Utils::contentTypeToArray(pq('meta[http-equiv=Content-Type]')->attr('content'));
+	// @Override
+	protected function parseMeta() {
+		$this->charsetsFromHTML = array();
+		$this->metaCharsetTags = array();
+		// Seems we can't use an anonymous callback function
 		pq('meta[http-equiv=Content-Type]')->each(array($this, 'addCharsetHTML'));
-		return $this->charsetsFromHTML;
-	}
-	
-	public function metaCharsetTags() {
-		return $this->metaCharsetTags;
-	}
-	
-	private function dump($node){
-	    return $this->doc->document->saveXML($node);
 	}
 	
 	public function addCharsetHTML($node) {
@@ -40,6 +31,10 @@ class ParserPHPQuery extends Parser {
 		$this->metaCharsetTags[] = $this->dump($node);
 		self::$logger->debug("Found meta tag charset: ".$contentType['charset']);
 	}
+	
+	/*public function langFromHTML() {
+		self::$logger->debug($this->dumpTag(pq('html')->elements[0]));
+	}*/
 }
 
 ParserPHPQuery::init();
