@@ -1,6 +1,6 @@
 <?php
 
-class Parser_HTML5Lib extends Parser {
+class ParserHTML5Lib extends Parser {
 	
 	protected function __construct($markup, $contentType) {
 		parent::__construct($markup, $contentType);
