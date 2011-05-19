@@ -9,9 +9,15 @@ abstract class Parser {
 	private $markup;
 	// HTTP Content-Type Header 
 	private $contentType;
+	// TODO: What if no dtd is declared? What about XHTML5 ?
 	private $isHTML;
 	private $isHTML5;
 	private $isXHTML;
+	// DOMDocument
+	protected $document;
+	// Meta charset tags
+	protected $metaCharsetTags;
+	protected $charsetsFromHTML;
 	
 	public static function init() {
 		self::$logger = Logger::getLogger('Parser');
@@ -32,33 +38,24 @@ abstract class Parser {
 	}
 	
 	private static function is_HTML5($markup) {
-		return preg_match("/<!DOCTYPE HTML>/i", $markup) == true;
+		return preg_match("/<!DOCTYPE HTML>/i", substr($markup, '0', Conf::get('perf_head_length'))) == true;
 	}
 	
 	public function isHTML5() {
-		if ($this->isHTML5 == null) {
-			$this->isHTML = false;
-			$this->isXHTML = false;
+		if ($this->isHTML5 == null)
 			$this->isHTML5 = self::is_HTML5($this->markup);
-		}
 		return $this->isHTML5;
 	}
 	
 	public function isXHTML() {
-		if ($this->isXHTML == null) {
-			$this->isHTML = false;
-			$this->isHTML5 = false;
-			$this->isXHTML = preg_match("/<!DOCTYPE [^>]*DTD XHTML/i", $this->markup) == true;
-		}
+		if ($this->isXHTML == null)
+			$this->isXHTML = preg_match("/<!DOCTYPE [^>]*DTD XHTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true;
 		return $this->isXHTML;
 	}
 	
 	public function isHTML() {
-		if ($this->isHTML == null) {
-			$this->isXHTML = false;
-			$this->isHTML5 = false;
-			$this->isHTML = preg_match("/<!DOCTYPE [^>]*DTD HTML/i", $this->markup) == true;
-		}
+		if ($this->isHTML == null)
+			$this->isHTML = preg_match("/<!DOCTYPE [^>]*DTD HTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true;
 		return $this->isHTML;
 	}
 	
@@ -73,37 +70,67 @@ abstract class Parser {
 	}
 	
 	public function charsetFromXML() {
-		preg_match('@<'.'?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i', $this->markup, $matches);
-		return isset($matches[2]) ? strtolower($matches[2]) : null;
+		preg_match('@<'.'?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i', substr($this->markup, '0', Conf::get('perf_head_length')), $matches);
+		return isset($matches[2]) ? strtoupper($matches[2]) : null;
 	}
 	
 	public function XMLDeclaration() {
-		preg_match('/<\?xml[^>]+encoding\\s*=\\s*(["|\'])[^>]+>/i', $this->markup, $matches);
-		return $matches[0];
+		preg_match('/<\?xml[^>]+encoding\\s*=\\s*(["|\'])[^>]+>/i', substr($this->markup, '0', Conf::get('perf_head_length')), $matches);
+		return isset($matches[0]) ? $matches[0] : null;
 	}
 	
-	public abstract function charsetsFromHTML();
+	protected function dump($node){
+	    return $this->document->saveXML($node);
+	}
 	
-	public abstract function metaCharsetTags();
+	// Only dumps the opening tag of $node
+	protected function dumpTag($node){
+	    preg_match('/^<[^>]+>/i', $this->document->saveXML($node), $matches);
+	    return isset($matches[0]) ? $matches[0] : null;
+	}
 	
-	/*public function charsetFromHTML() {
-		$contentType = $this->contentTypeFromHTML($this->markup);
-		return $contentType['charset'];
-	}*/
+	public function charsetsFromHTML() {
+		if ($this->charsetsFromHTML == null)
+			$this->parseMeta();
+		return $this->charsetsFromHTML;
+	}
 	
-	/*protected function contentTypeFromHTML() {
-		$matches;
-		// find meta tag
-		preg_match('@<meta[^>]+http-equiv\\s*=\\s*(["|\'])Content-Type\\1([^>]+?)>@i', $this->markup, $matches);
-		if (! isset($matches[0]))
-			return array(null, null);
-		// get attr 'content'
-		preg_match('@content\\s*=\\s*(["|\'])(.+?)\\1@', $matches[0], $matches);
-		if (! isset($matches[0]))
-			return array(null, null);
-		return Utils::contentTypeToArray($matches[2]);
-	}*/
+	public function metaCharsetTags() {
+		if ($this->metaCharsetTags == null)
+			$this->parseMeta();
+		return $this->metaCharsetTags;
+	}
 	
+	protected function parseMeta() {
+		$this->charsetsFromHTML = array();
+		$this->metaCharsetTags = array();
+		$metas = $this->document->getElementsByTagName("meta");
+		foreach ($metas as $meta) {
+			if (($charset = $meta->attributes->getNamedItem('charset')) != null) {
+				$this->charsetsFromHTML[] = strtoupper($charset->value);
+				$this->metaCharsetTags[] = $this->dump($meta);
+			}
+		}
+	}
+	
+	public function langFromHTML() {
+		// Use getNamedItemNS(null,'lang') so that it does not match xml:lang attributes
+		$lang = $this->document->getElementsByTagName('html')->item(0)->attributes->getNamedItemNS(null,'lang');
+		if ($lang != null)
+			return $lang->value;
+		return null;
+	}
+	
+	public function xmlLangFromHTML() {
+		$lang = $this->document->getElementsByTagName('html')->item(0)->attributes->getNamedItemNS('http://www.w3.org/XML/1998/namespace','lang');
+		if ($lang != null)
+			return $lang->value;
+		return null;
+	}
+	
+	public function HTMLTag() {
+		return $this->dumpTag($this->document->getElementsByTagName('html')->item(0));
+	}
 }
 
 Parser::init();
