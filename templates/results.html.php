@@ -87,7 +87,6 @@ include('includes/form.php');
 	<div class="block">
 		<table>
 		<?php 
-			//foreach ($results["infos"] as $category => $messages) {
 			foreach (Information::getInfoPerCategory() as $category => $infoArray) {
 			    echo "<tr>\n";
 			    	echo "<th>".lang($category)."</th>\n";
@@ -101,7 +100,13 @@ include('includes/form.php');
 					if ($info->display_value != null) {
 						_lang($info->display_value);
 					} else {
-						echo "<strong>".$info->value."</strong>";
+						if (is_array($info->value)) {
+							foreach ($info->value as $value) {
+								echo "<strong>".$value."</strong>";
+							}
+						} else {
+							echo "<strong>".$info->value."</strong>";
+						}
 					}
 					echo "</td>\n";
 					echo "<td>\n";
