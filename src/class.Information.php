@@ -29,11 +29,21 @@ class Information {
 	public static function getInfoPerCategory() {
 		$result = array();
 		foreach (self::$infos as $info) {
-			if (!isset($result[$info->category]))
-				$result[$info->category] = array();
-			$result[$info->category][] = $info;
+			if ($info->category != null) {
+				if (!isset($result[$info->category]))
+					$result[$info->category] = array();
+				$result[$info->category][] = $info;
+			}
 		}
 		return $result;
+	}
+	
+	public static function get($name) {
+		foreach (self::$infos as $info) {
+			if ($info->title == $name) {
+				return $info;
+			}
+		}
 	}
 	
 	public static function getCount() {
