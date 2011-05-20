@@ -93,6 +93,26 @@ final class ParserPHPQuery extends Parser {
 		return isset($matches[0]) ? $matches[0] : '<html>';
 	}
 	
+	public function getNodesWithClass() {
+		return $this->getNodesWithAttr('class');
+	}
+	
+	public function getNodesWithId() {
+		return $this->getNodesWithAttr('id');
+	}
+	
+	// Example: 
+	// getNodesWithAttr('class') = array(
+	//     '<div class="கோ">' => array('கோ'),
+	//     '<div class="test cằn">' => array('test', 'cằn'),
+	//     '<div class="c1 c2">' => array('c1', 'c2')
+	// );
+	private function getNodesWithAttr($attr) {
+		$result = array();
+		foreach (pq('*['.$attr.']') as $node)
+			$result[$this->dumpTag($node)] = Utils::arrayTrim(preg_split('/[ ]+/', pq($node)->attr($attr)));
+		return $result;
+	} 
 }
 
 ParserPHPQuery::init();
