@@ -24,7 +24,8 @@ class Checker {
 		try {
 			$this->doc = Parser::getParser($this->markup, isset($this->curl_info['content_type']) ? $this->curl_info['content_type'] : null);
 		} catch (Exception $e) {
-			Message::addMessage(MSG_LEVEL_ERROR, $e);
+			Message::addMessage(MSG_LEVEL_ERROR, 'Exception: '.$e->getMessage());
+			self::$logger->error('Exception raised for URI: '.$this->curl_info['url'], $e);
 			return;
 		}
 		$this->addInfoDTDMimetype();
