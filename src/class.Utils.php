@@ -17,7 +17,17 @@ class Utils {
 		} else
 			$matches[1] = null;
 		//return $matches;
-		return array ('mimetype' => $matches[0], 'charset' => $matches[1]);
+		return array ('mimetype' => $matches[0], 'charset' => strtoupper($matches[1]));
+	}
+	
+	public static function charsetFromContentType($contentType) {
+		$ct = Utils::contentTypeToArray($contentType);
+		return $ct['charset'];
+	}
+	
+	public static function mimeFromContentType($contentType) {
+		$ct = Utils::contentTypeToArray($contentType);
+		return $ct['mimetype'];
 	}
 	
 	public static function boolString($bValue = false) {
