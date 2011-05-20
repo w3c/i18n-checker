@@ -82,7 +82,7 @@ include('includes/form.php');
 <div id="infos" class="section">
 	<h1 class="title">
 		<a href="#infos"><?php _lang('information') ?></a>
-		<span><?php //echo $doctypename;?> :: <?php //echo $mimetypename;?></span>
+		<span class="meta"><?php echo Information::get('dtd')->value ?>&nbsp;&nbsp;-&nbsp;&nbsp;<?php echo Information::get('mimetype')->value ?></span>
 	</h1>
 	<div class="block">
 		<table>
