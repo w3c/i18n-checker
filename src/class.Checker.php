@@ -178,20 +178,41 @@ class Checker {
 		if ($value == null)
 			$value = lang('ltr_default');
 		Information::addInfo($category, $title, $value, $display_value, $code);	
-		
-		//	// find all dir attributes
-	//	$dirtagctr=0; $dirmismatchctr=0; $dirmismatches='';
-	//	if (preg_match_all("/<[^>]+? dir=([\"\'][^\"\'>]*[\"\']|[^ \"\'>]+)[^>]*>/i", $markup, $dirtagsA)) {
-	//		$dirtagctr = count($dirtagsA[0]);
-	//		for ($i=0; $i<$dirtagctr; $i++) { 
-	//			$dirvalue = $dirtagsA[1][$i]; $dirvalue = str_replace('\'','',$dirvalue); $dirvalue = str_replace('"','',$dirvalue);
-	//			if (! (strtolower($dirvalue == 'rtl') || strtolower($dirvalue == 'ltr')) ) { 
-	//				$dirmismatchctr++;
-	//				$dirmismatches .= '<li><code>'.str_replace('<','&lt;',$dirtagsA[0][$i]).'</code></li>';
-	//			}
-	//		}
-	//	}
+	}
 	
+	// INFO: REQUEST HEADERS
+	private function addInfoClassId() {
+		$classes = $this->doc->getNodesWithClass();
+		$ids = $this->doc->getNodesWithID();
+		$nodes = array_merge($classes, $ids);
+		
+		// Remove nodes for which all class names are ASCII
+		$unsetASCII = function (&$classes, $code) use (&$nodes) {
+			$classes = preg_filter('/[^\x20-\x7E]/', '$0', $classes);
+			if (count($classes) == 0)
+				unset($nodes[$code]);
+		};
+		array_walk(&$nodes, $unsetASCII);
+		
+		$category = 'class_and_id';
+		$title = 'class_and_id_non_ascii';
+		$value = array_unique(Utils::arrayFlatten(array_values($nodes)));
+		$display_value = count($value) == 0 ? 'token_none' : null;
+		$code = array_keys($nodes);
+		Information::addInfo($category, $title, $value, $display_value, $code);	
+		
+		// Remove nodes for which all class names are NFC
+		$unsetNFC = function (&$classes, $code) use (&$nodes) {
+			$classStr = implode('', $classes);
+			if (N11n::nfc($classStr) == $classStr)
+				unset($nodes[$code]);
+		};
+		array_walk(&$nodes, $unsetNFC);
+		$title = 'class_and_id_non_nfc';
+		$value = array_unique(Utils::arrayFlatten(array_values($nodes)));
+		$display_value = count($value) == 0 ? 'token_none' : null;
+		$code = array_keys($nodes);
+		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
 	// INFO: REQUEST HEADERS
@@ -215,85 +236,6 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
-	private function addInfoClassId() {
-		$classes = $this->doc->getNodesWithClass();
-		$ids = $this->doc->getNodesWithID();
-		$nodes = array_merge($classes, $ids);
-		$unsetASCII = function (&$param, $key) use (&$nodes) {
-			$param = preg_filter('/[^\x20-\x7E]/', '$0', $param);
-			if (count($param) == 0)
-				unset($nodes[$key]);
-		};
-		array_walk(&$nodes, $unsetASCII);
-		
-		$category = 'class_and_id';
-		$title = 'class_and_id_non_ascii';
-		$value = array_unique(Utils::arrayFlatten(array_values($nodes)));
-		$display_value = null;
-		$code = array_keys($nodes);
-		Information::addInfo($category, $title, $value, $display_value, $code);	
-	}
-	
-	function it() {
-		foreach ($classNodes as $code => $classes) {
-			
-			foreach ($classes as $class) {
-				if (!Utils::isASCII($class)) {
-					$nonASCIIclass[] = $class;
-					$nonASCIIclassCode[] = $code;
-				}
-			}
-		}
-		
-		self::$logger->debug(print_r(preg_filter('/[^\x20-\x7E]/', '$0', $classNodes), true));
-		
-		foreach ($classNodes as $node) {
-			
-		}
-		
-		// Create class_and_id information category 
-		$class = &$results['infos']['class_and_id'];
-		
-		// INFO: NON-ASCII AND NFC NAMES
-		$classfound = preg_match_all("/<[^>]*? class=[\'\"]?([^>\'\"]+)[\'\"]?[^>]*>/i", $markup, $classesA);
-		$idsfound = preg_match_all("/<[^>]*? id=[\'\"]?([^>\'\"]+)[\'\"]?[^>]*>/i", $markup, $idsA);
-		$class['class_and_id_non_ascii'] = array();
-		$class['class_and_id_non_ascii']['value'] = 0;
-		$class['class_and_id_non_nfc'] = array();
-		$class['class_and_id_non_nfc']['value'] = 0;
-		foreach ($classesA[1] as $key => $classes) {
-			$names = explode(" ", $classes);
-			foreach ($names as $name) {
-				if (preg_match("/[!-~\s]*[^!-~\s]+.*/", $name)) { //[^\x20-\x7E]
-					$class['class_and_id_non_ascii']['value'] += 1;
-					$class['class_and_id_non_ascii']['code'][] = $classesA[0][$key];
-					if (N11n::nfc($name) != $name) {
-						$class['class_and_id_non_nfc']['value'] += 1;
-						$class['class_and_id_non_nfc']['code'][] = $classesA[0][$key];
-					}
-				}
-			}
-		}
-		foreach ($idsA[1] as $key => $classes) {
-			$names = explode(" ", $classes);
-			foreach ($names as $name) {
-				if (preg_match("/[!-~\s]*[^!-~\s]+.*/", $name)) {
-					$class['class_and_id_non_ascii']['value'] += 1;
-					$class['class_and_id_non_ascii']['code'][] = $idsA[0][$key];
-					if (N11n::nfc($name) != $name) {
-						$class['class_and_id_non_nfc']['value'] += 1;
-						$class['class_and_id_non_nfc']['code'][] = $idsA[0][$key];
-					}
-				}
-			}
-		}
-		if ($class['class_and_id_non_ascii']['value'] == 0)
-			$class['class_and_id_non_ascii']['display'] = lang('token_none');
-		if ($class['class_and_id_non_nfc']['value'] == 0)
-			$class['class_and_id_non_nfc']['display'] = lang('token_none');
-		
-
-	}
 }
 
 Checker::init();
