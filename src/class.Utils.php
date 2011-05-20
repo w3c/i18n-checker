@@ -29,18 +29,17 @@ class Utils {
 	}
 	
 	// Adds the values contained in the comma-separated list $string (typically a list of languages) to $array
-	public static function arrayMergeCommaString($array, $string) {
-		return array_merge($array, array_map('trim', preg_split('/,/', $string)));
+	public static function arrayMergeCommaString(array $array = null, $string) {
+		return array_merge((array) $array, array_map('trim', preg_split('/,/', $string)));
 	}
 	
-	public static function arrayTrim($array) {
+	public static function arrayTrim(array $array) {
 		return array_map('trim', $array);
 	}
 	
-	public static function arrayFlatten($array, $nbPass = 1) {
+	public static function arrayFlatten(array $array, $nbPass = 1) {
 		if ($nbPass <= 0)
 			return $array;
-		$result = array();
 		foreach ($array as $key => $value) {
 			if (is_array($value))
 				foreach ($value as $valKey => $valVal) 
@@ -51,13 +50,12 @@ class Utils {
 		return self::arrayFlatten($result, $nbPass-1);
 	}
 	
-	public static function boolString($bValue = false) {
+	public static function boolString(bool $bValue) {
 		return ($bValue ? 'true' : 'false');
 	}
 	
 	// return an array of accepted languages/charsets from the Accept-Language and Accept-Charset HTTP headers 
 	public static function parseHeader($header) {
-		$result = array();
 		foreach (preg_split('/,/', $header) as $value) {
 			$a = preg_split('/;/', $value);
 			$result[] = trim($a[0]);
