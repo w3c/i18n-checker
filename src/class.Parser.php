@@ -93,7 +93,7 @@ abstract class Parser {
 	public function charsetsFromHTML() {
 		if ($this->charsetsFromHTML == null)
 			$this->parseMeta();
-		return $this->charsetsFromHTML;
+		return array_unique($this->charsetsFromHTML);
 	}
 	
 	public function metaCharsetTags() {
@@ -107,7 +107,7 @@ abstract class Parser {
 	public function langsFromMeta() {
 		if ($this->langsFromMeta == null)
 			$this->parseMeta();
-		return $this->langsFromMeta;
+		return array_unique($this->langsFromMeta);
 	}
 	
 	public function metaLangTags() {
