@@ -50,10 +50,15 @@ class Checker {
 			$dtd = 'XHTML';
 		} elseif ($this->doc->isHTML()) {
 			$dtd = 'HTML';
+		} elseif ($this->doc->isXHTML5()) {
+			$dtd = 'XHTML5';
 		} elseif ($this->doc->isHTML5()) {
 			$dtd = 'HTML5';
 		}
-		Information::addInfo(null, 'dtd', $dtd, null, null);
+		if ($dtd)
+			Information::addInfo(null, 'dtd', $dtd, null, null);
+		else
+			Information::addInfo(null, 'dtd', 'NA', null, null);
 		Information::addInfo(null, 'mimetype', $this->doc->mimetypeFromHTTP(), null, null);
 	}
 	
