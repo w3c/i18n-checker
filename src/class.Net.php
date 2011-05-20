@@ -42,16 +42,16 @@ class Net {
 		$curl_info = $result[2];
 		$curl_error = $result[3];
 		
-		self::$logger->info("- Effective URI: ".$uri);
+		self::$logger->info("Effective URI: ".$uri);
 		
 		// Add the content-language header value that we parsed before to $curl_info
 		if (isset($_REQUEST['doc_content_language'])) {
 			$curl_info['content_language'] = $_REQUEST['doc_content_language'];
 			unset($_REQUEST['doc_content_language']);
-			self::$logger->info("- Found Content-Language header: ".$curl_info['content_language']);
+			self::$logger->info("Found Content-Language header: ".$curl_info['content_language']);
 		} 
 		
-		self::$logger->debug("- Curl Info: ".print_r($curl_info, true));
+		self::$logger->debug("Curl Info: ".print_r($curl_info, true));
 		
 		// Report errors to the user. Most common cases should be internationalized.
 		if ($curl_error != 0) {
@@ -67,7 +67,7 @@ class Net {
 				// Otherwise send the curl error message (english)
 				Message::addMessage(MSG_LEVEL_ERROR, $result[4]);
 			}
-			self::$logger->info("- Curl ERROR: ".$result[4]);
+			self::$logger->info("Curl ERROR: ".$result[4]);
 			return false;
 		}
 		
