@@ -102,7 +102,7 @@ include('includes/form.php');
 					} else {
 						if (is_array($info->value) && count($info->value) > 0) {
 							foreach ($info->value as $value) {
-								echo "<strong>".$value."</strong>";
+								echo "<strong>".$value."</strong> "; // Leave the space to allow wrapping
 							}
 						} else {
 							echo "<strong>".$info->value."</strong>";
