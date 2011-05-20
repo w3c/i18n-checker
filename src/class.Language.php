@@ -11,7 +11,7 @@ class Language {
 	static public $language;
 	
 	// Available languages (code => displayName) 
-	static public $languages = array(); 
+	static public $languages; 
 	
 	public static function init() {
 		self::$logger = Logger::getLogger('Language');
