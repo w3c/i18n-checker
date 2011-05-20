@@ -33,33 +33,61 @@ class Report {
 		self::$reports[] = new Report($category, $severity, $title, $explanation, $whattodo, $further);
 	}
 	
-	public static function getCount() {
-		return count(self::$reports);
-	}
-	
-	public static function getCountFor($severity) {
+	private static function filterReports($severity) {
 		$callBack = function($report) use ($severity) {
 			if ($report->severity == $severity)
 				return true;
 			return false;
 		};
-		return count(array_filter(self::$reports, $callBack));
+		return array_filter(self::$reports, $callBack);
+	}
+	
+	public static function getCount() {
+		return count(self::$reports);
 	}
 	
 	public static function getErrorCount() {
-		return self::getCountFor(REPORT_LEVEL_ERROR);
+		return count(self::filterReports(REPORT_LEVEL_ERROR));
 	}
 	
 	public static function getWarningCount() {
-		return self::getCountFor(REPORT_LEVEL_WARNING);
+		return count(self::filterReports(REPORT_LEVEL_WARNING));
 	}
 	
 	public static function getInfoCount() {
-		return self::getCountFor(REPORT_LEVEL_INFO);
+		return count(self::filterReports(REPORT_LEVEL_INFO));
 	}
 	
-	private static function filterReports($severity) {
-		
+	public static function getErrors() {
+		return self::filterReports(REPORT_LEVEL_ERROR);
+	}
+	
+	public static function getWarnings() {
+		return self::filterReports(REPORT_LEVEL_WARNING);
+	}
+	
+	public static function getInfos() {
+		return self::filterReports(REPORT_LEVEL_INFO);
+	}
+	
+	public static function getReportsSorted() {
+		$logger = &self::$logger;
+		$sortedReports = self::$reports; // copy before, sorting is done in place
+		$sort = function($first, $second) use (&$logger) {
+			if ($first->severity == $second->severity)
+				return 0;
+			if ($first->severity == REPORT_LEVEL_ERROR) // ERROR lower than all
+				return -1;
+			if ($second->severity == REPORT_LEVEL_ERROR)
+				return 1;
+			if ($first->severity == REPORT_LEVEL_INFO) // INFO higher than all
+				return 1;
+			if ($second->severity == REPORT_LEVEL_INFO)
+				return -1;
+		};
+		if (usort($sortedReports, $sort)) 
+			return $sortedReports;
+		return self::$reports; // if sorting failed
 	}
 	
 }
