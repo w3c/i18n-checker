@@ -4,7 +4,7 @@ var W3Cr = {
 	
 	start: function() {
 		var slideDuration = 500;
-		//var scroller = new Fx.Scroll(document);
+		var scroller = new Fx.Scroll(document);
 		var instantScroller = new Fx.Scroll(document, {'duration': 0});
 		instantScroller.toElement('results');
 		$$('.section').each(function(section) {
@@ -16,6 +16,8 @@ var W3Cr = {
 			section.store('fxSlide', new Fx.Slide(block, {'duration': slideDuration, 'link': 'cancel'}));
 			section.store('block', block);
 			title.addEvent('click', function(event) {
+				event.preventDefault();
+				scroller.toElement(title);
 				W3Cr.toggle(section);
 			});
 			W3Cr.open(section);

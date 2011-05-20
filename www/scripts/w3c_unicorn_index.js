@@ -16,7 +16,7 @@ var W3C = {
 		W3C.WithOptions = false;
 		W3C.prepareDocument();
 		W3C.parseHash();
-		W3C.updateHash();
+		//W3C.updateHash();
 		W3C.showTab(W3C.SelectedTab, false);
 		console.log(window.location);
 	},
@@ -111,14 +111,14 @@ var W3C = {
 		// get selected tab
 		var index = W3C.Forms.getProperty('id').indexOf(selectedTab);
 		if (index == -1) {
-			W3C.setHash('');
+			//W3C.setHash('');
 			return;
 		}
 		W3C.SelectedTab = index;
 		
 		// with_options ?
 		if (!withOptions || !withOptions == "with_options") {
-			W3C.setHash(selectedTab);
+			//W3C.setHash(selectedTab);
 			return;
 		}
 		W3C.WithOptions = true;
