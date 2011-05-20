@@ -31,12 +31,12 @@ class Checker {
 		$this->addInfoDTDMimetype();
 		$this->addInfoCharsetHTTP();
 		$this->addInfoCharsetBom();
-		// TODO: need an isXML() function + how about issuing a warning/comment if xml:lang is found in a non-xml doc?
-		if ($this->doc->isXHTML() || $this->doc->isHTML5() || $this->doc->mimetypeFromHTTP() == 'application/xhtml+xml')
+		// TODO: how about issuing a warning/comment if xml:lang is found in a non-xml doc?
+		if ($this->doc->isXML() || $this->doc->mimetypeFromHTTP() == 'application/xhtml+xml')
 			$this->addInfoCharsetXMLDeclaration();
 		$this->addInfoCharsetMeta();
 		$this->addInfoLangAttr();
-		if ($this->doc->isXHTML() || $this->doc->isHTML5())
+		if ($this->doc->isXML())
 			$this->addInfoXMLLangAttr();
 		$this->addInfoLangHTTP();
 		$this->addInfoLangMeta();
@@ -55,7 +55,7 @@ class Checker {
 		} elseif ($this->doc->isHTML5()) {
 			$dtd = 'HTML5';
 		}
-		if ($dtd)
+		if (isset($dtd))
 			Information::addInfo(null, 'dtd', $dtd, null, null);
 		else
 			Information::addInfo(null, 'dtd', 'NA', null, null);
