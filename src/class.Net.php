@@ -48,7 +48,7 @@ class Net {
 		if (isset($_REQUEST['doc_content_language'])) {
 			$curl_info['content_language'] = $_REQUEST['doc_content_language'];
 			unset($_REQUEST['doc_content_language']);
-			self::$logger->info("Found Content-Language header: ".$curl_info['content_language']);
+			self::$logger->debug("Found Content-Language header: ".$curl_info['content_language']);
 		} 
 		
 		self::$logger->debug("Curl Info: ".print_r($curl_info, true));
