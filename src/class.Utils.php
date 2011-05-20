@@ -10,13 +10,11 @@ class Utils {
 		$matches = explode(';', trim(strtolower($contentType)));
 		if (isset($matches[1])) {
 			$matches[1] = explode('=', $matches[1]);
-			// strip 'charset='
 			$matches[1] = isset($matches[1][1]) && trim($matches[1][1])
 				? $matches[1][1]
 				: $matches[1][0];
 		} else
 			$matches[1] = null;
-		//return $matches;
 		return array ('mimetype' => $matches[0], 'charset' => strtoupper($matches[1]));
 	}
 	
@@ -36,11 +34,39 @@ class Utils {
 	}
 	
 	public static function arrayTrim($array) {
-		return array_map('trim', $string);
+		return array_map('trim', $array);
+	}
+	
+	public static function arrayFlatten($array, $nbPass = 1) {
+		if ($nbPass <= 0)
+			return $array;
+		$result = array();
+		foreach ($array as $key => $value) {
+			if (is_array($value))
+				foreach ($value as $valKey => $valVal) 
+					$result[] = $valVal;
+			else 
+				$result[] = $value;
+		}
+		return self::arrayFlatten($result, $nbPass-1);
 	}
 	
 	public static function boolString($bValue = false) {
 		return ($bValue ? 'true' : 'false');
+	}
+	
+	// return an array of accepted languages/charsets from the Accept-Language and Accept-Charset HTTP headers 
+	public static function parseHeader($header) {
+		$result = array();
+		foreach (preg_split('/,/', $header) as $value) {
+			$a = preg_split('/;/', $value);
+			$result[] = trim($a[0]);
+		}
+		return $result;
+	}
+	
+	public static function isASCII($string) {
+		return preg_match('/^[\x20-\x7E]*$/', $string) == true;
 	}
 	
 }
