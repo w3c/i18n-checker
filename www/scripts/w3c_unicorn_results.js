@@ -16,7 +16,7 @@ var W3Cr = {
 			section.store('fxSlide', new Fx.Slide(block, {'duration': slideDuration, 'link': 'cancel'}));
 			section.store('block', block);
 			title.addEvent('click', function(event) {
-				event.preventDefault();
+				event.stop();
 				scroller.toElement(title);
 				W3Cr.toggle(section);
 			});
