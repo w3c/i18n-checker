@@ -6,7 +6,8 @@ var W3Cr = {
 		var slideDuration = 500;
 		var scroller = new Fx.Scroll(document);
 		var instantScroller = new Fx.Scroll(document, {'duration': 0});
-		instantScroller.toElement('results');
+		if ($('results') != null)
+			instantScroller.toElement('results');
 		$$('.section').each(function(section) {
 			var title = section.getElement('.title');
 			var block = section.getElement('.block');
