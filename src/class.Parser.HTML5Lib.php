@@ -6,7 +6,7 @@ final class ParserHTML5Lib extends Parser {
 	private static $logger;
 	
 	public static function init() {
-		self::$logger = Logger::getLogger('Parser.PHPQuery');
+		self::$logger = Logger::getLogger('Parser.HTML5Lib');
 	}
 	
 	protected function __construct($markup, $contentType) {
@@ -63,7 +63,6 @@ final class ParserHTML5Lib extends Parser {
 		};
 		$body = $this->document->getElementsByTagName('body')->item(0);
 		$this->iterate($test, $body);
-		self::$logger->debug(print_r($result, true));
 		return $result;
 	} 
 	
