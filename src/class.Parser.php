@@ -135,6 +135,9 @@ abstract class Parser {
 		$dir = $this->document->getElementsByTagName('html')->item(0)->attributes->getNamedItem('dir');
 		return ($dir != null) ? strtoupper($dir->value) : null;
 	}
+	
+	public abstract function getNodesWithClass();
+	public abstract function getNodesWithId();
 }
 
 Parser::init();
