@@ -9,7 +9,7 @@ class Message
 	public $title;
 	public $message;
 	public $type = MSG_LEVEL_INFO;
-	public static $messages = array();
+	public static $messages;
 	
 	private function __construct($type, $message, $title='') {
 		$this->type = $type;

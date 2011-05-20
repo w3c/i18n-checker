@@ -137,7 +137,6 @@ class Net {
 				"\n\t\t Timeout: ".Conf::get('curl_timeout').
 				"\n\t\t Max redirections: ".Conf::get('curl_maxredirs'));
 		
-		$header = array();
 		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 			$header[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 		if (isset($_SERVER['HTTP_ACCEPT_CHARSET']))

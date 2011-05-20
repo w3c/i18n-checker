@@ -24,10 +24,6 @@ final class ParserHTML5Lib extends Parser {
 	// phpQuery::loadDocument($this->document);
 	// pq('meta[http-equiv=content-language]');
 	protected function parseMeta() {
-		$this->charsetsFromHTML = array();
-		$this->metaCharsetTags = array();
-		$this->langsFromMeta = array();
-		$this->metaLanguageTags = array();
 		$metas = $this->document->getElementsByTagName("meta");
 		foreach ($metas as $meta) {
 			// check for charset attribute
@@ -60,7 +56,6 @@ final class ParserHTML5Lib extends Parser {
 	}
 	
 	private function getNodesWithAttr($attr) {
-		$result = array();
 		$t = &$this;
 		$test = function($node) use (&$result, $t, $attr) {
 			if ($node->hasAttributes())
