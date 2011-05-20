@@ -78,13 +78,12 @@ class Language {
 	
 	public static function lang($str) {
 		$str = (string) $str;
-		if (array_key_exists($str, self::$language)) {
-			$result = self::$language[$str];
-		} else if (Conf::get('debug') == true) {
-			$result = "[[[".$str."]]]";
-		} else {
-			$result = $str;
+		if (Conf::get('debug_lang') || !array_key_exists($str, self::$language) || !self::$language[$str] != "") {
+			if (!Conf::get('debug_lang'))
+				self::$logger->warn("Unknown language key or value is empty: ".$str);
+			return "[".$str."]";
 		}
+		$result = self::$language[$str];
 		$numargs = func_num_args();
 	    if ($numargs >= 2) {
 	        $arg_list = func_get_args();
