@@ -80,12 +80,12 @@ abstract class Parser {
 		return isset($matches[0]) ? $matches[0] : null;
 	}
 	
-	protected function dump($node){
+	public function dump($node){
 	    return $this->document->saveXML($node);
 	}
 	
 	// Only dumps the opening tag of $node
-	protected function dumpTag($node){
+	public function dumpTag($node){
 	    preg_match('/^<[^>]+>/i', $this->document->saveXML($node), $matches);
 	    return isset($matches[0]) ? $matches[0] : null;
 	}
@@ -137,6 +137,7 @@ abstract class Parser {
 	}
 	
 	public abstract function getNodesWithClass();
+	
 	public abstract function getNodesWithId();
 }
 
