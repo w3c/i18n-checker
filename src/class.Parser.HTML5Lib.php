@@ -10,7 +10,13 @@ final class ParserHTML5Lib extends Parser {
 	}
 	
 	protected function __construct($markup, $contentType) {
-		$this->document = HTML5_Parser::parse($markup);
+		try {
+			$this->document = HTML5_Parser::parse($markup);
+			self::$logger->debug("Successfully parsed document as HTML5.");
+		} catch (Exception $e) {
+			self::$logger->debug("Document parsing failed: ".$e->getMessage(), $e);
+			throw $e;
+		}
 		parent::__construct($markup, $contentType);
 	}
 	
