@@ -38,6 +38,7 @@ class Utils {
 	}
 	
 	public static function arrayFlatten(array $array, $nbPass = 1) {
+		$result = array();
 		if ($nbPass <= 0)
 			return $array;
 		foreach ($array as $key => $value) {
