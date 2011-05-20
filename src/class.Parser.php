@@ -9,7 +9,7 @@ abstract class Parser {
 	protected $markup;
 	// HTTP Content-Type Header 
 	protected $contentType;
-	// TODO: What if no dtd is declared? What about XHTML5 ?
+	// TODO: What if no dtd is declared?
 	protected $isHTML;
 	protected $isHTML5;
 	protected $isXHTML;
