@@ -1172,12 +1172,16 @@ body > .section {
 	text-align:right;
 }
 
+#infos tr td:nth-child(2) {
+	width:20%;
+}
+
 #infos td strong {
 	background-color:#F17900;
 	font-size:17px;
 	padding:2px 5px;
 	color:white;
-	margin-right:4px;
+	line-height:28px;
 }
 
 .backtop {
