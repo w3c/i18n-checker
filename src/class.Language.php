@@ -77,7 +77,6 @@ class Language {
 	}
 	
 	public static function lang($str) {
-		$result = '';
 		$str = (string) $str;
 		if (array_key_exists($str, self::$language)) {
 			$result = self::$language[$str];
@@ -97,7 +96,7 @@ class Language {
 	}
 	
 	public static function _lang($str) {
-		print call_user_func_array('lang', func_get_args());
+		echo call_user_func_array('lang', func_get_args());
 	}
 }
 
