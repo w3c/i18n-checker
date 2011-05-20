@@ -26,7 +26,9 @@ $curl_info = $document[1];
 $content = $document[2];
 
 $checker = new Checker($curl_info, $content);
-$checker->checkDocument();
+$succeded = false;
+if ($checker->checkDocument())
+	$succeded = true;
 
 // Check the format parameter to determine output template
 if (isset($_REQUEST['format']) && $_REQUEST['format'] == 'xml') {
