@@ -30,12 +30,11 @@ final class ParserHTML5Lib extends Parser {
 				$this->metaCharsetTags[] = $this->dump($meta);
 			// check for http-equiv="content-language" (deprecated in HTML5)
 			// TODO: Add a warning if <meta http-equiv="content-language" content="en"> is used in HTML5?
-			// TODO: Content-Language value should be split on ',' and not used as-is
 			// FIXME: case sensitity of getNamedItem
 			} else if (($equivParam = $meta->attributes->getNamedItem('http-equiv')) != null) {
 				if (strcasecmp($equivParam->value, 'Content-Language') == 0) {
 					if (($contentParam = $meta->attributes->getNamedItem('content')) != null)
-						$this->langsFromMeta[] = $contentParam->value;
+						$this->langsFromMeta = Utils::arrayMergeCommaString($this->langsFromMeta, $contentParam->value);
 					$this->metaLanguageTags[] = $this->dump($meta);
 				} elseif (strcasecmp($equivParam->value, 'Content-Type') == 0) {
 					if (($contentParam = $meta->attributes->getNamedItem('content')) != null)

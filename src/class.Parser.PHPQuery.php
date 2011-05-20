@@ -65,14 +65,13 @@ final class ParserPHPQuery extends Parser {
 		
 		// ---- Solution3: fixes the case sensitivity issue on Content-Type
 		// FIXME: case sensitivity on http-equiv
-		// TODO: Content-Language value should be split on ',' and used as array
 		foreach (pq('meta[http-equiv]') as $meta) {
 			if (strcasecmp(pq($meta)->attr('http-equiv'), 'Content-Type') == 0) {
 				$this->charsetsFromHTML[] = Utils::charsetFromContentType(pq($meta)->attr('content'));
 				$this->metaCharsetTags[] = $this->dump($meta);
 			}
 			else if (strcasecmp(pq($meta)->attr('http-equiv'), 'Content-Language') == 0) {
-				$this->langsFromMeta[] = pq($meta)->attr('content');
+				$this->langsFromMeta = Utils::arrayMergeCommaString($this->langsFromMeta, pq($meta)->attr('content'));
 				$this->metaLanguageTags[] = $this->dump($meta);
 			}
 		}
