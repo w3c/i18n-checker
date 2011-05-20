@@ -9,6 +9,7 @@ class Information {
 	public $value;
 	public $display_value;
 	public $code;
+	// Not used: set category to null to hide that information from the info table
 	public $hidden;
 	
 	private function __construct($category, $title, $value, $display_value, $code, $hidden) {
@@ -21,17 +22,12 @@ class Information {
 	}
 	
 	public static function addInfo($category, $title, $value, $display_value, $code, $hidden = false) {
-		if (self::$infos == null)
-			self::$infos = array();
 		self::$infos[] = new Information($category, $title, $value, $display_value, $code, $hidden);
 	}
 	
 	public static function getInfoPerCategory() {
-		$result = array();
 		foreach (self::$infos as $info) {
 			if ($info->category != null) {
-				if (!isset($result[$info->category]))
-					$result[$info->category] = array();
 				$result[$info->category][] = $info;
 			}
 		}
@@ -44,6 +40,11 @@ class Information {
 				return $info;
 			}
 		}
+		return null;
+	}
+	
+	public static function getValue($name) {
+		return self::get($name) ? self::get($name)->value : null; 
 	}
 	
 	public static function getCount() {
