@@ -44,6 +44,36 @@ final class ParserHTML5Lib extends Parser {
 			}
 		}
 	}
+	
+	public function getNodesWithClass() {
+		return $this->getNodesWithAttr('class');
+	}
+	
+	public function getNodesWithId() {
+		return $this->getNodesWithAttr('id');
+	}
+	
+	private function getNodesWithAttr($attr) {
+		$result = array();
+		$t = &$this;
+		$test = function($node) use (&$result, $t, $attr) {
+			if ($node->hasAttributes())
+				if ($node->attributes->getNamedItem($attr) != null) 
+					$result[$t->dumpTag($node)] = Utils::arrayTrim(preg_split('/[ ]+/', $node->attributes->getNamedItem($attr)->value));
+		};
+		$body = $this->document->getElementsByTagName('body')->item(0);
+		$this->iterate($test, $body);
+		self::$logger->debug(print_r($result, true));
+		return $result;
+	} 
+	
+	private function iterate($callback, $node) {
+		foreach ($node->childNodes as $child) {
+			$callback($child);
+			if ($child->hasChildNodes())
+				$this->iterate($callback, $child);
+		}
+	}
 }
 
 ParserHTML5Lib::init();
