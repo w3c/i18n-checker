@@ -24,6 +24,11 @@ final class ParserHTML5Lib extends Parser {
 	// phpQuery::loadDocument($this->document);
 	// pq('meta[http-equiv=content-language]');
 	protected function parseMeta() {
+		$this->metaCharsetTags = array();
+		$this->charsetsFromHTML = array();
+		$this->metaLanguageTags = array();
+		$this->langsFromMeta = array();
+		
 		$metas = $this->document->getElementsByTagName("meta");
 		foreach ($metas as $meta) {
 			// check for charset attribute

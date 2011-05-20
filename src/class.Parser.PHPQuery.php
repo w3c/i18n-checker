@@ -32,6 +32,11 @@ final class ParserPHPQuery extends Parser {
 	}
 	
 	protected function parseMeta() {
+		$this->metaCharsetTags = array();
+		$this->charsetsFromHTML = array();
+		$this->metaLanguageTags = array();
+		$this->langsFromMeta = array();
+		
 		// XXX: attributes values in selectors are case sensitive!
 		
 		// ---- Solution1: 
