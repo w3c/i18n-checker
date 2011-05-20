@@ -45,6 +45,17 @@ abstract class Parser {
 		return preg_match("/<!DOCTYPE HTML>/i", substr($markup, '0', Conf::get('perf_head_length'))) == true;
 	}
 	
+	public function isHTML() {
+		if ($this->isHTML == null) {
+			if ($this->isHTML = preg_match("/<!DOCTYPE [^>]*DTD HTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true) {
+				$this->isHTML5 = false;
+				$this->isXHTML5 = false;
+				$this->isXHTML = false;
+			}
+		}
+		return $this->isHTML;
+	}
+	
 	public function isHTML5() {
 		if ($this->isHTML5 == null) {
 			//$this->isHTML5 = self::is_HTML5($this->markup);
@@ -55,6 +66,17 @@ abstract class Parser {
 			}
 		}
 		return $this->isHTML5;
+	}
+	
+	public function isXHTML() {
+		if ($this->isXHTML == null) {
+			if ($this->isXHTML = preg_match("/<!DOCTYPE [^>]*DTD XHTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true) {
+				$this->isHTML = false;
+				$this->isHTML5 = false;
+				$this->isXHTML5 = false;
+			}
+		}
+		return $this->isXHTML;
 	}
 	
 	public function isXHTML5() {
@@ -70,26 +92,8 @@ abstract class Parser {
 		return $this->isXHTML5;
 	}
 	
-	public function isXHTML() {
-		if ($this->isXHTML == null) {
-			if ($this->isXHTML = preg_match("/<!DOCTYPE [^>]*DTD XHTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true) {
-				$this->isHTML = false;
-				$this->isHTML5 = false;
-				$this->isXHTML5 = false;
-			}
-		}
-		return $this->isXHTML;
-	}
-	
-	public function isHTML() {
-		if ($this->isHTML == null) {
-			if ($this->isHTML = preg_match("/<!DOCTYPE [^>]*DTD HTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true) {
-				$this->isHTML5 = false;
-				$this->isXHTML5 = false;
-				$this->isXHTML = false;
-			}
-		}
-		return $this->isHTML;
+	public function isXML() {
+		return $this->isXHTML() || $this->isXHTML5();
 	}
 	
 	public function mimetypeFromHTTP() {
