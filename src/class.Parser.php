@@ -13,6 +13,7 @@ abstract class Parser {
 	protected $isHTML;
 	protected $isHTML5;
 	protected $isXHTML;
+	protected $isXHTML5;
 	// DOMDocument
 	protected $document;
 	// Meta charset tags
@@ -45,20 +46,49 @@ abstract class Parser {
 	}
 	
 	public function isHTML5() {
-		if ($this->isHTML5 == null)
-			$this->isHTML5 = self::is_HTML5($this->markup);
+		if ($this->isHTML5 == null) {
+			//$this->isHTML5 = self::is_HTML5($this->markup);
+			// If HTML5 DTD then it can't be HTML or XHTML but still can be XHTML5 (in which case both isHTML5 and isXHTML5 return true) 
+			if ($this->isHTML5 = self::is_HTML5($this->markup)) { 
+				$this->isHTML = false;
+				$this->isXHTML = false;
+			}
+		}
 		return $this->isHTML5;
 	}
 	
+	public function isXHTML5() {
+		if ($this->isXHTML5 == null) {
+		 	if ($this->isHTML5() && Utils::mimeFromContentType($this->contentType) == "application/xhtml+xml") {
+		 		$this->isXHTML5 = true;
+				$this->isHTML = false;
+				$this->isXHTML = false;
+		 	} else {
+		 		$this->isXHTML5 = false;
+		 	}
+		}
+		return $this->isXHTML5;
+	}
+	
 	public function isXHTML() {
-		if ($this->isXHTML == null)
-			$this->isXHTML = preg_match("/<!DOCTYPE [^>]*DTD XHTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true;
+		if ($this->isXHTML == null) {
+			if ($this->isXHTML = preg_match("/<!DOCTYPE [^>]*DTD XHTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true) {
+				$this->isHTML = false;
+				$this->isHTML5 = false;
+				$this->isXHTML5 = false;
+			}
+		}
 		return $this->isXHTML;
 	}
 	
 	public function isHTML() {
-		if ($this->isHTML == null)
-			$this->isHTML = preg_match("/<!DOCTYPE [^>]*DTD HTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true;
+		if ($this->isHTML == null) {
+			if ($this->isHTML = preg_match("/<!DOCTYPE [^>]*DTD HTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true) {
+				$this->isHTML5 = false;
+				$this->isXHTML5 = false;
+				$this->isXHTML = false;
+			}
+		}
 		return $this->isHTML;
 	}
 	
