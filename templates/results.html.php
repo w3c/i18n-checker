@@ -133,11 +133,11 @@ include('includes/form.php');
 </div>
 <?php } ?>
 
-<!--  <div id="source" class="section">
+<?php  /* <div id="source" class="section">
 	<h1><a href="#source"><?php _lang('source_code') ?></a></h1>
 	<div class="content">
 	</div>
-</div> -->
+</div> */ ?>
 
 <div id="don_program">
 	<script type="text/javascript" src="http://www.w3.org/QA/Tools/don_prog.js"></script>
