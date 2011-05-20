@@ -1117,8 +1117,7 @@ div.intro p {
 }
 
 .w3cLarge {
-	background: url("../images/sitetitle.gif") no-repeat scroll left top
-		transparent;
+	background: url("../images/sitetitle.gif") no-repeat scroll left top transparent;
 	display: block;
 	float: left;
 	height: 49px;
@@ -1186,6 +1185,16 @@ body > .section {
 	padding:2px 5px;
 	color:white;
 	line-height:28px;
+}
+
+#results .noissues {
+	color: white;
+	font-weight:bold;
+	font-size:1.1em;
+	background-color: #1DAA34;
+	border:1px solid #17882A;
+	padding: 0.3em !important;
+	margin-top:10px;
 }
 
 .backtop {
@@ -1258,8 +1267,6 @@ body > .section {
 }
 
 #results .block {
-    /*border-left: 1px solid #365D95;*/
-    padding-left: 0.5em;
     text-align: center;
     padding-top: 10px
 }

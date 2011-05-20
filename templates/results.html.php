@@ -17,7 +17,7 @@ include('includes/form.php');
 		<a href="#result"><?php _lang('results', $uri) ?></a>
 	</h1>
 	
-	<div class="block">
+	<div class="block<?php echo Report::getCount() == 0 ? ' noissues' : '' ?>">
 		<?php if (Report::getCount() > 0) {
 			 if (($errorCount = Report::getErrorCount()) > 0) {
 				echo '<img src="images/error.png" alt="Error" title="', $errorCount, ' error(s)" /> ';
@@ -30,7 +30,7 @@ include('includes/form.php');
 				echo "<strong>$infoCount</strong>";
 			}
 		} else {
-				echo '<p class="noissues">', lang('no_issues'), '</p>';
+				echo lang('no_issues');
 		} ?>
 	</div>
 </div>
