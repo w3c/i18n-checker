@@ -76,7 +76,7 @@ abstract class Parser {
 	}
 	
 	public function XMLDeclaration() {
-		preg_match('/<\?xml[^>]+encoding\\s*=\\s*(["|\'])[^>]+>/i', substr($this->markup, '0', Conf::get('perf_head_length')), $matches);
+		preg_match('/<\?xml[^>]+>/i', substr($this->markup, '0', Conf::get('perf_head_length')), $matches);
 		return isset($matches[0]) ? $matches[0] : null;
 	}
 	
@@ -129,6 +129,11 @@ abstract class Parser {
 	
 	public function HTMLTag() {
 		return $this->dumpTag($this->document->getElementsByTagName('html')->item(0));
+	}
+	
+	public function dirFromHTML() {
+		$dir = $this->document->getElementsByTagName('html')->item(0)->attributes->getNamedItem('dir');
+		return ($dir != null) ? strtoupper($dir->value) : null;
 	}
 }
 
