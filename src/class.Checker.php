@@ -29,14 +29,18 @@ class Checker {
 		}
 		$this->addInfoCharsetHTTP();
 		$this->addInfoCharsetBom();
-		if ($this->doc->isXHTML() || $this->doc->mimetypeFromHTTP() == 'application/xhtml+xml')
+		// TODO: need an isXML() function + how about issuing a warning/comment if xml:lang is found in a non-xml doc?
+		if ($this->doc->isXHTML() || $this->doc->isHTML5() || $this->doc->mimetypeFromHTTP() == 'application/xhtml+xml')
 			$this->addInfoCharsetXMLDeclaration();
 		$this->addInfoCharsetMeta();
 		$this->addInfoLangAttr();
-		if ($this->doc->isXHTML()) // TODO: need an isXML() function + how about issuing a warning/comment if xml:lang is found in a non-xml doc?
+		if ($this->doc->isXHTML() || $this->doc->isHTML5())
 			$this->addInfoXMLLangAttr();
 		$this->addInfoLangHTTP();
 		$this->addInfoLangMeta();
+		$this->addInfoDirHTML();
+		$this->addInfoClassId();
+		$this->addInfoRequestHeaders();
 	}
 	
 	// INFO: CHARSET FROM HTTP CONTENT-TYPE HEADER
@@ -164,27 +168,18 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value, $code);		
 	}
 	
-	function checkMisc($curl_info, $markup) {
+	// INFO: TEXT DIRECTION FROM HTML TAGS
+	private function addInfoDirHTML() {
+		$category = 'text_direction';
+		$title = 'default_direction';
+		$value = $this->doc->dirFromHTML();
+		$display_value = null;
+		$code = $this->doc->HTMLTag();
+		if ($value == null)
+			$value = lang('ltr_default');
+		Information::addInfo($category, $title, $value, $display_value, $code);	
 		
-		// Create language information category 
-		global $results;
-		$direction = &$results['infos']['text_direction'];
-		
-		// INFO: HTML DIR ATTRIBUTE
-		$direction['default_direction'] = array();
-		if (preg_match("/<html[^>]*dir=[\'\"]?([^ >\'\"]+)[\'\"]?[^>]*>/i", $markup, $match)) {
-			$direction['default_direction']['value'] = $match[1];
-			$direction['default_direction']['code'] = $match[0];
-		} else {
-			$direction['default_direction']['value'] = lang('ltr_default');
-			if (preg_match("/<html[^>]*>/i", $markup, $match)) {
-				$direction['default_direction']['code'] = $match[0];
-			} else {
-				$direction['default_direction']['display'] = lang('no_html_tag_found');
-			}
-		}
-		
-	//	// find all dir attributes
+		//	// find all dir attributes
 	//	$dirtagctr=0; $dirmismatchctr=0; $dirmismatches='';
 	//	if (preg_match_all("/<[^>]+? dir=([\"\'][^\"\'>]*[\"\']|[^ \"\'>]+)[^>]*>/i", $markup, $dirtagsA)) {
 	//		$dirtagctr = count($dirtagsA[0]);
@@ -197,6 +192,65 @@ class Checker {
 	//		}
 	//	}
 	
+	}
+	
+	// INFO: REQUEST HEADERS
+	private function addInfoRequestHeaders() {
+		$category = 'request_headers';
+		$title = 'accept_language';
+		$value = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Utils::parseHeader($_SERVER['HTTP_ACCEPT_LANGUAGE']) : null;
+		$code = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? 'Accept-Language: '.$_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
+		$display_value = null;
+		if ($value == null)
+			$display_value = 'none_found';
+		Information::addInfo($category, $title, $value, $display_value, $code);
+		
+		$category = 'request_headers';
+		$title = 'accept_charset';
+		$value = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? array_map('strtoupper', Utils::parseHeader($_SERVER['HTTP_ACCEPT_CHARSET'])) : null;
+		$code = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? 'Accept-Charset: '.$_SERVER['HTTP_ACCEPT_CHARSET'] : null;
+		$display_value = null;
+		if ($value == null)
+			$display_value = 'none_found';
+		Information::addInfo($category, $title, $value, $display_value, $code);
+	}
+	
+	private function addInfoClassId() {
+		$classes = $this->doc->getNodesWithClass();
+		$ids = $this->doc->getNodesWithID();
+		$nodes = array_merge($classes, $ids);
+		$unsetASCII = function (&$param, $key) use (&$nodes) {
+			$param = preg_filter('/[^\x20-\x7E]/', '$0', $param);
+			if (count($param) == 0)
+				unset($nodes[$key]);
+		};
+		array_walk(&$nodes, $unsetASCII);
+		
+		$category = 'class_and_id';
+		$title = 'class_and_id_non_ascii';
+		$value = array_unique(Utils::arrayFlatten(array_values($nodes)));
+		$display_value = null;
+		$code = array_keys($nodes);
+		Information::addInfo($category, $title, $value, $display_value, $code);	
+	}
+	
+	function it() {
+		foreach ($classNodes as $code => $classes) {
+			
+			foreach ($classes as $class) {
+				if (!Utils::isASCII($class)) {
+					$nonASCIIclass[] = $class;
+					$nonASCIIclassCode[] = $code;
+				}
+			}
+		}
+		
+		self::$logger->debug(print_r(preg_filter('/[^\x20-\x7E]/', '$0', $classNodes), true));
+		
+		foreach ($classNodes as $node) {
+			
+		}
+		
 		// Create class_and_id information category 
 		$class = &$results['infos']['class_and_id'];
 		
@@ -210,7 +264,7 @@ class Checker {
 		foreach ($classesA[1] as $key => $classes) {
 			$names = explode(" ", $classes);
 			foreach ($names as $name) {
-				if (preg_match("/[!-~\s]*[^!-~\s]+.*/", $name)) {
+				if (preg_match("/[!-~\s]*[^!-~\s]+.*/", $name)) { //[^\x20-\x7E]
 					$class['class_and_id_non_ascii']['value'] += 1;
 					$class['class_and_id_non_ascii']['code'][] = $classesA[0][$key];
 					if (N11n::nfc($name) != $name) {
@@ -237,23 +291,9 @@ class Checker {
 			$class['class_and_id_non_ascii']['display'] = lang('token_none');
 		if ($class['class_and_id_non_nfc']['value'] == 0)
 			$class['class_and_id_non_nfc']['display'] = lang('token_none');
-			
-		// Create class_and_id information category
-		$headers = &$results['infos']['request_headers'];
 		
-		// INFO: REQUEST HEADERS
-		$headers['accept_language'] = array();
-		$headers['accept_language']['value'] = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : lang('none_found');
-		$headers['accept_charset'] = array();
-		$headers['accept_charset']['value'] = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? $_SERVER['HTTP_ACCEPT_CHARSET'] : lang('none_found');
-		
+
 	}
-	
-	/*public function isHTML5($markup) {
-		if ($this->is_html5 == null)
-			$this->is_html5 = preg_match("/^<!DOCTYPE HTML>/i", $markup);
-		return $this->is_html5;
-	}*/
 }
 
 Checker::init();
