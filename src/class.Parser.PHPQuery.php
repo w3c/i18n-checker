@@ -5,6 +5,7 @@ final class ParserPHPQuery extends Parser {
 	
 	private static $logger;
 	private $doc;
+	private $forcedHTML = false;
 	
 	public static function init() {
 		self::$logger = Logger::getLogger('Parser.PHPQuery');
@@ -12,7 +13,20 @@ final class ParserPHPQuery extends Parser {
 	
 	protected function __construct($markup, $contentType) {
 		//phpQuery::$debug = 2;
-		$this->doc = phpQuery::newDocument($markup);
+		//phpQuery::$defaultCharset = "utf-8";
+		try {
+			$this->doc = phpQuery::newDocument($markup);
+			if ($this->doc->isHTML())
+				self::$logger->debug("Successfully parsed document as HTML.");
+			if ($this->doc->isXHTML())
+				self::$logger->debug("Successfully parsed document as XHTML.");
+		} catch (Exception $e) {
+			// force HTML parsing, phpQuery parser seem to choke easily on malformed XHTML code
+			self::$logger->debug("Document parsing failed. Forcing HTML mode.");
+			$this->doc = phpQuery::newDocumentHTML($markup);
+			$this->forcedHTML = true;
+			self::$logger->debug("Successfully parsed document as HTML.");
+		}
 		$this->document = $this->doc->document;
 		parent::__construct($markup, $contentType);
 	}
@@ -24,9 +38,10 @@ final class ParserPHPQuery extends Parser {
 		$this->metaLanguageTags = array();
 		
 		// XXX: attributes values in selectors are case sensitive!
+		
 		// ---- Solution1: 
-		// pq('meta[http-equiv]')->each(array($this, 'publicCallbackFunction'));
-		// pq('meta[http-equiv]')->each(array($this, 'publicCallbackFunction'));
+		// pq('meta[http-equiv=content-type]')->each(array($this, 'publicCallbackFunction'));
+		// pq('meta[http-equiv=Content-Type]')->each(array($this, 'publicCallbackFunction'));
 		
 		// ---- Solution2: Requires PHP5.3 closures.
 		/*$doc = &$this->document;
@@ -39,7 +54,7 @@ final class ParserPHPQuery extends Parser {
 			};
 		pq('meta[http-equiv=Content-Type]')->each($charsetCallback);
 		pq('meta[http-equiv=content-type]')->each($charsetCallback);
-		$tags = &$this->$metaLanguageTags;
+		$tags = &$this->metaLanguageTags;
 		$langs = &$this->langsFromMeta;
 		$langCallback = function ($node) use (&$tags, &$langs, &$doc) {
 				$langs[] = pq($node)->attr('content');
@@ -50,11 +65,10 @@ final class ParserPHPQuery extends Parser {
 		
 		// ---- Solution3: fixes the case sensitivity issue on Content-Type
 		// FIXME: case sensitivity on http-equiv
-		// TODO: Content-Language value should be split on ',' and not used as-is
+		// TODO: Content-Language value should be split on ',' and used as array
 		foreach (pq('meta[http-equiv]') as $meta) {
 			if (strcasecmp(pq($meta)->attr('http-equiv'), 'Content-Type') == 0) {
-				$contentType = Utils::contentTypeToArray(pq($meta)->attr('content'));
-				$this->charsetsFromHTML[] = strtoupper($contentType['charset']);
+				$this->charsetsFromHTML[] = Utils::charsetFromContentType(pq($meta)->attr('content'));
 				$this->metaCharsetTags[] = $this->dump($meta);
 			}
 			else if (strcasecmp(pq($meta)->attr('http-equiv'), 'Content-Language') == 0) {
@@ -62,6 +76,22 @@ final class ParserPHPQuery extends Parser {
 				$this->metaLanguageTags[] = $this->dump($meta);
 			}
 		}
+	}
+	
+	// @Override: if document is parsed as HTML getNamedItemNS('...XML/1998/namespace','lang') fails
+	public function xmlLangFromHTML() {
+		if (!$this->doc->isHTML())
+			return parent::xmlLangFromHTML();
+		preg_match('/xml:lang=[\'"]?([^\s>\'"]+)/i', $this->HTMLTag(), $matches);
+		return isset($matches[1]) ? $matches[1] : null;
+	}
+	
+	// @Override: if document is parsed as HTML phpQuery isn't reliable to dump accurate html tag 
+	public function HTMLTag() {
+		if (!$this->doc->isHTML())
+			return parent::HTMLTag();
+		preg_match('/<html[^>]+>/i', substr($this->markup, '0', Conf::get('perf_head_length')), $matches);
+		return isset($matches[0]) ? $matches[0] : '<html>';
 	}
 	
 }
