@@ -27,6 +27,7 @@ class Checker {
 			Message::addMessage(MSG_LEVEL_ERROR, $e);
 			return;
 		}
+		$this->addInfoDTDMimetype();
 		$this->addInfoCharsetHTTP();
 		$this->addInfoCharsetBom();
 		// TODO: need an isXML() function + how about issuing a warning/comment if xml:lang is found in a non-xml doc?
@@ -41,6 +42,18 @@ class Checker {
 		$this->addInfoDirHTML();
 		$this->addInfoClassId();
 		$this->addInfoRequestHeaders();
+	}
+	
+	private function addInfoDTDMimetype() {
+		if ($this->doc->isXHTML()) {
+			$dtd = 'XHTML';
+		} elseif ($this->doc->isHTML()) {
+			$dtd = 'HTML';
+		} elseif ($this->doc->isHTML5()) {
+			$dtd = 'HTML5';
+		}
+		Information::addInfo(null, 'dtd', $dtd, null, null);
+		Information::addInfo(null, 'mimetype', $this->doc->mimetypeFromHTTP(), null, null);
 	}
 	
 	// INFO: CHARSET FROM HTTP CONTENT-TYPE HEADER
