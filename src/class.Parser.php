@@ -63,13 +63,11 @@ abstract class Parser {
 	}
 	
 	public function mimetypeFromHTTP() {
-		$contentType = Utils::contentTypeToArray($this->contentType);
-		return $contentType['mimetype'];
+		return Utils::mimeFromContentType($this->contentType);
 	}
 	
 	public function charsetFromHTTP() {
-		$contentType = Utils::contentTypeToArray($this->contentType);
-		return $contentType['charset'];
+		return Utils::charsetFromContentType($this->contentType);
 	}
 	
 	public function charsetFromXML() {
