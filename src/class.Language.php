@@ -1,5 +1,8 @@
 <?php 
 
+define("LANG_FORMAT_OL", 0);
+define("LANG_FORMAT_OL_CODE", 1);
+
 class Language {
 	
 	static private $logger;
@@ -96,6 +99,24 @@ class Language {
 	
 	public static function _lang($str) {
 		echo call_user_func_array('lang', func_get_args());
+	}
+	
+	public static function format($value, $type) {
+		switch ($type) {
+			case LANG_FORMAT_OL:
+				$result = '<ol>';
+				foreach ((array) $value as $val)
+					$result .= '<li>'.$val.'</li>';
+				return $result;
+			case LANG_FORMAT_OL_CODE:
+				$result = '<ol>';
+				foreach ((array) $value as $val)
+					$result .= '<li><code>'.htmlspecialchars($val).'</code></li>';
+				return $result;
+			default:
+				self::$logger->error("Unknown format modifier: ".$type);
+				return self::lang($value);
+		}
 	}
 }
 
