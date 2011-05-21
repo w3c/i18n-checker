@@ -25,7 +25,7 @@ class Conf {
 		if (array_key_exists($key, self::$configuration)) {
 			return self::$configuration[$key];
 		} else {
-			self::$logger->warn("Unknow configuration key: ".$key.". Look for Conf::get('".$key."') in the code or add that key to the configuration file.");
+			self::$logger->warn("Unknow configuration key: ".$key.". Look for Conf::get('".$key."') or add that key to the configuration file.");
 			return null;
 		}
 	}
