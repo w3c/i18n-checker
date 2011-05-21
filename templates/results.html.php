@@ -112,16 +112,16 @@ include('includes/form.php');
 				<div class="block">
 				<?php 
 					if ($report->explanation != null) {
-						echo "<h3>", lang('ui_explanation'), "</h3>";
+						echo "<h3>", lang('rep_explanation'), "</h3>";
 						echo "<p>", $report->explanation, "</p>";
 					}
 					if ($report->whattodo != null) {
-						echo "<h3>", lang('ui_what_to_do'), "</h3>";
+						echo "<h3>", lang('rep_what_to_do'), "</h3>";
 						echo "<p>", $report->whattodo, "</p>";
 					}
 					if ($report->further != null) {
-						echo "<h3>", lang('ui_further_reading'), "</h3>";
-						echo "<p>", $report->further, "</p>";
+						echo "<h3>", lang('rep_further_reading'), "</h3>";
+						echo "<p>", Language::format($report->further, LANG_FORMAT_OL), "</p>";
 					}						
 				?>
 					<p class="backtop"><a href="#"><?php _lang('top') ?></a></p>
