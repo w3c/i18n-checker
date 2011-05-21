@@ -47,6 +47,10 @@ class Information {
 		return self::get($name) ? self::get($name)->value : null; 
 	}
 	
+	public static function getCode($name) {
+		return self::get($name) ? self::get($name)->code : null; 
+	}
+	
 	public static function getCount() {
 		return count(self::$infos);
 	}
