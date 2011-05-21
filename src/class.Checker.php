@@ -21,13 +21,17 @@ class Checker {
 	}
 	
 	public function checkDocument() {
+		
+		// Instantiate parser
 		try {
 			$this->doc = Parser::getParser($this->markup, isset($this->curl_info['content_type']) ? $this->curl_info['content_type'] : null);
 		} catch (Exception $e) {
 			Message::addMessage(MSG_LEVEL_ERROR, 'Exception: '.$e->getMessage());
 			self::$logger->error('Exception raised for URI: '.$this->curl_info['url'], $e);
-			return;
+			return false;
 		}
+		
+		// Gather information
 		$this->addInfoDTDMimetype();
 		$this->addInfoCharsetHTTP();
 		$this->addInfoCharsetBom();
@@ -43,6 +47,10 @@ class Checker {
 		$this->addInfoDirHTML();
 		$this->addInfoClassId();
 		$this->addInfoRequestHeaders();
+		
+		// Generate report
+		$this->addReportCharsets();
+		return true;
 	}
 	
 	private function addInfoDTDMimetype() {
@@ -64,22 +72,22 @@ class Checker {
 	
 	// INFO: CHARSET FROM HTTP CONTENT-TYPE HEADER
 	private function addInfoCharsetHTTP() { 
-		$category = 'character_encoding';
-		$title = 'content_type';
+		$category = 'charset_category';
+		$title = 'charset_http';
 		$value = strtoupper($this->doc->charsetFromHTTP());
 		$display_value = null;
 		$code = 'Content-Type: '.$this->curl_info['content_type'];
 		if ($code != null && $value == null)
-			$display_value = 'no_charset_found';
+			$display_value = 'charset_val_none';
 		if ($code == null && $value == null)
-			$display_value = 'none_found';
+			$display_value = 'val_none_found';
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
 	// INFO: BYTE ORDER MARK.
 	private function addInfoCharsetBom() {
-		$category = 'character_encoding';
-		$title = 'bom';
+		$category = 'charset_category';
+		$title = 'charset_bom';
 		$value = null;
 		$display_value = null;
 		$code = null;
@@ -101,62 +109,64 @@ class Checker {
 				$this->markup = mb_convert_encoding($markup, 'UTF-8', 'UTF-16BE');
 			$code = "Byte-order mark: {$value}";
 		} else {
-			$display_value = lang('token_no');
+			$display_value = 'val_no';
 		}
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
 	// INFO: CHARSET FROM XML DECLARATION
 	private function addInfoCharsetXMLDeclaration() {
-		$category = 'character_encoding';
-		$title = 'xml_declaration';
+		$category = 'charset_category';
+		$title = 'charset_xml';
 		$value = $this->doc->charsetFromXML();
 		$display_value = null;
 		$code = $this->doc->XMLDeclaration();
 		if ($code != null && $value == null)
-			$display_value = 'no_encoding_found';
+			$display_value = 'charset_val_none';
 		if ($code == null && $value == null)
-			$display_value = 'none_found';
+			$display_value = 'val_none_found';
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
 	// INFO: CHARSET FROM META CONTENT-TYPE OR META CHARSET (HTML5)
 	private function addInfoCharsetMeta() {
-		$category = 'character_encoding';
-		$title = 'content_type_meta';
+		$category = 'charset_category';
+		$title = 'charset_meta';
+		if ($this->doc->isHTML5() || $this->doc->isXHTML5())
+			$title = 'charset_meta_html5';
 		$value = $this->doc->charsetsFromHTML();
 		$display_value = null;
 		$code = $this->doc->metaCharsetTags();
 		if ($code != null && $value == null)
-			$display_value = 'no_charset_found';
+			$display_value = 'charset_val_none';
 		if ($code == null && $value == null)
-			$display_value = 'none_found';
+			$display_value = 'val_none_found';
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
 	// INFO: LANGUAGE FROM HTML LANG ATTRIBUTE
 	private function addInfoLangAttr() {
-		$category = 'language';
-		$title = 'html_lang';
+		$category = 'lang_category';
+		$title = 'lang_attr_lang';
 		$value = $this->doc->langFromHTML();
 		$display_value = null;
 		$code = $this->doc->HTMLTag();
 		if ($code != null && $value == null)
-			$display_value = 'token_none';
+			$display_value = 'val_none';
 		if ($code == null && $value == null)
-			$display_value = 'no_html_tag_found'; // Can this really happen ? Parsing should fail without an html tag
+			$display_value = 'no_html_tag_found'; // Actually can't happen -> added by parsers to generate a valid DOMDocument
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
 	// INFO: LANGUAGE FROM HTML XML:LANG ATTRIBUTE
 	private function addInfoXMLLangAttr() {
-		$category = 'language';
-		$title = 'html_xmllang';
+		$category = 'lang_category';
+		$title = 'lang_attr_xmllang';
 		$value = $this->doc->xmlLangFromHTML();
 		$display_value = null;
 		$code = $this->doc->HTMLTag();
 		if ($code != null && $value == null)
-			$display_value = 'token_none';
+			$display_value = 'val_none';
 		if ($code == null && $value == null)
 			$display_value = 'no_html_tag_found';
 		Information::addInfo($category, $title, $value, $display_value, $code);
@@ -164,38 +174,38 @@ class Checker {
 	
 	// INFO: LANGUAGE FROM HTTP CONTENT-LANGUAGE
 	private function addInfoLangHTTP() {
-		$category = 'language';
-		$title = 'http_content_language';
+		$category = 'lang_category';
+		$title = 'lang_http';
 		$value = isset($this->curl_info['content_language']) ? $this->curl_info['content_language'] : null;
 		$display_value = null;
 		$code = isset($this->curl_info['content_language']) ? 'Content-Language: '.$this->curl_info['content_language'] : null;
 		if ($value == null)
-			$display_value = 'none_found';
+			$display_value = 'val_none_found';
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
 	// INFO: LANGUAGE FROM META CONTENT-LANGUAGE
 	// XXX: HTML5 content-language deprecated (http://www.w3.org/TR/html-markup/meta.http-equiv.content-language.html), consider adding a warning if used?
 	private function addInfoLangMeta() {
-		$category = 'language';
-		$title = 'meta_content_language';
+		$category = 'lang_category';
+		$title = 'lang_meta';
 		$value = $this->doc->langsFromMeta();
 		$display_value = null;
 		$code = $this->doc->metaLangTags();
 		if ($value == null)
-			$display_value = 'none_found';
+			$display_value = 'val_none_found';
 		Information::addInfo($category, $title, $value, $display_value, $code);		
 	}
 	
 	// INFO: TEXT DIRECTION FROM HTML TAGS
 	private function addInfoDirHTML() {
-		$category = 'text_direction';
-		$title = 'default_direction';
+		$category = 'dir_category';
+		$title = 'dir_default';
 		$value = $this->doc->dirFromHTML();
 		$display_value = null;
 		$code = $this->doc->HTMLTag();
 		if ($value == null)
-			$value = lang('ltr_default');
+			$value = lang('dir_default_ltr');
 		Information::addInfo($category, $title, $value, $display_value, $code);	
 	}
 	
@@ -213,10 +223,10 @@ class Checker {
 		};
 		array_walk(&$nodes, $unsetASCII);
 		
-		$category = 'class_and_id';
-		$title = 'class_and_id_non_ascii';
+		$category = 'classId_category';
+		$title = 'classId_non_ascii';
 		$value = array_unique(Utils::arrayFlatten(array_values($nodes)));
-		$display_value = count($value) == 0 ? 'token_none' : null;
+		$display_value = count($value) == 0 ? 'val_none' : null;
 		$code = array_keys($nodes);
 		Information::addInfo($category, $title, $value, $display_value, $code);	
 		
@@ -227,34 +237,163 @@ class Checker {
 				unset($nodes[$code]);
 		};
 		array_walk(&$nodes, $unsetNFC);
-		$title = 'class_and_id_non_nfc';
+		$title = 'classId_non_nfc';
 		$value = array_unique(Utils::arrayFlatten(array_values($nodes)));
-		$display_value = count($value) == 0 ? 'token_none' : null;
+		$display_value = count($value) == 0 ? 'val_none' : null;
 		$code = array_keys($nodes);
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
 	// INFO: REQUEST HEADERS
 	private function addInfoRequestHeaders() {
-		$category = 'request_headers';
-		$title = 'accept_language';
+		$category = 'headers_category';
+		$title = 'headers_accept_language';
 		$value = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Utils::parseHeader($_SERVER['HTTP_ACCEPT_LANGUAGE']) : null;
 		$code = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? 'Accept-Language: '.$_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
 		$display_value = null;
 		if ($value == null)
-			$display_value = 'none_found';
+			$display_value = 'val_none_found';
 		Information::addInfo($category, $title, $value, $display_value, $code);
 		
-		$category = 'request_headers';
-		$title = 'accept_charset';
+		$category = 'headers_category';
+		$title = 'headers_accept_charset';
 		$value = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? array_map('strtoupper', Utils::parseHeader($_SERVER['HTTP_ACCEPT_CHARSET'])) : null;
 		$code = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? 'Accept-Charset: '.$_SERVER['HTTP_ACCEPT_CHARSET'] : null;
 		$display_value = null;
 		if ($value == null)
-			$display_value = 'none_found';
+			$display_value = 'val_none_found';
 		Information::addInfo($category, $title, $value, $display_value, $code);
 	}
 	
+	private function addReportCharsets() {
+		$category = 'charset_category';
+		
+		// Get all the charsets found
+		$charsets = array_merge(
+			(array) Information::getValue('charset_http'),
+			(array) Information::getValue('charset_bom'),
+			(array) Information::getValue('charset_xml'),
+			(array) Information::getValue('charset_meta')
+		);
+		
+		$charsetCodes = array_merge(
+			(array) Information::getCode('charset_http'),
+			(array) Information::getCode('charset_bom'),
+			(array) Information::getCode('charset_xml'),
+			(array) Information::getCode('charset_meta')
+		);
+		
+		//self::$logger->error('test: '.print_r($charsetCodes, true));
+		
+		/*$charsetsCodes = array_merge(
+			(array) Information::get('charset_http'),
+			(array) Information::getValue('charset_bom'),
+			(array) Information::getValue('charset_xml'),
+			(array) Information::getValue('charset_meta')
+		);*/
+		
+		//$charsets = array();
+		
+		// WARNING: No character encoding information
+		if (empty($charsets)) {
+			self::$logger->debug('No charset information found for this document.');
+			Report::addReport($category, 
+				REPORT_LEVEL_WARNING, 
+				lang('rep_charset_none'),
+				lang('rep_charset_none_expl'),
+				lang('rep_charset_none_todo'),
+				lang('rep_charset_none_link')
+			);
+			return;
+		} else {
+			//self::$logger->debug('List of all charsets found: '.print_r($charsets, true));
+		}
+		
+		// INFO: UTF-8 is not used
+		if (!in_array("UTF-8", $charsets)) { //TODO check this
+			Report::addReport(
+				$category, REPORT_LEVEL_INFO, 
+				lang('rep_charset_no_utf8'),
+				lang('rep_charset_no_utf8_expl'),
+				lang('rep_charset_no_utf8_todo'),
+				lang('rep_charset_no_utf8_link')
+			);
+		}
+		
+		// ERROR: Conflicting character encoding declarations
+		if (count(array_unique($charsets)) != 1) {
+			// $http_conflict_msg
+			Report::addReport(
+				$category, REPORT_LEVEL_ERROR, 
+				lang('rep_charset_conflict'),
+				lang('rep_charset_conflict_expl', Language::format(array_unique($charsetCodes), LANG_FORMAT_OL_CODE)),
+				lang('rep_charset_conflict_todo'),
+				lang('rep_charset_conflict_link')
+			);
+		}
+		
+		// WARNING: Multiple encoding declarations using the meta tag
+		if (count(Information::getValue('charset_meta')) > 1) {
+			Report::addReport(
+				$category, REPORT_LEVEL_WARNING, 
+				lang('rep_charset_multiple_meta'),
+				lang('rep_charset_multiple_meta_expl'),
+				lang('rep_charset_multiple_meta_todo'),
+				lang('rep_charset_multiple_meta_link')
+			);
+		}
+		
+		// WARNING: UTF-8 BOM found at start of file
+		$bom = Information::getValue('charset_bom');
+		if ($bom != null) {
+			Report::addReport(
+				$category, REPORT_LEVEL_WARNING, 
+				lang('rep_charset_bom_found'),
+				lang('rep_charset_bom_found_expl'),
+				lang('rep_charset_bom_found_todo'),
+				lang('rep_charset_bom_found_link')
+			);
+		}
+		
+		// TODO: BOM in content Report::addReport();
+		
+		/*if (empty($bom)
+			&& empty(Information::getValue('charset_bom'))
+			&& empty(Information::getValue('charset_bom'))) {
+			// No in-document encoding found
+			Report::addReport(
+				$category, REPORT_LEVEL_WARNING, 
+				lang('rep_charset_bom_in_content'),
+				lang('rep_charset_bom_in_content_expl'),
+				lang('rep_charset_bom_in_content_todo'),
+				lang('rep_charset_bom_in_content_link')
+			);
+		}*/
+		
+	}
+	
+	private function addReportLanguages() {
+		// The html tag has no language attribute
+		// The lang attribute and the xml:lang attribute in the html tag have different values
+		// This HTML file contains xml:lang attributes
+		// A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
+		// A language attribute value was incorrectly formed.
+		// check that lang and xml:lang come in pairs in xhtml & check for non-welformed values
+			// A tag uses a lang attribute without an associated xml:lang attribute.
+			// A tag uses an xml:lang attribute without an associated lang attribute.
+		// check that xhtml files served as XML have xml:lang
+		
+	}
+	
+	private function addReportDirValues() {
+		// Incorrect values used for dir attribute
+	}
+	
+	private function addReportMisc() {
+		// are there non-NFC class or id names?
+		// <b> tags found in source
+		// <i> tags found in source
+	}
 }
 
 Checker::init();
