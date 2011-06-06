@@ -33,6 +33,11 @@ class Utils {
 		return array_merge((array) $array, array_map('trim', preg_split('/,/', $string)));
 	}
 	
+	// Returns an array of values from a comma-separated string of values
+	public static function getValuesFromCSString($string) {
+		return array_map('trim', preg_split('/,/', $string));
+	}
+	
 	public static function arrayTrim(array $array) {
 		return array_map('trim', $array);
 	}
