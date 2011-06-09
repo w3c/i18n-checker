@@ -38,6 +38,28 @@ class Utils {
 		return array_map('trim', preg_split('/,/', $string));
 	}
 	
+	public static function valuesFromValArray($array) {
+		if ($array == null || !is_array($array))
+			return null;
+		$result = array();
+		foreach ($array as $valArr) {
+			if (array_key_exists('values', $valArr) && $valArr['values'] != null) // TODO: if not then an invalid array has been passed, log?
+				$result[] = $valArr['values'];
+		}
+		return array_values(array_unique(self::arrayFlatten($result)));
+	}
+	
+	public static function codesFromValArray($array) {
+		if ($array == null || !is_array($array))
+			return null;
+		$result = array();
+		foreach ($array as $valArr) {
+			if (array_key_exists('code', $valArr) && $valArr['code'] != null) // TODO: if not then an invalid array has been passed, log?
+				$result[] = $valArr['code'];
+		}
+		return array_values(array_unique(self::arrayFlatten($result)));
+	}
+	
 	public static function arrayTrim(array $array) {
 		return array_map('trim', $array);
 	}
