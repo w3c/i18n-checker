@@ -17,11 +17,11 @@ abstract class Parser {
 	// DOMDocument
 	protected $document;
 	// Meta charset tags
-	protected $metaCharsetTags;
-	protected $charsetsFromHTML;
+	protected $metaCharsets; // Change in one array($code => array(values))
+	//protected $charsetsFromHTML;
 	// Meta language tags
-	protected $metaLanguageTags;
-	protected $langsFromMeta;
+	protected $metaLanguages;
+	//protected $langsFromMeta;
 	
 	public static function init() {
 		self::$logger = Logger::getLogger('Parser');
@@ -125,6 +125,12 @@ abstract class Parser {
 	}
 	
 	public function charsetsFromHTML() {
+		if ($this->metaCharsets == null)
+			$this->parseMeta();
+		return $this->metaCharsets;
+	}
+	
+	/*public function charsetsFromHTML() {
 		if ($this->charsetsFromHTML == null)
 			$this->parseMeta();
 		return array_unique((array) $this->charsetsFromHTML);
@@ -134,21 +140,21 @@ abstract class Parser {
 		if ($this->metaCharsetTags == null)
 			$this->parseMeta();
 		return $this->metaCharsetTags;
-	}
+	}*/
 	
 	protected abstract function parseMeta();
 	
 	public function langsFromMeta() {
-		if ($this->langsFromMeta == null)
+		if ($this->metaLanguages == null)
 			$this->parseMeta();
-		return array_unique((array) $this->langsFromMeta);
+		return $this->metaLanguages;
 	}
 	
-	public function metaLangTags() {
+	/*public function metaLangTags() {
 		if ($this->metaLanguageTags == null)
 			$this->parseMeta();
 		return $this->metaLanguageTags;
-	}
+	}*/
 	
 	public function langFromHTML() {
 		// Use getNamedItemNS(null,'lang') so that it does not match xml:lang attributes
