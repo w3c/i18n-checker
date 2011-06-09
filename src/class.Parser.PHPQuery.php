@@ -32,10 +32,10 @@ final class ParserPHPQuery extends Parser {
 	}
 	
 	protected function parseMeta() {
-		$this->metaCharsetTags = array();
-		$this->charsetsFromHTML = array();
-		$this->metaLanguageTags = array();
-		$this->langsFromMeta = array();
+		$this->metaCharsets = array();
+		$this->metaLanguages = array();
+		//$this->metaLanguageTags = array();
+		//$this->langsFromMeta = array();
 		
 		// XXX: attributes values in selectors are case sensitive!
 		
@@ -67,14 +67,24 @@ final class ParserPHPQuery extends Parser {
 		// FIXME: case sensitivity on http-equiv
 		foreach (pq('meta[http-equiv]') as $meta) {
 			if (strcasecmp(pq($meta)->attr('http-equiv'), 'Content-Type') == 0) {
-				$this->charsetsFromHTML[] = Utils::charsetFromContentType(pq($meta)->attr('content'));
-				$this->metaCharsetTags[] = $this->dump($meta);
+				//$this->charsetsFromHTML[] = Utils::charsetFromContentType(pq($meta)->attr('content'));
+				//$this->metaCharsetTags[] = $this->dump($meta);
+				$this->metaCharsets[] = array ( 
+					'code'   => $this->dump($meta),
+					'values' => Utils::charsetFromContentType(pq($meta)->attr('content'))
+				);
 			}
 			else if (strcasecmp(pq($meta)->attr('http-equiv'), 'Content-Language') == 0) {
-				$this->langsFromMeta = Utils::arrayMergeCommaString($this->langsFromMeta, pq($meta)->attr('content'));
-				$this->metaLanguageTags[] = $this->dump($meta);
+				//$this->langsFromMeta = Utils::arrayMergeCommaString($this->langsFromMeta, pq($meta)->attr('content'));
+				//$this->metaLanguageTags[] = $this->dump($meta);
+				$this->metaLanguages[] = array ( 
+					'code'   => $this->dump($meta),
+					'values' => Utils::getValuesFromCSString(pq($meta)->attr('content'))
+				);
 			}
 		}
+		//self::$logger->error(print_r($this->metaCharsets, true));
+		//self::$logger->error(print_r($this->metaLanguages, true));
 	}
 	
 	// @Override: if document is parsed as HTML getNamedItemNS('...XML/1998/namespace','lang') fails
@@ -110,7 +120,12 @@ final class ParserPHPQuery extends Parser {
 	private function getNodesWithAttr($attr) {
 		$result = array();
 		foreach (pq('*['.$attr.']') as $node)
-			$result[$this->dumpTag($node)] = Utils::arrayTrim(preg_split('/[ ]+/', pq($node)->attr($attr)));
+			//$result[$this->dumpTag($node)] = Utils::arrayTrim(preg_split('/[ ]+/', pq($node)->attr($attr)));
+			$result[] = array(
+				'code' => $this->dumpTag($node),
+				'values' => Utils::arrayTrim(preg_split('/[ ]+/', pq($node)->attr($attr)))
+			);
+		//self::$logger->error(print_r($result, true));
 		return $result;
 	} 
 }
