@@ -49,7 +49,7 @@ class Checker {
 		$this->addInfoRequestHeaders();
 		
 		// Generate report
-		$this->addReportCharsets();
+		//$this->addReportCharsets();
 		return true;
 	}
 	
@@ -64,24 +64,25 @@ class Checker {
 			$dtd = 'HTML5';
 		}
 		if (isset($dtd))
-			Information::addInfo(null, 'dtd', $dtd, null, null);
+			Information::addInfo(null, 'dtd', null, $dtd);
 		else
-			Information::addInfo(null, 'dtd', 'NA', null, null);
-		Information::addInfo(null, 'mimetype', $this->doc->mimetypeFromHTTP(), null, null);
+			Information::addInfo(null, 'dtd', null, 'NA');
+		Information::addInfo(null, 'mimetype', null, $this->doc->mimetypeFromHTTP());
 	}
 	
 	// INFO: CHARSET FROM HTTP CONTENT-TYPE HEADER
 	private function addInfoCharsetHTTP() { 
 		$category = 'charset_category';
 		$title = 'charset_http';
-		$value = strtoupper($this->doc->charsetFromHTTP());
+		$_code = 'Content-Type: '.$this->curl_info['content_type'];
+		$_val = strtoupper($this->doc->charsetFromHTTP());
+		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
-		$code = 'Content-Type: '.$this->curl_info['content_type'];
-		if ($code != null && $value == null)
-			$display_value = 'charset_val_none';
-		if ($code == null && $value == null)
+		if ($_code != null && $_val == null)
+			$display_value = 'charset_none_found';
+		if ($_code == null && $_val == null)
 			$display_value = 'val_none_found';
-		Information::addInfo($category, $title, $value, $display_value, $code);
+		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: BYTE ORDER MARK.
@@ -90,42 +91,42 @@ class Checker {
 		$title = 'charset_bom';
 		$value = null;
 		$display_value = null;
-		$code = null;
 		$filestart = substr($this->markup,0,3);
 		if (ord($filestart{0})== 239 && ord($filestart{1})== 187 && ord($filestart{2})== 191) 
-			$value = 'UTF-8';
+			$bom = 'UTF-8';
 		else { 
 			$filestart = substr($this->markup,0,2);
 			if (ord($filestart{0})== 254 && ord($filestart{1})== 255)
-				$value = 'UTF-16BE';
+				$bom = 'UTF-16BE';
 			elseif (ord($filestart{0})== 255 && ord($filestart{1})== 254)
-				$value = 'UTF-16LE';
+				$bom = 'UTF-16LE';
 		}
-		if ($value != null) {
+		if (isset($bom)) {
 			// Convert to UTF-8
-			if ($value == 'UTF-16LE')
+			if ($bom == 'UTF-16LE')
 				$this->markup = mb_convert_encoding($markup, 'UTF-8', 'UTF-16LE');
-			elseif ($value == 'UTF-16BE')
+			elseif ($bom == 'UTF-16BE')
 				$this->markup = mb_convert_encoding($markup, 'UTF-8', 'UTF-16BE');
-			$code = "Byte-order mark: {$value}";
+			$value = array ('code' => "Byte-order mark: {$bom}", 'value' => $bom);
 		} else {
 			$display_value = 'val_no';
 		}
-		Information::addInfo($category, $title, $value, $display_value, $code);
+		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: CHARSET FROM XML DECLARATION
 	private function addInfoCharsetXMLDeclaration() {
 		$category = 'charset_category';
 		$title = 'charset_xml';
-		$value = $this->doc->charsetFromXML();
+		$_code = $this->doc->XMLDeclaration();
+		$_val = $this->doc->charsetFromXML();
+		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
-		$code = $this->doc->XMLDeclaration();
-		if ($code != null && $value == null)
+		if ($_code != null && $_val == null)
 			$display_value = 'charset_val_none';
-		if ($code == null && $value == null)
+		if ($_code == null && $_val == null)
 			$display_value = 'val_none_found';
-		Information::addInfo($category, $title, $value, $display_value, $code);
+		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: CHARSET FROM META CONTENT-TYPE OR META CHARSET (HTML5)
@@ -136,52 +137,61 @@ class Checker {
 			$title = 'charset_meta_html5';
 		$value = $this->doc->charsetsFromHTML();
 		$display_value = null;
-		$code = $this->doc->metaCharsetTags();
-		if ($code != null && $value == null)
-			$display_value = 'charset_val_none';
-		if ($code == null && $value == null)
-			$display_value = 'val_none_found';
-		Information::addInfo($category, $title, $value, $display_value, $code);
+		$vals = Utils::valuesFromValArray($value);
+		if (empty($vals)) {
+			$codes = Utils::codesFromValArray($value);
+			if (empty($codes))
+				$display_value = 'val_none_found';
+			else
+				$display_value = 'charset_none_found';
+		}
+		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: LANGUAGE FROM HTML LANG ATTRIBUTE
 	private function addInfoLangAttr() {
 		$category = 'lang_category';
 		$title = 'lang_attr_lang';
-		$value = $this->doc->langFromHTML();
+		$_code = $this->doc->HTMLTag();
+		$_val = $this->doc->langFromHTML();
+		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
-		$code = $this->doc->HTMLTag();
-		if ($code != null && $value == null)
+		if ($_code != null && $_val == null)
 			$display_value = 'val_none';
-		if ($code == null && $value == null)
-			$display_value = 'no_html_tag_found'; // Actually can't happen -> added by parsers to generate a valid DOMDocument
-		Information::addInfo($category, $title, $value, $display_value, $code);
+		if ($_code == null && $_val == null)
+			$display_value = 'no_html_tag_found';
+		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: LANGUAGE FROM HTML XML:LANG ATTRIBUTE
 	private function addInfoXMLLangAttr() {
 		$category = 'lang_category';
 		$title = 'lang_attr_xmllang';
-		$value = $this->doc->xmlLangFromHTML();
+		$_code = $this->doc->HTMLTag();
+		$_val = $this->doc->xmlLangFromHTML();
+		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
-		$code = $this->doc->HTMLTag();
-		if ($code != null && $value == null)
+		if ($_code != null && $_val == null)
 			$display_value = 'val_none';
-		if ($code == null && $value == null)
+		if ($_code == null && $_val == null)
 			$display_value = 'no_html_tag_found';
-		Information::addInfo($category, $title, $value, $display_value, $code);
+		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: LANGUAGE FROM HTTP CONTENT-LANGUAGE
 	private function addInfoLangHTTP() {
 		$category = 'lang_category';
 		$title = 'lang_http';
-		$value = isset($this->curl_info['content_language']) ? $this->curl_info['content_language'] : null;
+		$_code = isset($this->curl_info['content_language']) ? 'Content-Language: '.$this->curl_info['content_language'] : null;
+		$_val = isset($this->curl_info['content_language']) ? $this->curl_info['content_language'] : null;
+		$value = array(
+			'code' => $_code,
+			'values' => $_val
+		);		
 		$display_value = null;
-		$code = isset($this->curl_info['content_language']) ? 'Content-Language: '.$this->curl_info['content_language'] : null;
-		if ($value == null)
+		if ($_val == null)
 			$display_value = 'val_none_found';
-		Information::addInfo($category, $title, $value, $display_value, $code);
+		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: LANGUAGE FROM META CONTENT-LANGUAGE
@@ -191,22 +201,22 @@ class Checker {
 		$title = 'lang_meta';
 		$value = $this->doc->langsFromMeta();
 		$display_value = null;
-		$code = $this->doc->metaLangTags();
 		if ($value == null)
 			$display_value = 'val_none_found';
-		Information::addInfo($category, $title, $value, $display_value, $code);		
+		Information::addInfo($category, $title, $value, $display_value);		
 	}
 	
 	// INFO: TEXT DIRECTION FROM HTML TAGS
 	private function addInfoDirHTML() {
 		$category = 'dir_category';
 		$title = 'dir_default';
-		$value = $this->doc->dirFromHTML();
+		$_code = $this->doc->HTMLTag();
+		$_val = $this->doc->dirFromHTML();
+		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
-		$code = $this->doc->HTMLTag();
-		if ($value == null)
+		if ($_val == null)
 			$value = lang('dir_default_ltr');
-		Information::addInfo($category, $title, $value, $display_value, $code);	
+		Information::addInfo($category, $title, $value, $display_value);	
 	}
 	
 	// INFO: REQUEST HEADERS
@@ -216,53 +226,53 @@ class Checker {
 		$nodes = array_merge($classes, $ids);
 		
 		// Remove nodes for which all class names are ASCII
-		$unsetASCII = function (&$classes, $code) use (&$nodes) {
-			$classes = preg_filter('/[^\x20-\x7E]/', '$0', $classes);
-			if (count($classes) == 0)
-				unset($nodes[$code]);
-		};
-		array_walk(&$nodes, $unsetASCII);
+		array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
+			$valArray['values'] = preg_filter('/[^\x20-\x7E]/', '$0', $valArray['values']);
+			if (count($valArray['values']) == 0)
+				unset($nodes[$key]);
+		});
 		
 		$category = 'classId_category';
 		$title = 'classId_non_ascii';
-		$value = array_unique(Utils::arrayFlatten(array_values($nodes)));
+		$value = array_values($nodes); // we use array_values() to reindex the array
 		$display_value = count($value) == 0 ? 'val_none' : null;
-		$code = array_keys($nodes);
-		Information::addInfo($category, $title, $value, $display_value, $code);	
+		Information::addInfo($category, $title, $value, $display_value);
 		
 		// Remove nodes for which all class names are NFC
-		$unsetNFC = function (&$classes, $code) use (&$nodes) {
-			$classStr = implode('', $classes);
+		array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
+			$classStr = implode('', $valArray['values']);
 			if (N11n::nfc($classStr) == $classStr)
-				unset($nodes[$code]);
-		};
-		array_walk(&$nodes, $unsetNFC);
+				unset($nodes[$key]);
+		});
 		$title = 'classId_non_nfc';
-		$value = array_unique(Utils::arrayFlatten(array_values($nodes)));
+		$value = array_values($nodes);
+		
+		//array_unique(Utils::arrayFlatten(array_values($nodes)));
 		$display_value = count($value) == 0 ? 'val_none' : null;
-		$code = array_keys($nodes);
-		Information::addInfo($category, $title, $value, $display_value, $code);
+		//$code = array_keys($nodes);
+		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: REQUEST HEADERS
 	private function addInfoRequestHeaders() {
 		$category = 'headers_category';
 		$title = 'headers_accept_language';
-		$value = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Utils::parseHeader($_SERVER['HTTP_ACCEPT_LANGUAGE']) : null;
-		$code = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? 'Accept-Language: '.$_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
+		$_val = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Utils::parseHeader($_SERVER['HTTP_ACCEPT_LANGUAGE']) : null;
+		$_code = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? 'Accept-Language: '.$_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
+		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
-		if ($value == null)
+		if ($_val == null)
 			$display_value = 'val_none_found';
-		Information::addInfo($category, $title, $value, $display_value, $code);
+		Information::addInfo($category, $title, $value, $display_value);
 		
-		$category = 'headers_category';
 		$title = 'headers_accept_charset';
-		$value = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? array_map('strtoupper', Utils::parseHeader($_SERVER['HTTP_ACCEPT_CHARSET'])) : null;
-		$code = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? 'Accept-Charset: '.$_SERVER['HTTP_ACCEPT_CHARSET'] : null;
+		$_val = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? array_map('strtoupper', Utils::parseHeader($_SERVER['HTTP_ACCEPT_CHARSET'])) : null;
+		$_code = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? 'Accept-Charset: '.$_SERVER['HTTP_ACCEPT_CHARSET'] : null;
+		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
-		if ($value == null)
+		if ($_val == null)
 			$display_value = 'val_none_found';
-		Information::addInfo($category, $title, $value, $display_value, $code);
+		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	private function addReportCharsets() {
@@ -270,18 +280,18 @@ class Checker {
 		
 		// Get all the charsets found
 		$charsets = array_merge(
-			(array) Information::getValue('charset_http'),
-			(array) Information::getValue('charset_bom'),
-			(array) Information::getValue('charset_xml'),
-			(array) Information::getValue('charset_meta')
+			(array) Information::getValues('charset_http'),
+			(array) Information::getValues('charset_bom'),
+			(array) Information::getValues('charset_xml'),
+			(array) Information::getValues('charset_meta')
 		);
 		
-		$charsetCodes = array_merge(
+		/*$charsetCodes = array_merge(
 			(array) Information::getCode('charset_http'),
 			(array) Information::getCode('charset_bom'),
 			(array) Information::getCode('charset_xml'),
 			(array) Information::getCode('charset_meta')
-		);
+		);*/
 		
 		//self::$logger->error('test: '.print_r($charsetCodes, true));
 		
