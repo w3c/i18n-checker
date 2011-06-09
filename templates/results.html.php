@@ -40,7 +40,7 @@ include('includes/form.php');
 <div id="infos" class="section">
 	<h1 class="title">
 		<a href="#infos"><?php _lang('information') ?></a>
-		<span class="meta"><?php echo Information::get('dtd')->value ?>&nbsp;&nbsp;-&nbsp;&nbsp;<?php echo Information::get('mimetype')->value ?></span>
+		<span class="meta"><?php echo Information::get('dtd')->display_value ?>&nbsp;&nbsp;-&nbsp;&nbsp;<?php echo Information::get('mimetype')->display_value ?></span>
 	</h1>
 	<div class="block">
 		<table>
@@ -52,31 +52,34 @@ include('includes/form.php');
 					echo "<th>".lang('code')."</th>\n";
 			    echo "</tr>\n";
 			    foreach ($infoArray as $info) {
+			    //$logger->error(print_r($info, true));
 			    echo "<tr>\n";
 			    	echo "<td>".lang($info->title)."</td>\n";
 					echo "<td>";
 					if ($info->display_value != null) {
 						_lang($info->display_value);
-					} else {
-						if (is_array($info->value) && count($info->value) > 0) {
-							foreach ($info->value as $value) {
-								echo "<strong>".$value."</strong> "; // Leave the space to allow wrapping
-							}
-						} else {
-							echo "<strong>".$info->value."</strong>";
+					} else if ($info->values != null) { 
+						//$logger->error(print_r($info->values, true));
+						for ($i = 0; $i < count($info->values); $i++) {
+							$valArray = $info->values[$i];
+							foreach ((array) $valArray['values'] as $value)
+								if ($value != null)
+									echo '<strong class="', $info->title, '_', $i, '">', $value, '</strong> ';
 						}
 					}
 					echo "</td>\n";
 					echo "<td>\n";
-						if ($info->code != null) {
-							if (is_array($info->code) && count($info->code) > 0) {
-								echo '<ol>';
-								foreach ($info->code as $code) {
-									echo "<li><code>".htmlspecialchars($code)."</code></li>";
+						if ($info->values != null) {
+							$count = count($info->values);
+							echo $count > 1 ? '<ol>' : '';
+							for ($i = 0; $i < $count; $i++) {
+								if (($code = $info->values[$i]['code']) != null) {
+									echo $count > 1 ? '<li>' : '';
+									echo '<code class="', $info->title, '_', $i, '">', htmlspecialchars($code), '</code>';
+									echo $count > 1 ? '</li>' : '';
 								}
-								echo '</ol>';
-							} else
-								echo "<code>".htmlspecialchars($info->code)."</code>\n";
+							}
+							echo $count > 1 ? '</ol>' : '';
 						}
 					echo '</td>';
 			    echo '</tr>';
