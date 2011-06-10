@@ -26,6 +26,28 @@ var W3Cr = {
 		$$('#report .section').each(function(section) {
 			W3Cr.close(section);
 		});
+		$$('#infos strong[class]').each(function(value) {
+			var className = value.getProperty('class');
+			var code = $$('#infos code[class=' + className + ']')[0];
+			if (code != null) {
+				value.addEvent('mouseover', function(event) {
+					code.addClass('emphasized');
+					value.addClass('emphasized');
+				});
+				value.addEvent('mouseout', function(event) {
+					code.removeClass('emphasized');
+					value.removeClass('emphasized');
+				});
+				code.addEvent('mouseover', function(event) {
+					code.addClass('emphasized');
+					value.addClass('emphasized');
+				});
+				code.addEvent('mouseout', function(event) {
+					code.removeClass('emphasized');
+					value.removeClass('emphasized');
+				});
+			}
+		});
 	},
 	
 	toggle: function(section) {
