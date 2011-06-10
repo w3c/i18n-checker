@@ -49,7 +49,7 @@ class Checker {
 		$this->addInfoRequestHeaders();
 		
 		// Generate report
-		//$this->addReportCharsets();
+		$this->addReportCharsets();
 		return true;
 	}
 	
@@ -107,7 +107,7 @@ class Checker {
 				$this->markup = mb_convert_encoding($markup, 'UTF-8', 'UTF-16LE');
 			elseif ($bom == 'UTF-16BE')
 				$this->markup = mb_convert_encoding($markup, 'UTF-8', 'UTF-16BE');
-			$value = array ('code' => "Byte-order mark: {$bom}", 'value' => $bom);
+			$value = array ('code' => "Byte-order mark: {$bom}", 'values' => $bom);
 		} else {
 			$display_value = 'val_no';
 		}
@@ -120,7 +120,9 @@ class Checker {
 		$title = 'charset_xml';
 		$_code = $this->doc->XMLDeclaration();
 		$_val = $this->doc->charsetFromXML();
-		$value = array('code' => $_code, 'values' => $_val);
+		$value = null;
+		if ($_code != null && $_val != null)
+			$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
 		if ($_code != null && $_val == null)
 			$display_value = 'charset_val_none';
@@ -219,7 +221,7 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value);	
 	}
 	
-	// INFO: REQUEST HEADERS
+	// INFO: NON ASCII AND NFC CLASSES AND IDS
 	private function addInfoClassId() {
 		$classes = $this->doc->getNodesWithClass();
 		$ids = $this->doc->getNodesWithID();
@@ -280,32 +282,28 @@ class Checker {
 		
 		// Get all the charsets found
 		$charsets = array_merge(
-			(array) Information::getValues('charset_http'),
-			(array) Information::getValues('charset_bom'),
-			(array) Information::getValues('charset_xml'),
-			(array) Information::getValues('charset_meta')
+			(array) Information::get('charset_http')->values,
+			(array) Information::get('charset_bom')->values,
+			(array) Information::get('charset_xml')->values,
+			(array) Information::get('charset_meta')->values
 		);
 		
-		/*$charsetCodes = array_merge(
-			(array) Information::getCode('charset_http'),
-			(array) Information::getCode('charset_bom'),
-			(array) Information::getCode('charset_xml'),
-			(array) Information::getCode('charset_meta')
-		);*/
+		$charsetVals = Utils::valuesFromValArray($charsets);
+		//$charsetVals = null;
+		$charsetVals = $charsetVals == null ? array() : $charsetVals;
+		//self::$logger->error(print_r($charsetVals, true));
 		
-		//self::$logger->error('test: '.print_r($charsetCodes, true));
-		
-		/*$charsetsCodes = array_merge(
-			(array) Information::get('charset_http'),
-			(array) Information::getValue('charset_bom'),
-			(array) Information::getValue('charset_xml'),
-			(array) Information::getValue('charset_meta')
-		);*/
-		
-		//$charsets = array();
+		$charsetCodes = Utils::codesFromValArray(
+			array_filter($charsets, function ($array) {
+				if ($array['values'] != null && !empty($array['values']))
+					return true;
+				return false;
+			})
+		);
+		//self::$logger->error(print_r($charsetCodes, true));
 		
 		// WARNING: No character encoding information
-		if (empty($charsets)) {
+		if (empty($charsetVals)) {
 			self::$logger->debug('No charset information found for this document.');
 			Report::addReport($category, 
 				REPORT_LEVEL_WARNING, 
@@ -319,43 +317,52 @@ class Checker {
 			//self::$logger->debug('List of all charsets found: '.print_r($charsets, true));
 		}
 		
-		// INFO: UTF-8 is not used
-		if (!in_array("UTF-8", $charsets)) { //TODO check this
+		// INFO: Non UTF-8 charset declared
+		if (!in_array("UTF-8", $charsetVals) || count(array_unique($charsetVals)) > 1) {
+			self::$logger->error(print_r($charsets, true));
+			$nonUTF8CharsetCodes = Utils::codesFromValArray(
+				array_filter($charsets, function ($array) {
+					if ($array['values'] != null 
+						&& (!in_array("UTF-8", (array) $array['values'])))
+						//|| count(array_unique((array) $array['values'])) > 1))
+						return true;
+					return false;
+				})
+			);
 			Report::addReport(
 				$category, REPORT_LEVEL_INFO, 
 				lang('rep_charset_no_utf8'),
-				lang('rep_charset_no_utf8_expl'),
+				lang('rep_charset_no_utf8_expl', Language::format($nonUTF8CharsetCodes, LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_no_utf8_todo'),
 				lang('rep_charset_no_utf8_link')
 			);
 		}
 		
 		// ERROR: Conflicting character encoding declarations
-		if (count(array_unique($charsets)) != 1) {
+		if (count(array_unique($charsetVals)) != 1) {
 			// $http_conflict_msg
 			Report::addReport(
 				$category, REPORT_LEVEL_ERROR, 
 				lang('rep_charset_conflict'),
-				lang('rep_charset_conflict_expl', Language::format(array_unique($charsetCodes), LANG_FORMAT_OL_CODE)),
+				lang('rep_charset_conflict_expl', Language::format($charsetCodes, LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_conflict_todo'),
 				lang('rep_charset_conflict_link')
 			);
 		}
 		
 		// WARNING: Multiple encoding declarations using the meta tag
-		if (count(Information::getValue('charset_meta')) > 1) {
+		if (count(Information::get('charset_meta')->values) > 1) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_multiple_meta'),
-				lang('rep_charset_multiple_meta_expl'),
+				lang('rep_charset_multiple_meta_expl', Language::format(Utils::codesFromValArray(Information::get('charset_meta')->values), LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_multiple_meta_todo'),
 				lang('rep_charset_multiple_meta_link')
 			);
 		}
 		
 		// WARNING: UTF-8 BOM found at start of file
-		$bom = Information::getValue('charset_bom');
-		if ($bom != null) {
+		if (Information::get('charset_bom')->values != null) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_bom_found'),
@@ -365,12 +372,34 @@ class Checker {
 			);
 		}
 		
-		// TODO: BOM in content Report::addReport();
 		
-		/*if (empty($bom)
-			&& empty(Information::getValue('charset_bom'))
-			&& empty(Information::getValue('charset_bom'))) {
-			// No in-document encoding found
+		// WARNING: No charset declaration in the document
+		$inDocCharsets = array_merge(
+			(array) Information::get('charset_bom')->values,
+			(array) Information::get('charset_xml')->values,
+			(array) Information::get('charset_meta')->values
+		);
+		$inDocCharsets = Utils::codesFromValArray(
+			array_filter($inDocCharsets, function ($array) {
+				if ($array['values'] != null && !empty($array['values']))
+					return true;
+				return false;
+			})
+		);
+		$inDocCharsets = array();
+		//self::$logger->error("In Doc: ".print_r($inDocCharsets, true));
+		if (!empty($charsetVals) && empty($inDocCharsets)) {
+			Report::addReport(
+				$category, REPORT_LEVEL_WARNING, 
+				lang('rep_charset_no_in_doc'),
+				lang('rep_charset_no_in_doc_expl', Information::get('charset_http')->values[0]['code']),
+				lang('rep_charset_no_in_doc_todo'),
+				lang('rep_charset_no_in_doc_link')
+			);
+		}
+		
+		// WARNING: BOM in content TODO: Shouldn't the message warn that it could be intentional like in this very message
+		if (preg_match('/ï»¿/',$this->markup)) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_bom_in_content'),
@@ -378,7 +407,7 @@ class Checker {
 				lang('rep_charset_bom_in_content_todo'),
 				lang('rep_charset_bom_in_content_link')
 			);
-		}*/
+		}
 		
 	}
 	
