@@ -107,11 +107,13 @@ class Language {
 				$result = '<ol>';
 				foreach ((array) $value as $val)
 					$result .= '<li>'.$val.'</li>';
+				$result .= '</ol>';
 				return $result;
 			case LANG_FORMAT_OL_CODE:
 				$result = '<ol>';
 				foreach ((array) $value as $val)
 					$result .= '<li><code>'.htmlspecialchars($val).'</code></li>';
+				$result .= '</ol>';
 				return $result;
 			default:
 				self::$logger->error("Unknown format modifier: ".$type);
