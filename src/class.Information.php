@@ -37,7 +37,7 @@ class Information {
 			if (array_key_exists('values', $values)) {
 				$values = array($values);
 			}
-		} else {
+		} elseif ($values != null) {
 			$values = array(
 				array(
 					'code' => null,
@@ -45,7 +45,7 @@ class Information {
 				)
 			);
 		}
-		self::$infos[] = new Information($category, $title, $values, $display_value);
+		self::$infos[$title] = new Information($category, $title, $values, $display_value);
 	}
 	
 	public static function getInfoPerCategory() {
@@ -56,9 +56,8 @@ class Information {
 	}
 	
 	public static function get($name) {
-		foreach (self::$infos as $info)
-			if ($info->title == $name)
-				return $info;
+		if (array_key_exists($name, self::$infos))
+			return self::$infos[$name];
 		return null;
 	}
 	
