@@ -386,7 +386,7 @@ class Checker {
 				return false;
 			})
 		);
-		$inDocCharsets = array();
+		//$inDocCharsets = array();
 		//self::$logger->error("In Doc: ".print_r($inDocCharsets, true));
 		if (!empty($charsetVals) && empty($inDocCharsets)) {
 			Report::addReport(
