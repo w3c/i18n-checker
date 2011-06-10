@@ -116,15 +116,17 @@ include('includes/form.php');
 				<?php 
 					if ($report->explanation != null) {
 						echo "<h3>", lang('rep_explanation'), "</h3>";
-						echo "<p>", $report->explanation, "</p>";
+						foreach ((array) $report->explanation as $expl)
+							echo strpos($expl, '<') == 0 ? $expl : "<p>".$expl."</p>"; // if the line starts with a tag do not add inside p
 					}
 					if ($report->whattodo != null) {
 						echo "<h3>", lang('rep_what_to_do'), "</h3>";
-						echo "<p>", $report->whattodo, "</p>";
+						foreach ((array) $report->whattodo as $todo)
+							echo strpos($todo, '<') == 0 ? $todo : "<p>".$todo."</p>";
 					}
 					if ($report->further != null) {
 						echo "<h3>", lang('rep_further_reading'), "</h3>";
-						echo "<p>", Language::format($report->further, LANG_FORMAT_OL), "</p>";
+						echo Language::format($report->further, LANG_FORMAT_OL);
 					}						
 				?>
 					<p class="backtop"><a href="#"><?php _lang('top') ?></a></p>
