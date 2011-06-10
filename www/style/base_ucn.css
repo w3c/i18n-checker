@@ -1319,6 +1319,14 @@ body > .section {
 	background-color: #E1E1E1;
 }
 
+#report .msg ol, #report .msg p {
+	margin:5px 0;	
+}
+
+#report .msg ol li {
+	margin-bottom:2px;	
+}
+
 code {
   background-color:#EAEBEE;
   border:1px dotted #CCCCCC;
