@@ -101,7 +101,7 @@ include('includes/form.php');
 	<div class="block">
 		<ol>
 		<?php foreach (Report::getReportsSorted() as $report) { ?> 
-			<li class="section">
+			<li class="section msg">
 				<h2 class="title">
 					<?php 
 					if ($report->severity == REPORT_LEVEL_ERROR)
@@ -117,12 +117,12 @@ include('includes/form.php');
 					if ($report->explanation != null) {
 						echo "<h3>", lang('rep_explanation'), "</h3>";
 						foreach ((array) $report->explanation as $expl)
-							echo strpos($expl, '<') == 0 ? $expl : "<p>".$expl."</p>"; // if the line starts with a tag do not add inside p
+							echo strpos($expl, '<') === 0 ? $expl : "<p>".$expl."</p>"; // if the line starts with a tag do not add inside p
 					}
 					if ($report->whattodo != null) {
 						echo "<h3>", lang('rep_what_to_do'), "</h3>";
 						foreach ((array) $report->whattodo as $todo)
-							echo strpos($todo, '<') == 0 ? $todo : "<p>".$todo."</p>";
+							echo strpos($todo, '<') === 0 ? $todo : "<p>".$todo."</p>";
 					}
 					if ($report->further != null) {
 						echo "<h3>", lang('rep_further_reading'), "</h3>";
