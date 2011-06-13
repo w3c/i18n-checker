@@ -319,7 +319,7 @@ class Checker {
 		
 		// INFO: Non UTF-8 charset declared
 		if (!in_array("UTF-8", $charsetVals) || count(array_unique($charsetVals)) > 1) {
-			self::$logger->error(print_r($charsets, true));
+			//self::$logger->error(print_r($charsets, true));
 			$nonUTF8CharsetCodes = Utils::codesFromValArray(
 				array_filter($charsets, function ($array) {
 					if ($array['values'] != null 
@@ -351,7 +351,7 @@ class Checker {
 		}
 		
 		// WARNING: Multiple encoding declarations using the meta tag
-		if (count(Information::get('charset_meta')->values) > 1) {
+		if (count(Information::getValues('charset_meta')) > 1) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_multiple_meta'),
@@ -361,8 +361,11 @@ class Checker {
 			);
 		}
 		
+		// TODO: desambiguate ValuesArray against Values
 		// WARNING: UTF-8 BOM found at start of file
-		if (Information::get('charset_bom')->values != null) {
+		//self::$logger->error(print_r(Information::getValues('charset_bom'), true));
+		if (($boms = Information::getValues('charset_bom')) != null 
+			&& $boms[0]['values'] == "UTF-8") {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_bom_found'),
