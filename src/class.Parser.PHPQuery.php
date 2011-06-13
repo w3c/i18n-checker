@@ -34,8 +34,10 @@ final class ParserPHPQuery extends Parser {
 	protected function parseMeta() {
 		$this->metaCharsets = array();
 		$this->metaLanguages = array();
-		//$this->metaLanguageTags = array();
-		//$this->langsFromMeta = array();
+		
+		// PhpQuery adds the content-type meta tag if not originally present, which is an issue.
+		// Workaround is to first detect if there is one present using a regex. This will give false results if the tag is commented however.
+		$noContentTypeMeta = preg_match('/<meta http-equiv="?content-type"?/i', $this->markup) ? false : true;
 		
 		// XXX: attributes values in selectors are case sensitive!
 		
@@ -65,21 +67,28 @@ final class ParserPHPQuery extends Parser {
 		
 		// ---- Solution3: fixes the case sensitivity issue on Content-Type
 		// FIXME: case sensitivity on http-equiv
-		foreach (pq('meta[http-equiv]') as $meta) {
-			if (strcasecmp(pq($meta)->attr('http-equiv'), 'Content-Type') == 0) {
+		//foreach (pq('meta[http-equiv]') as $meta) {
+		foreach (pq('meta') as $meta) {
+			if (strcasecmp(pq($meta)->attr('http-equiv'), 'Content-Type') == 0 && !$noContentTypeMeta) {
 				//$this->charsetsFromHTML[] = Utils::charsetFromContentType(pq($meta)->attr('content'));
 				//$this->metaCharsetTags[] = $this->dump($meta);
 				$this->metaCharsets[] = array ( 
 					'code'   => $this->dump($meta),
 					'values' => Utils::charsetFromContentType(pq($meta)->attr('content'))
 				);
-			}
-			else if (strcasecmp(pq($meta)->attr('http-equiv'), 'Content-Language') == 0) {
+			} else if (strcasecmp(pq($meta)->attr('http-equiv'), 'Content-Language') == 0) {
 				//$this->langsFromMeta = Utils::arrayMergeCommaString($this->langsFromMeta, pq($meta)->attr('content'));
 				//$this->metaLanguageTags[] = $this->dump($meta);
 				$this->metaLanguages[] = array ( 
 					'code'   => $this->dump($meta),
 					'values' => Utils::getValuesFromCSString(pq($meta)->attr('content'))
+				);
+			} else if (pq($meta)->attr('charset') != null) {
+				//$this->langsFromMeta = Utils::arrayMergeCommaString($this->langsFromMeta, pq($meta)->attr('content'));
+				//$this->metaLanguageTags[] = $this->dump($meta);
+				$this->metaCharsets[] = array ( 
+					'code'   => $this->dump($meta),
+					'values' => Utils::getValuesFromCSString(pq($meta)->attr('charset'))
 				);
 			}
 		}
