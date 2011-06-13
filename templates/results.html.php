@@ -43,8 +43,8 @@ include('includes/form.php');
 <?php if (Information::getCount() > 0) { ?>
 <div id="infos" class="section">
 	<h1 class="title">
-		<a href="#infos"><?php _lang('information') ?></a>
 		<span class="meta"><?php echo Information::get('dtd')->display_value ?>&nbsp;&nbsp;-&nbsp;&nbsp;<?php echo Information::get('mimetype')->display_value ?></span>
+		<a href="#infos"><?php _lang('information') ?></a>
 	</h1>
 	<div class="block">
 		<table>
