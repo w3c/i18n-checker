@@ -29,6 +29,10 @@ class Conf {
 			return null;
 		}
 	}
+	
+	static function set($key, $value) {
+		self::$configuration[$key] = $value;
+	}
 }
 
 Conf::init();
