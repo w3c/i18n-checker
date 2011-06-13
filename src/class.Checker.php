@@ -104,9 +104,9 @@ class Checker {
 		if (isset($bom)) {
 			// Convert to UTF-8
 			if ($bom == 'UTF-16LE')
-				$this->markup = mb_convert_encoding($markup, 'UTF-8', 'UTF-16LE');
+				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16LE');
 			elseif ($bom == 'UTF-16BE')
-				$this->markup = mb_convert_encoding($markup, 'UTF-8', 'UTF-16BE');
+				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16BE');
 			$value = array ('code' => "Byte-order mark: {$bom}", 'values' => $bom);
 		} else {
 			$display_value = 'val_no';
@@ -282,10 +282,10 @@ class Checker {
 		
 		// Get all the charsets found
 		$charsets = array_merge(
-			(array) Information::get('charset_http')->values,
-			(array) Information::get('charset_bom')->values,
-			(array) Information::get('charset_xml')->values,
-			(array) Information::get('charset_meta')->values
+			(array) Information::getValues('charset_http'),
+			(array) Information::getValues('charset_bom'),
+			(array) Information::getValues('charset_xml'),
+			(array) Information::getValues('charset_meta')
 		);
 		
 		$charsetVals = Utils::valuesFromValArray($charsets);
@@ -372,12 +372,11 @@ class Checker {
 			);
 		}
 		
-		
 		// WARNING: No charset declaration in the document
 		$inDocCharsets = array_merge(
-			(array) Information::get('charset_bom')->values,
-			(array) Information::get('charset_xml')->values,
-			(array) Information::get('charset_meta')->values
+			(array) Information::getValues('charset_bom'),
+			(array) Information::getValues('charset_xml'),
+			(array) Information::getValues('charset_meta')
 		);
 		$inDocCharsets = Utils::codesFromValArray(
 			array_filter($inDocCharsets, function ($array) {

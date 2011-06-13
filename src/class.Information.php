@@ -61,9 +61,9 @@ class Information {
 		return null;
 	}
 	
-	/*public static function getValues($name) {
+	public static function getValues($name) {
 		return self::get($name) ? self::get($name)->values : null; 
-	}*/
+	}
 	
 	/*public static function getCode($name) {
 		return self::get($name) ? self::get($name)->code : null; 
