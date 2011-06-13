@@ -24,10 +24,8 @@ final class ParserHTML5Lib extends Parser {
 	// phpQuery::loadDocument($this->document);
 	// pq('meta[http-equiv=content-language]');
 	protected function parseMeta() {
-		$this->metaCharsetTags = array();
-		$this->charsetsFromHTML = array();
-		$this->metaLanguageTags = array();
-		$this->langsFromMeta = array();
+		$this->metaCharsets = array();
+		$this->metaLanguages = array();
 		
 		$metas = $this->document->getElementsByTagName("meta");
 		foreach ($metas as $meta) {
@@ -40,13 +38,22 @@ final class ParserHTML5Lib extends Parser {
 			// FIXME: case sensitity of getNamedItem
 			} else if (($equivParam = $meta->attributes->getNamedItem('http-equiv')) != null) {
 				if (strcasecmp($equivParam->value, 'Content-Language') == 0) {
-					if (($contentParam = $meta->attributes->getNamedItem('content')) != null)
-						$this->langsFromMeta = Utils::arrayMergeCommaString($this->langsFromMeta, $contentParam->value);
-					$this->metaLanguageTags[] = $this->dump($meta);
+					//if (($contentParam = $meta->attributes->getNamedItem('content')) != null)
+					//	$this->langsFromMeta = Utils::arrayMergeCommaString($this->langsFromMeta, $contentParam->value);
+					//$this->metaLanguageTags[] = $this->dump($meta);
+					$this->metaLanguages[] = array ( 
+						'code'   => $this->dump($meta),
+						'values' => ($contentParam = $meta->attributes->getNamedItem('content')) == null ? null : Utils::getValuesFromCSString($contentParam->value)
+					);
 				} elseif (strcasecmp($equivParam->value, 'Content-Type') == 0) {
-					if (($contentParam = $meta->attributes->getNamedItem('content')) != null)
-						$this->charsetsFromHTML[] = Utils::charsetFromContentType($contentParam->value);
-					$this->metaCharsetTags[] = $this->dump($meta);
+					//if (($contentParam = $meta->attributes->getNamedItem('content')) != null)
+					//	$this->charsetsFromHTML[] = Utils::charsetFromContentType($contentParam->value);
+					//$this->metaCharsetTags[] = $this->dump($meta);
+					
+					$this->metaCharsets[] = array ( 
+						'code'   => $this->dump($meta),
+						'values' => ($contentParam = $meta->attributes->getNamedItem('content')) == null ? null : Utils::charsetFromContentType($contentParam->value)
+					);
 				}
 			}
 		}
@@ -65,7 +72,11 @@ final class ParserHTML5Lib extends Parser {
 		$test = function($node) use (&$result, $t, $attr) {
 			if ($node->hasAttributes())
 				if ($node->attributes->getNamedItem($attr) != null) 
-					$result[$t->dumpTag($node)] = Utils::arrayTrim(preg_split('/[ ]+/', $node->attributes->getNamedItem($attr)->value));
+					$result[] = array(
+						'code' => $t->dumpTag($node),
+						'values' => Utils::arrayTrim(preg_split('/[ ]+/', $node->attributes->getNamedItem($attr)->value))
+					);
+					//$result[$t->dumpTag($node)] = Utils::arrayTrim(preg_split('/[ ]+/', $node->attributes->getNamedItem($attr)->value));
 		};
 		$body = $this->document->getElementsByTagName('body')->item(0);
 		$this->iterate($test, $body);
