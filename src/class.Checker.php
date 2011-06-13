@@ -22,6 +22,9 @@ class Checker {
 	
 	public function checkDocument() {
 		
+		// Do that first !
+		$this->addInfoCharsetBom();
+		
 		// Instantiate parser
 		try {
 			$this->doc = Parser::getParser($this->markup, isset($this->curl_info['content_type']) ? $this->curl_info['content_type'] : null);
@@ -34,13 +37,13 @@ class Checker {
 		// Gather information
 		$this->addInfoDTDMimetype();
 		$this->addInfoCharsetHTTP();
-		$this->addInfoCharsetBom();
+		
 		// TODO: how about issuing a warning/comment if xml:lang is found in a non-xml doc?
 		if ($this->doc->isXML() || $this->doc->mimetypeFromHTTP() == 'application/xhtml+xml')
 			$this->addInfoCharsetXMLDeclaration();
 		$this->addInfoCharsetMeta();
 		$this->addInfoLangAttr();
-		if ($this->doc->isXML())
+		//if ($this->doc->isXML())
 			$this->addInfoXMLLangAttr();
 		$this->addInfoLangHTTP();
 		$this->addInfoLangMeta();
@@ -62,11 +65,10 @@ class Checker {
 			$dtd = 'XHTML5';
 		} elseif ($this->doc->isHTML5()) {
 			$dtd = 'HTML5';
+		} else {
+			$dtd = 'NA';
 		}
-		if (isset($dtd))
-			Information::addInfo(null, 'dtd', null, $dtd);
-		else
-			Information::addInfo(null, 'dtd', null, 'NA');
+		Information::addInfo(null, 'dtd', null, $dtd);
 		Information::addInfo(null, 'mimetype', null, $this->doc->mimetypeFromHTTP());
 	}
 	
@@ -177,7 +179,8 @@ class Checker {
 			$display_value = 'val_none';
 		if ($_code == null && $_val == null)
 			$display_value = 'no_html_tag_found';
-		Information::addInfo($category, $title, $value, $display_value);
+		if ($this->doc->isXML() || $_val != null) // If no xml:lang is null add the line only if doc is xml to begin with
+			Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: LANGUAGE FROM HTTP CONTENT-LANGUAGE
@@ -225,14 +228,16 @@ class Checker {
 	private function addInfoClassId() {
 		$classes = $this->doc->getNodesWithClass();
 		$ids = $this->doc->getNodesWithID();
-		$nodes = array_merge($classes, $ids);
+		$nodes = array_merge((array) $classes,(array) $ids);
 		
 		// Remove nodes for which all class names are ASCII
-		array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
-			$valArray['values'] = preg_filter('/[^\x20-\x7E]/', '$0', $valArray['values']);
-			if (count($valArray['values']) == 0)
-				unset($nodes[$key]);
-		});
+		//self::$logger->error(print_r($nodes, true));
+		if (count($nodes) > 0)
+			array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
+				$valArray['values'] = preg_filter('/[^\x20-\x7E]/', '$0', $valArray['values']);
+				if (count($valArray['values']) == 0)
+					unset($nodes[$key]);
+			});
 		
 		$category = 'classId_category';
 		$title = 'classId_non_ascii';
@@ -241,11 +246,12 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value);
 		
 		// Remove nodes for which all class names are NFC
-		array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
-			$classStr = implode('', $valArray['values']);
-			if (N11n::nfc($classStr) == $classStr)
-				unset($nodes[$key]);
-		});
+		if (count($nodes) > 0)
+			array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
+				$classStr = implode('', $valArray['values']);
+				if (N11n::nfc($classStr) == $classStr)
+					unset($nodes[$key]);
+			});
 		$title = 'classId_non_nfc';
 		$value = array_values($nodes);
 		
