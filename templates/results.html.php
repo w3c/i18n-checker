@@ -11,6 +11,10 @@ include('includes/head.html.php');
 include('includes/form.php');
 ?>
 
+<script type="text/javascript">
+	window.addEvent('domready', W3Cr.start);
+</script>
+
 <?php if ($succeded) { ?>
 <div id="results" class="section">
 	<h1 class="title">

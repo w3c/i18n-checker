@@ -50,5 +50,10 @@
 			statements.
 		</p>
 	</div>
+	
+	<script type="text/javascript">
+		W3C.start();
+	</script>
+	
 </body>
 </html>

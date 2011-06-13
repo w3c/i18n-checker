@@ -151,4 +151,4 @@ var W3C = {
 	
 };
 
-window.addEvent('domready', W3C.start);
+//window.addEvent('domready', W3C.start);

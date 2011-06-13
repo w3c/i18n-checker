@@ -5,7 +5,7 @@ var W3Cr = {
 	start: function() {
 		var slideDuration = 500;
 		var scroller = new Fx.Scroll(document);
-		var instantScroller = new Fx.Scroll(document, {'duration': 0});
+		var instantScroller = new Fx.Scroll(document, {'duration': 500});
 		if ($('results') != null)
 			instantScroller.toElement('results');
 		$$('.section').each(function(section) {
@@ -96,4 +96,4 @@ var W3Cr = {
 	},
 };
 
-window.addEvent('domready', W3Cr.start);
+//window.addEvent('domready', W3Cr.start);
