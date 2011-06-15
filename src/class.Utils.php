@@ -38,6 +38,19 @@ class Utils {
 		return array_map('trim', preg_split('/,/', $string));
 	}
 	
+	public static function arrayToCS($array) {
+		if (!is_array($array))
+			return null;
+		$result = '';
+		foreach ($array as $val) {
+			if (is_array($val))
+				continue;
+			$result .= $val.',';
+		}
+		return preg_replace('/,$/', '', $result);
+		
+	}
+	
 	public static function valuesFromValArray($array) {
 		if ($array == null || !is_array($array))
 			return null;
