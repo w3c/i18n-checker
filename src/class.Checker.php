@@ -249,7 +249,10 @@ class Checker {
 		// Remove nodes for which all class names are NFC
 		if (count($nodes) > 0)
 			array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
-				$classStr = implode('', $valArray['values']);
+				if (is_array($valArray['values'])) 
+					$classStr = implode('', $valArray['values']);
+				else
+					$classStr = $valArray['values']; 
 				if (N11n::nfc($classStr) == $classStr)
 					unset($nodes[$key]);
 			});
@@ -423,7 +426,7 @@ class Checker {
 	private function addReportLanguages() {
 		$category = 'lang_category';
 		
-		// WARNING: The html tag has no language attribute
+		// WARNING: The html tag doesn't have the right language attributes
 		/* 3 tests:
 		 * - mimetype:text/html + doctype HTML  => lang != null
 		 * - mimetype:text/html + doctype XHTML => lang != null && xml:lang != null
@@ -456,9 +459,34 @@ class Checker {
 			);
 		}
 
+		// ERROR: The lang attribute and the xml:lang attribute in the html tag have different values
+		if ($langAttr != null && $xmlLangAttr != null && $langAttr != $xmlLangAttr) {
+			Report::addReport(
+				$category, REPORT_LEVEL_ERROR, 
+				lang('rep_lang_conflict'),
+				lang('rep_lang_conflict_expl', $langAttr, $xmlLangAttr, htmlspecialchars($this->doc->HTMLTag())),
+				lang('rep_lang_conflict_todo'),
+				lang('rep_lang_conflict_link')
+			);
+		}
 		
-		// The lang attribute and the xml:lang attribute in the html tag have different values
-		// This HTML file contains xml:lang attributes
+		//self::$logger->debug("XML ".print_r($this->doc->getNodesWithAttr('lang', true),true));
+		//self::$logger->debug("HTML ".print_r($this->doc->getNodesWithAttr('lang'),true));
+		
+		// WARNING: This HTML file contains xml:lang attributes
+		if (!$this->doc->isXML() && ($xmlAttrs = $this->doc->getNodesWithAttr('lang', true)) != null) {
+			self::$logger->debug(print_r($xmlAttrs,true));
+			self::$logger->debug(print_r(Utils::codesFromValArray($xmlAttrs),true));
+			self::$logger->debug(print_r(Language::format(Utils::codesFromValArray($xmlAttrs), LANG_FORMAT_OL),true));
+			Report::addReport(
+				$category, REPORT_LEVEL_WARNING, 
+				lang('rep_lang_xml_attr_in_html'),
+				lang('rep_lang_xml_attr_in_html_expl', Language::format(Utils::codesFromValArray($xmlAttrs), LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_xml_attr_in_html_todo'),
+				lang('rep_lang_xml_attr_in_html_link')
+			);
+		}
+		
 		// A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
 		// A language attribute value was incorrectly formed.
 		// check that lang and xml:lang come in pairs in xhtml & check for non-welformed values
