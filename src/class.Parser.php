@@ -142,7 +142,9 @@ abstract class Parser {
 		return $this->metaCharsetTags;
 	}*/
 	
-	protected abstract function parseMeta();
+	//protected abstract function parseMeta();
+	
+	//public abstract function getNodesWithAttr($attr);
 	
 	public function langsFromMeta() {
 		if ($this->metaLanguages == null)
@@ -176,9 +178,92 @@ abstract class Parser {
 		return ($dir != null) ? strtoupper($dir->value) : null;
 	}
 	
-	public abstract function getNodesWithClass();
+	//public abstract function getNodesWithClass();
 	
-	public abstract function getNodesWithId();
+	//public abstract function getNodesWithId();
+	
+	// XXX: if phpQuery::loadDocument was implemented could be refactored in Parser. eg:
+	// phpQuery::loadDocument($this->document);
+	// pq('meta[http-equiv=content-language]');
+	protected function parseMeta() {
+		$this->metaCharsets = array();
+		$this->metaLanguages = array();
+		
+		$metas = $this->document->getElementsByTagName("meta");
+		foreach ($metas as $meta) {
+			// check for charset attribute
+			if (($charset = $meta->attributes->getNamedItem('charset')) != null) {
+				$this->charsetsFromHTML[] = strtoupper($charset->value);
+				$this->metaCharsetTags[] = $this->dump($meta);
+			// check for http-equiv="content-language" (deprecated in HTML5)
+			// TODO: Add a warning if <meta http-equiv="content-language" content="en"> is used in HTML5?
+			// FIXME: case sensitity of getNamedItem
+			} else if (($equivParam = $meta->attributes->getNamedItem('http-equiv')) != null) {
+				if (strcasecmp($equivParam->value, 'Content-Language') == 0) {
+					//if (($contentParam = $meta->attributes->getNamedItem('content')) != null)
+					//	$this->langsFromMeta = Utils::arrayMergeCommaString($this->langsFromMeta, $contentParam->value);
+					//$this->metaLanguageTags[] = $this->dump($meta);
+					$this->metaLanguages[] = array ( 
+						'code'   => $this->dump($meta),
+						'values' => ($contentParam = $meta->attributes->getNamedItem('content')) == null ? null : Utils::getValuesFromCSString($contentParam->value)
+					);
+				} elseif (strcasecmp($equivParam->value, 'Content-Type') == 0) {
+					//if (($contentParam = $meta->attributes->getNamedItem('content')) != null)
+					//	$this->charsetsFromHTML[] = Utils::charsetFromContentType($contentParam->value);
+					//$this->metaCharsetTags[] = $this->dump($meta);
+					
+					$this->metaCharsets[] = array ( 
+						'code'   => $this->dump($meta),
+						'values' => ($contentParam = $meta->attributes->getNamedItem('content')) == null ? null : Utils::charsetFromContentType($contentParam->value)
+					);
+				}
+			}
+		}
+	}
+	
+	public function getNodesWithClass() {
+		return $this->getNodesWithAttr('class');
+	}
+	
+	public function getNodesWithId() {
+		return $this->getNodesWithAttr('id');
+	}
+	
+	public function getNodesWithAttr($attr, $xmlNamespace = false) {
+		$t = &$this;
+		$test = function($node) use (&$result, $t, $attr, $xmlNamespace) {
+			if ($node->hasAttributes())
+				if (($a = $node->attributes->getNamedItem($attr)) != null) {
+					//print_r($t->dumpTag($node)." - ".$node->attributes->getNamedItem($attr)->namespaceURI."\n");
+					if ($xmlNamespace && $a->namespaceURI != 'http://www.w3.org/XML/1998/namespace')
+						return;
+					if (!$xmlNamespace && $a->namespaceURI != '')
+						return;
+					$result[] = array(
+						'code' => $t->dumpTag($node),
+						'values' => count(($p = array_filter(Utils::arrayTrim(preg_split('/[ ]+/', $a->value))))) == 1 ? $p[0] : $p // array_filter(Utils::arrayTrim(preg_split('/[ ]+/', $a->value))) // array_filter with no callback parameter will remove empty elements
+					);
+					/*$result[] = array(
+						'code' => $t->dumpTag($node),
+						'values' => !$xmlMode ? 
+								Utils::arrayTrim(preg_split('/[ ]+/', $node->attributes->getNamedItem($attr)->value)) :
+								Utils::arrayTrim(preg_split('/[ ]+/', $node->attributes->getNamedItemNS('http://www.w3.org/XML/1998/namespace',$attr)->value))
+					);*/
+					//$result[$t->dumpTag($node)] = Utils::arrayTrim(preg_split('/[ ]+/', $node->attributes->getNamedItem($attr)->value));
+				}
+		};
+		$body = $this->document->getElementsByTagName('body')->item(0);
+		$this->iterate($test, $body);
+		return $result;
+	} 
+	
+	private function iterate($callback, $node) {
+		foreach ($node->childNodes as $child) {
+			$callback($child);
+			if ($child->hasChildNodes())
+				$this->iterate($callback, $child);
+		}
+	}
 }
 
 Parser::init();
