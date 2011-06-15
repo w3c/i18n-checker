@@ -8,6 +8,7 @@ class Information {
 	public $title;
 	public $values;
 	/* eg:
+	 * TODO: deambiguate values and values
 	 * $values = array (
 	 * 		array (
 	 * 			'code' => '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'
@@ -63,6 +64,10 @@ class Information {
 	
 	public static function getValues($name) {
 		return self::get($name) ? self::get($name)->values : null; 
+	}
+	
+	public static function getFirstVal($name) {
+		return ($v = self::getValues($name)) ? $v[0]['values'][0] : null; 
 	}
 	
 	/*public static function getCode($name) {
