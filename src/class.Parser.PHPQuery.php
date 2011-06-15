@@ -121,22 +121,24 @@ final class ParserPHPQuery extends Parser {
 	}
 	
 	// Example: 
+	// FIXME
 	// getNodesWithAttr('class') = array(
 	//     '<div class="கோ">' => array('கோ'),
 	//     '<div class="test cằn">' => array('test', 'cằn'),
 	//     '<div class="c1 c2">' => array('c1', 'c2')
 	// );
-	private function getNodesWithAttr($attr) {
+	// FIXME xmlAttr
+	/*public function getNodesWithAttr($attr, $xmlAttr = false) {
 		$result = array();
 		foreach (pq('*['.$attr.']') as $node)
 			//$result[$this->dumpTag($node)] = Utils::arrayTrim(preg_split('/[ ]+/', pq($node)->attr($attr)));
 			$result[] = array(
 				'code' => $this->dumpTag($node),
-				'values' => Utils::arrayTrim(preg_split('/[ ]+/', pq($node)->attr($attr)))
+				'values' => count(($p = array_filter(Utils::arrayTrim(preg_split('/[ ]+/', pq($node)->attr($attr)))))) == 1 ? $p[0] : $p // Utils::arrayTrim(preg_split('/[ ]+/', pq($node)->attr($attr)))
 			);
 		//self::$logger->error(print_r($result, true));
 		return $result;
-	} 
+	} */
 }
 
 ParserPHPQuery::init();
