@@ -73,6 +73,18 @@ class Utils {
 		return array_values(array_unique(self::arrayFlatten($result)));
 	}
 	
+	/*
+	 public static function codesFromValArray($array) {
+		if (!is_array($array))
+			return null;
+		$result = array();
+		foreach ($array as $element) {
+			array_merge($result, $element);
+		}
+		return $result;
+	}
+	 */
+	
 	public static function arrayTrim(array $array) {
 		return array_map('trim', $array);
 	}
