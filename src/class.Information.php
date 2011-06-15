@@ -67,7 +67,12 @@ class Information {
 	}
 	
 	public static function getFirstVal($name) {
-		return ($v = self::getValues($name)) ? $v[0]['values'][0] : null; 
+		if (($v = self::getValues($name)) != null)
+			if (is_array($v[0]['values']))
+				return $v[0]['values'][0];
+			else 
+				return $v[0]['values'];
+		return null;
 	}
 	
 	/*public static function getCode($name) {
