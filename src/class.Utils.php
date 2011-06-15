@@ -120,4 +120,15 @@ class Utils {
 		return preg_match('/^[\x20-\x7E]*$/', $string) == true;
 	}
 	
+	// returns all elements in array1 that or not in array2
+	public static function diffArray($array1, $array2) {
+		if (!is_array($array1) || !is_array($array2))
+			return null;
+		foreach($array1 as $val) {
+			if (!in_array($val, $array2))
+				$result[] = $val;
+		}
+		return $result;
+	}
+	
 }
