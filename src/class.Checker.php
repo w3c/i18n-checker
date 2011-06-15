@@ -53,6 +53,7 @@ class Checker {
 		
 		// Generate report
 		$this->addReportCharsets();
+		$this->addReportLanguages();
 		return true;
 	}
 	
@@ -188,7 +189,7 @@ class Checker {
 		$category = 'lang_category';
 		$title = 'lang_http';
 		$_code = isset($this->curl_info['content_language']) ? 'Content-Language: '.$this->curl_info['content_language'] : null;
-		$_val = isset($this->curl_info['content_language']) ? $this->curl_info['content_language'] : null;
+		$_val = isset($this->curl_info['content_language']) ? Utils::getValuesFromCSString($this->curl_info['content_language']) : null;
 		$value = array(
 			'code' => $_code,
 			'values' => $_val
@@ -370,8 +371,8 @@ class Checker {
 		// TODO: desambiguate ValuesArray against Values
 		// WARNING: UTF-8 BOM found at start of file
 		//self::$logger->error(print_r(Information::getValues('charset_bom'), true));
-		if (($boms = Information::getValues('charset_bom')) != null 
-			&& $boms[0]['values'] == "UTF-8") {
+		if (($bom = Information::getFirstVal('charset_bom')) != null 
+			&& $bom == "UTF-8") {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_bom_found'),
@@ -407,7 +408,7 @@ class Checker {
 		}
 		
 		// WARNING: BOM in content TODO: Shouldn't the message warn that it could be intentional like in this very message
-		if (preg_match('/ï»¿/',$this->markup)) {
+		if (preg_match('/.ï»¿/',$this->markup)) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_bom_in_content'),
@@ -420,7 +421,42 @@ class Checker {
 	}
 	
 	private function addReportLanguages() {
-		// The html tag has no language attribute
+		$category = 'lang_category';
+		
+		// WARNING: The html tag has no language attribute
+		/* 3 tests:
+		 * - mimetype:text/html + doctype HTML  => lang != null
+		 * - mimetype:text/html + doctype XHTML => lang != null && xml:lang != null
+		 * - mimetype:application/xhtml+xml     => xml:lang != null 
+		 */
+		$langAttr = Information::getFirstVal('lang_attr_lang');
+		$xmlLangAttr = Information::getFirstVal('lang_attr_xmllang');
+		$b = false;
+		$todo = 'rep_lang_no_lang_attr_todo_1';
+		if ($this->doc->mimetypeFromHTTP() == 'application/xhtml+xml' && $xmlLangAttr == null) {
+			$b = true;
+		} else if ($this->doc->isXML() && ($xmlLangAttr == null || $langAttr == null)) {
+			$b = true;
+			$todo = 'rep_lang_no_lang_attr_todo_2';
+		} else if (!$this->doc->isXML() && $langAttr == null) {
+			$b = true;
+		}
+		if ($b) {
+			$expl = lang('rep_lang_no_lang_attr_expl', htmlspecialchars($this->doc->HTMLTag()));
+			if ($this->doc->langsFromMeta() != null) {
+				$a = Information::getValues('lang_meta');
+				$expl[] = lang('rep_lang_no_lang_attr_expl_CL', Utils::arrayToCS($a[0]['values']), htmlspecialchars($a[0]['code']));
+			}
+			Report::addReport(
+				$category, REPORT_LEVEL_WARNING, 
+				lang('rep_lang_no_lang_attr'),
+				$expl,
+				lang($todo),
+				lang('rep_lang_no_lang_attr_link')
+			);
+		}
+
+		
 		// The lang attribute and the xml:lang attribute in the html tag have different values
 		// This HTML file contains xml:lang attributes
 		// A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
