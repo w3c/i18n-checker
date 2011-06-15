@@ -106,7 +106,7 @@ class Language {
 			case LANG_FORMAT_OL:
 				$result = '<ol>';
 				foreach ((array) $value as $val)
-					$result .= '<li>'.$val.'</li>';
+					$result .= '<li>'.htmlspecialchars($val).'</li>';
 				$result .= '</ol>';
 				return $result;
 			case LANG_FORMAT_OL_CODE:
