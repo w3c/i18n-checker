@@ -103,7 +103,7 @@ class Utils {
 		return self::arrayFlatten($result, $nbPass-1);
 	}
 	
-	public static function boolString(bool $bValue) {
+	public static function boolString($bValue) {
 		return ($bValue ? 'true' : 'false');
 	}
 	
@@ -122,13 +122,15 @@ class Utils {
 	
 	// returns all elements in array1 that or not in array2
 	public static function diffArray($array1, $array2) {
-		if (!is_array($array1) || !is_array($array2))
+		if (!is_array($array1))
 			return null;
+		if (!is_array($array2))
+			return $array1;
 		foreach($array1 as $val) {
 			if (!in_array($val, $array2))
 				$result[] = $val;
 		}
-		return $result;
+		return isset($result) ? $result : null;
 	}
 	
 }
