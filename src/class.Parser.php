@@ -33,7 +33,7 @@ abstract class Parser {
 	}
 	
 	public static function getParser($markup, $contentType) {
-		if (self::is_HTML5($markup)) {
+		if (true) { //self::is_HTML5($markup)) {
 			self::$logger->debug(sprintf("Creating HTML5 parser. Content-type is: %s", $contentType == null ? 'null' : $contentType));
 			return new ParserHTML5Lib($markup, $contentType);
 		} else
@@ -232,13 +232,29 @@ abstract class Parser {
 	public function getNodesWithAttr($attr, $xmlNamespace = false) {
 		$t = &$this;
 		$test = function($node) use (&$result, $t, $attr, $xmlNamespace) {
-			if ($node->hasAttributes())
-				if (($a = $node->attributes->getNamedItem($attr)) != null) {
-					//print_r($t->dumpTag($node)." - ".$node->attributes->getNamedItem($attr)->namespaceURI."\n");
-					if ($xmlNamespace && $a->namespaceURI != 'http://www.w3.org/XML/1998/namespace')
-						return;
-					if (!$xmlNamespace && $a->namespaceURI != '')
-						return;
+			if ($node->hasAttributes()) {
+				/*echo $t->dumpTag($node)."\n";
+				if ($node->attributes->getNamedItemNS(null, 'lang'))
+					echo "lang: ".$node->attributes->getNamedItemNS(null,'lang')->value." - ".$node->attributes->getNamedItemNS(null,'lang')->namespaceURI."\n";
+				if ($node->attributes->getNamedItemNS('http://www.w3.org/XML/1998/namespace', 'lang'))
+					echo "xml:lang: ".$node->attributes->getNamedItemNS('http://www.w3.org/XML/1998/namespace', 'lang')->value." - ".$node->attributes->getNamedItemNS('http://www.w3.org/XML/1998/namespace','lang')->namespaceURI."\n";
+				foreach ($node->attributes as $n) {
+					echo "attribute: ".$n->name."|".$n->value."\n";
+					//echo "schema: ".$n->schemaTypeInfo."\n";
+					//echo "speci: ".$n->specified."\n";
+					//echo "val: ".$n->value."\n";
+					//if ($node->attributes->getNamedItem('lang'))
+					//	echo "getNamedItem ".$node->attributes->getNamedItem('lang')->value."\n";
+
+				}*/
+				$a = !$xmlNamespace ? $node->attributes->getNamedItemNS(null, $attr) : $node->attributes->getNamedItemNS('http://www.w3.org/XML/1998/namespace', $attr);
+				if ($a != null) {
+					//print_r(Utils::boolString($xmlNamespace)." - ".$t->dumpTag($node)." - ".$node->attributes->getNamedItem($attr)->namespaceURI."\n");
+					//print_r($node->attributes->getNamedItemNS('http://www.w3.org/XML/1998/namespace', $attr)->namespaceURI);
+					//if ($xmlNamespace && $a->namespaceURI != 'http://www.w3.org/XML/1998/namespace')
+					//	return;
+					//if (!$xmlNamespace && $a->namespaceURI != '')
+					//	return;
 					$result[] = array(
 						'code' => $t->dumpTag($node),
 						'values' => count(($p = array_filter(Utils::arrayTrim(preg_split('/[ ]+/', $a->value))))) == 1 ? $p[0] : $p // array_filter(Utils::arrayTrim(preg_split('/[ ]+/', $a->value))) // array_filter with no callback parameter will remove empty elements
@@ -251,13 +267,14 @@ abstract class Parser {
 					);*/
 					//$result[$t->dumpTag($node)] = Utils::arrayTrim(preg_split('/[ ]+/', $node->attributes->getNamedItem($attr)->value));
 				}
+			}
 		};
 		$body = $this->document->getElementsByTagName('body')->item(0);
 		$this->iterate($test, $body);
 		return $result;
 	} 
 	
-	private function iterate($callback, $node) {
+	protected function iterate($callback, $node) {
 		foreach ($node->childNodes as $child) {
 			$callback($child);
 			if ($child->hasChildNodes())
