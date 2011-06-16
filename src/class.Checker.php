@@ -426,14 +426,26 @@ class Checker {
 	private function addReportLanguages() {
 		$category = 'lang_category';
 		
+		// Attributes on the html tag
+		$langAttr = Information::getFirstVal('lang_attr_lang');
+		$xmlLangAttr = Information::getFirstVal('lang_attr_xmllang');
+		// Attributes on all nodes
+		$htmlLangAttrs = $this->doc->getNodesWithAttr('lang');
+		$xmlLangAttrs = $this->doc->getNodesWithAttr('lang', true);
+		// Only the tag dumps of nodes containing (xml:)lang
+		$htmlLangCodes = Utils::codesFromValArray($htmlLangAttrs);
+		$xmlLangCodes = Utils::codesFromValArray($xmlLangAttrs);
+		//self::$logger->debug("HTML ".print_r($htmlLangCodes, true));
+		//self::$logger->debug("XML ".print_r($xmlLangCodes, true));
+		//self::$logger->debug("diff html/xml".print_r(Utils::diffArray($htmlLangCodes, $xmlLangCodes),true));
+		//self::$logger->debug("diff xml/html".print_r(Utils::diffArray($xmlLangCodes, $htmlLangCodes),true));
+		
 		// WARNING: The html tag doesn't have the right language attributes
 		/* 3 tests:
 		 * - mimetype:text/html + doctype HTML  => lang != null
 		 * - mimetype:text/html + doctype XHTML => lang != null && xml:lang != null
 		 * - mimetype:application/xhtml+xml     => xml:lang != null 
 		 */
-		$langAttr = Information::getFirstVal('lang_attr_lang');
-		$xmlLangAttr = Information::getFirstVal('lang_attr_xmllang');
 		$b = false;
 		$todo = 'rep_lang_no_lang_attr_todo_1';
 		if ($this->doc->mimetypeFromHTTP() == 'application/xhtml+xml' && $xmlLangAttr == null) {
@@ -474,25 +486,77 @@ class Checker {
 		//self::$logger->debug("HTML ".print_r($this->doc->getNodesWithAttr('lang'),true));
 		
 		// WARNING: This HTML file contains xml:lang attributes
-		if (!$this->doc->isXML() && ($xmlAttrs = $this->doc->getNodesWithAttr('lang', true)) != null) {
-			self::$logger->debug(print_r($xmlAttrs,true));
-			self::$logger->debug(print_r(Utils::codesFromValArray($xmlAttrs),true));
-			self::$logger->debug(print_r(Language::format(Utils::codesFromValArray($xmlAttrs), LANG_FORMAT_OL),true));
+		
+		if (!$this->doc->isXML() && $xmlLangAttrs != null) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_xml_attr_in_html'),
-				lang('rep_lang_xml_attr_in_html_expl', Language::format(Utils::codesFromValArray($xmlAttrs), LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_xml_attr_in_html_expl', Language::format($xmlLangCodes, LANG_FORMAT_OL_CODE)),
 				lang('rep_lang_xml_attr_in_html_todo'),
 				lang('rep_lang_xml_attr_in_html_link')
 			);
 		}
 		
-		// A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
+		
+		// WARNING: Check that lang and xml:lang come in pairs in xhtml
+		
+		
+		//self::$logger->error("HTML ".print_r($htmlLangCodes, true));
+		//self::$logger->error("HTML codes ".print_r($htmlLangCodes, true));
+		//self::$logger->error("XML ".print_r($xmlLangCodes, true));
+		
+		if ($this->doc->isXML() && ($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) {
+			// XXX Hack: html5lib will append lang= to nodes that do not have it but have xml:lang= (for XML docs only)
+			if ($this->doc->isXML())
+				array_walk($diff, function (&$val) {
+					$val = preg_replace('/[ ]+xml:lang=[^>]+/', '', $val);
+				});
+			Report::addReport(
+				$category, REPORT_LEVEL_WARNING, 
+				lang('rep_lang_missing_xml_attr'),
+				lang('rep_lang_missing_xml_attr_expl', Language::format($diff, LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_missing_xml_attr_todo'),
+				lang('rep_lang_missing_attr_link')
+			);
+		}
+		if ($this->doc->isXML() && ($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) {
+			// XXX Hack: html5lib will append lang= to nodes that do not have it but have xml:lang= (for XML docs only)
+			//if ($this->doc->isXML())
+			//	array_walk($diff, function (&$val) {
+			//		$val = preg_replace('/[ ]+lang=[^>]+/', '', $val);
+			//	});
+			Report::addReport(
+				$category, REPORT_LEVEL_WARNING, 
+				lang('rep_lang_missing_html_attr'),
+				lang('rep_lang_missing_html_attr_expl', Language::format($diff, LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_missing_html_attr_todo'),
+				lang('rep_lang_missing_attr_link')
+			);
+		}
+		
 		// A language attribute value was incorrectly formed.
-		// check that lang and xml:lang come in pairs in xhtml & check for non-welformed values
-			// A tag uses a lang attribute without an associated xml:lang attribute.
-			// A tag uses an xml:lang attribute without an associated lang attribute.
-		// check that xhtml files served as XML have xml:lang
+		//self::$logger->error("Merge ".print_r(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), true));
+		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
+			foreach ((array) $element['values'] as $val)
+				if (preg_match("/^[a-zA-Z0-9]*[^a-zA-Z0-9\-]+[a-zA-Z0-9]*$/", $val))
+					return true; // keep only those that do not match
+				return false;
+		});
+		if ($malformedAttrs != null) {
+			Report::addReport(
+				$category, REPORT_LEVEL_WARNING, 
+				lang('rep_lang_malformed_attr'),
+				lang('rep_lang_malformed_attr_expl', Language::format(Utils::codesFromValArray($malformedAttrs), LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_malformed_attr_todo'),
+				lang('rep_lang_malformed_attr_link')
+			);
+		}
+		
+		
+		// A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
+		
+
+		
 		
 	}
 	
