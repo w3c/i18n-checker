@@ -158,8 +158,8 @@ class Checker {
 	private function addInfoCharsetMeta() {
 		$category = 'charset_category';
 		$title = 'charset_meta';
-		if ($this->doc->isHTML5() || $this->doc->isXHTML5())
-			$title = 'charset_meta_html5';
+		//if ($this->doc->isHTML5() || $this->doc->isXHTML5())
+		//	$title = 'charset_meta_html5';
 		$value = $this->doc->charsetsFromHTML();
 		$display_value = null;
 		$vals = Utils::valuesFromValArray($value);
@@ -387,11 +387,11 @@ class Checker {
 		//self::$logger->error(print_r(Information::getValues('charset_meta*'), true));
 		//self::$logger->error(print_r(Utils::codesFromValArray(Information::getValues('charset_meta*')), true));
 		// WARNING: Multiple encoding declarations using the meta tag
-		if (count(Information::getValues('charset_meta*')) > 1) {
+		if (count(Information::getValues('charset_meta')) > 1) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_multiple_meta'),
-				lang('rep_charset_multiple_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta*')), LANG_FORMAT_OL_CODE)),
+				lang('rep_charset_multiple_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_multiple_meta_todo'),
 				lang('rep_charset_multiple_meta_link')
 			);
@@ -415,7 +415,7 @@ class Checker {
 		$inDocCharsets = array_merge(
 			(array) Information::getValues('charset_bom'),
 			(array) Information::getValues('charset_xml'),
-			(array) Information::getValues('charset_meta*')
+			(array) Information::getValues('charset_meta')
 		);
 		$inDocCharsets = 
 			array_filter($inDocCharsets, function ($array) {
