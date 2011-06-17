@@ -133,4 +133,13 @@ class Utils {
 		return isset($result) ? $result : null;
 	}
 	
+	public static function findCodeIn($code, $array) {
+		if (!is_array($array))
+			return null;
+		foreach($array as $val) {
+			if ($val['code'] == $code)
+				return $val;
+		}
+	}
+	
 }
