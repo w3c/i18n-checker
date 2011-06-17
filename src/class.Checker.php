@@ -437,7 +437,7 @@ class Checker {
 		
 		// WARNING: BOM in content
 		// In the following like is the invisible BOM.
-		if (preg_match('/﻿/', $this->markup)) {
+		if (preg_match('/﻿/', substr($this->markup,3))) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_bom_in_content'),
