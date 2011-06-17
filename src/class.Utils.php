@@ -70,7 +70,7 @@ class Utils {
 			if (array_key_exists('code', $valArr) && $valArr['code'] != null) // TODO: if not then an invalid array has been passed, log?
 				$result[] = $valArr['code'];
 		}
-		return array_values(array_unique(self::arrayFlatten($result)));
+		return array_values(self::arrayFlatten($result));
 	}
 	
 	/*
