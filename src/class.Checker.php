@@ -23,7 +23,7 @@ class Checker {
 	public function checkDocument() {
 		
 		// Do that first !
-		$this->addInfoCharsetBom();
+		$bom = $this->convertEncoding();
 		
 		// Instantiate parser
 		try {
@@ -37,9 +37,10 @@ class Checker {
 		// Gather information
 		$this->addInfoDTDMimetype();
 		$this->addInfoCharsetHTTP();
+		$this->addInfoCharsetBom($bom);
 		
 		// TODO: how about issuing a warning/comment if xml:lang is found in a non-xml doc?
-		if ($this->doc->isXML() || $this->doc->mimetypeFromHTTP() == 'application/xhtml+xml')
+		//if ($this->doc->isXML() || $this->doc->mimetypeFromHTTP() == 'application/xhtml+xml')
 			$this->addInfoCharsetXMLDeclaration();
 		$this->addInfoCharsetMeta();
 		$this->addInfoLangAttr();
@@ -60,7 +61,7 @@ class Checker {
 	}
 	
 	private function addInfoDTDMimetype() {
-		if ($this->doc->isXHTML()) {
+		/*if ($this->doc->isXHTML()) {
 			$dtd = 'XHTML';
 		} elseif ($this->doc->isHTML()) {
 			$dtd = 'HTML';
@@ -71,7 +72,8 @@ class Checker {
 		} else {
 			$dtd = 'NA';
 		}
-		Information::addInfo(null, 'dtd', null, $dtd);
+		$this->doc->findDoctype();*/
+		Information::addInfo(null, 'dtd', null, $this->doc->doctype);
 		Information::addInfo(null, 'mimetype', null, $this->doc->mimetypeFromHTTP());
 	}
 	
@@ -80,7 +82,7 @@ class Checker {
 		$category = 'charset_category';
 		$title = 'charset_http';
 		$_code = 'Content-Type: '.$this->curl_info['content_type'];
-		$_val = strtoupper($this->doc->charsetFromHTTP());
+		$_val = $this->doc->charsetFromHTTP();
 		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
 		if ($_code != null && $_val == null)
@@ -90,13 +92,29 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
+	private function convertEncoding() {
+		$filestart = substr($this->markup,0,3);
+		if (ord($filestart{0})== 239 && ord($filestart{1})== 187 && ord($filestart{2})== 191) 
+			return 'UTF-8';
+		else { 
+			$filestart = substr($this->markup,0,2);
+			if (ord($filestart{0})== 254 && ord($filestart{1})== 255) {
+				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16BE');
+				return 'UTF-16BE';
+			} else if (ord($filestart{0})== 255 && ord($filestart{1})== 254) {
+				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16LE');
+				return 'UTF-16LE';
+			}
+		}
+	}
+	
 	// INFO: BYTE ORDER MARK.
-	private function addInfoCharsetBom() {
+	private function addInfoCharsetBom($bom = '') {
 		$category = 'charset_category';
 		$title = 'charset_bom';
 		$value = null;
 		$display_value = null;
-		$filestart = substr($this->markup,0,3);
+		/*$filestart = substr($this->markup,0,3);
 		if (ord($filestart{0})== 239 && ord($filestart{1})== 187 && ord($filestart{2})== 191) 
 			$bom = 'UTF-8';
 		else { 
@@ -105,14 +123,14 @@ class Checker {
 				$bom = 'UTF-16BE';
 			elseif (ord($filestart{0})== 255 && ord($filestart{1})== 254)
 				$bom = 'UTF-16LE';
-		}
-		if (isset($bom)) {
+		}*/
+		if ($bom != '') {
 			// Convert to UTF-8
-			if ($bom == 'UTF-16LE')
+			/*if ($bom == 'UTF-16LE')
 				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16LE');
 			elseif ($bom == 'UTF-16BE')
-				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16BE');
-			$value = array ('code' => "Byte-order mark: {$bom}", 'values' => $bom);
+				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16BE');*/
+			$value = array ('code' => null, 'values' => $bom);
 		} else {
 			$display_value = 'val_no';
 		}
@@ -126,11 +144,11 @@ class Checker {
 		$_code = $this->doc->XMLDeclaration();
 		$_val = $this->doc->charsetFromXML();
 		$value = null;
-		if ($_code != null && $_val != null)
+		//if ($_code != null && $_val != null)
 			$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
 		if ($_code != null && $_val == null)
-			$display_value = 'charset_val_none';
+			$display_value = 'charset_none_found';
 		if ($_code == null && $_val == null)
 			$display_value = 'val_none_found';
 		Information::addInfo($category, $title, $value, $display_value);
@@ -282,7 +300,7 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value);
 		
 		$title = 'headers_accept_charset';
-		$_val = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? array_map('strtoupper', Utils::parseHeader($_SERVER['HTTP_ACCEPT_CHARSET'])) : null;
+		$_val = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? Utils::parseHeader($_SERVER['HTTP_ACCEPT_CHARSET']) : null;
 		$_code = isset($_SERVER['HTTP_ACCEPT_CHARSET']) ? 'Accept-Charset: '.$_SERVER['HTTP_ACCEPT_CHARSET'] : null;
 		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
@@ -295,12 +313,14 @@ class Checker {
 		$category = 'charset_category';
 		
 		// Get all the charsets found
-		$charsets = array_merge(
+		$charsets = (array) Information::getValuesStartingWith('charset_');
+		
+		/*array_merge(
 			(array) Information::getValues('charset_http'),
 			(array) Information::getValues('charset_bom'),
 			(array) Information::getValues('charset_xml'),
-			(array) Information::getValues('charset_meta')
-		);
+			(array) Information::getValuesStartingWith('charset_meta')
+		);*/
 		
 		$charsetVals = Utils::valuesFromValArray($charsets);
 		//$charsetVals = null;
@@ -365,11 +385,11 @@ class Checker {
 		}
 		
 		// WARNING: Multiple encoding declarations using the meta tag
-		if (count(Information::getValues('charset_meta')) > 1) {
+		if (count(Information::getValues('charset_meta*')) > 1) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_multiple_meta'),
-				lang('rep_charset_multiple_meta_expl', Language::format(Utils::codesFromValArray(Information::get('charset_meta')->values), LANG_FORMAT_OL_CODE)),
+				lang('rep_charset_multiple_meta_expl', Language::format(Utils::codesFromValArray(Information::get('charset_meta*')->values), LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_multiple_meta_todo'),
 				lang('rep_charset_multiple_meta_link')
 			);
@@ -393,7 +413,7 @@ class Checker {
 		$inDocCharsets = array_merge(
 			(array) Information::getValues('charset_bom'),
 			(array) Information::getValues('charset_xml'),
-			(array) Information::getValues('charset_meta')
+			(array) Information::getValues('charset_meta*')
 		);
 		$inDocCharsets = Utils::codesFromValArray(
 			array_filter($inDocCharsets, function ($array) {
@@ -555,15 +575,16 @@ class Checker {
 		// ERROR: A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
 		// walk through htmlLangAttrs, scan xmlLangAttrs to find same code, compare values, do the opposite?
 		$nonMatchingAttrs = array();
-		array_walk(&$htmlLangAttrs, function (&$valArray, $key) use (&$xmlLangAttrs, &$nonMatchingAttrs) {
-			$code = $valArray['code'];
-			//$vals = $valArray['values'];
-			if (($el = Utils::findCodeIn($code, $xmlLangAttrs)) != null) {
-				if ($el['values'] != $valArray['values']) {
-					$nonMatchingAttrs[] = $code;
+		if (count($htmlLangAttrs) > 0)
+			array_walk(&$htmlLangAttrs, function (&$valArray, $key) use (&$xmlLangAttrs, &$nonMatchingAttrs) {
+				$code = $valArray['code'];
+				//$vals = $valArray['values'];
+				if (($el = Utils::findCodeIn($code, $xmlLangAttrs)) != null) {
+					if ($el['values'] != $valArray['values']) {
+						$nonMatchingAttrs[] = $code;
+					}
 				}
-			}
-		});
+			});
 		if (count($nonMatchingAttrs) > 0) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
