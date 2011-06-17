@@ -54,6 +54,8 @@ class Checker {
 		// Generate report
 		$this->addReportCharsets();
 		$this->addReportLanguages();
+		$this->addReportDirValues();
+		$this->addReportMisc();
 		return true;
 	}
 	
@@ -233,6 +235,7 @@ class Checker {
 		
 		// Remove nodes for which all class names are ASCII
 		//self::$logger->error(print_r($nodes, true));
+		// FIXME! use array_filter
 		if (count($nodes) > 0)
 			array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
 				$valArray['values'] = preg_filter('/[^\x20-\x7E]/', '$0', $valArray['values']);
@@ -247,6 +250,7 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value);
 		
 		// Remove nodes for which all class names are NFC
+		// FIXME: i shoudln't unset elements while walking through the array. clone first or use array_filter
 		if (count($nodes) > 0)
 			array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
 				if (is_array($valArray['values'])) 
@@ -435,8 +439,8 @@ class Checker {
 		// Only the tag dumps of nodes containing (xml:)lang
 		$htmlLangCodes = Utils::codesFromValArray($htmlLangAttrs);
 		$xmlLangCodes = Utils::codesFromValArray($xmlLangAttrs);
-		//self::$logger->debug("HTML ".print_r($htmlLangCodes, true));
-		//self::$logger->debug("XML ".print_r($xmlLangCodes, true));
+		//self::$logger->debug("HTML ".print_r($htmlLangAttrs, true));
+		//self::$logger->debug("XML ".print_r($xmlLangAttrs, true));
 		//self::$logger->debug("diff html/xml".print_r(Utils::diffArray($htmlLangCodes, $xmlLangCodes),true));
 		//self::$logger->debug("diff xml/html".print_r(Utils::diffArray($xmlLangCodes, $htmlLangCodes),true));
 		
@@ -486,7 +490,6 @@ class Checker {
 		//self::$logger->debug("HTML ".print_r($this->doc->getNodesWithAttr('lang'),true));
 		
 		// WARNING: This HTML file contains xml:lang attributes
-		
 		if (!$this->doc->isXML() && $xmlLangAttrs != null) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
@@ -499,18 +502,15 @@ class Checker {
 		
 		
 		// WARNING: Check that lang and xml:lang come in pairs in xhtml
-		
-		
-		//self::$logger->error("HTML ".print_r($htmlLangCodes, true));
-		//self::$logger->error("HTML codes ".print_r($htmlLangCodes, true));
-		//self::$logger->error("XML ".print_r($xmlLangCodes, true));
-		
+		// self::$logger->error("HTML ".print_r($htmlLangCodes, true));
+		// self::$logger->error("HTML codes ".print_r($htmlLangCodes, true));
+		// self::$logger->error("XML ".print_r($xmlLangCodes, true));
 		if ($this->doc->isXML() && ($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) {
 			// XXX Hack: html5lib will append lang= to nodes that do not have it but have xml:lang= (for XML docs only)
-			if ($this->doc->isXML())
+			/*if ($this->doc->isXML())
 				array_walk($diff, function (&$val) {
 					$val = preg_replace('/[ ]+xml:lang=[^>]+/', '', $val);
-				});
+				});*/
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_missing_xml_attr'),
@@ -552,22 +552,93 @@ class Checker {
 			);
 		}
 		
-		
 		// A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
 		
-
 		
 		
 	}
 	
 	private function addReportDirValues() {
-		// Incorrect values used for dir attribute
+		// ERROR: Incorrect values used for dir attribute
+		$dirNodes = $this->doc->getNodesWithAttr('dir');
+		//self::$logger->debug(print_r($dirNodes, true));
+		
+		$isXHTML = $this->doc->isXHTML();
+		if (count($dirNodes) > 0) {
+			$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXHTML) {
+				$b = $isXHTML ? preg_match('/(rtl)|(ltr)/', $array['values']) : preg_match('/(rtl)|(ltr)/i', $array['values']);
+				if ($b)
+					return false;
+				return true;
+			});
+			if (count($invalidDirNodes) > 0)
+				Report::addReport(
+					'dir_category', REPORT_LEVEL_ERROR, 
+					lang('rep_dir_incorrect'),
+					lang('rep_dir_incorrect_expl', Language::format(Utils::codesFromValArray($invalidDirNodes), LANG_FORMAT_OL_CODE)),
+					lang('rep_dir_incorrect_todo'),
+					lang('rep_dir_incorrect_link')
+				);
+		}
+		
+		//self::$logger->debug("Invalids: ".print_r($invalidDirNodes, true));
+		
 	}
 	
 	private function addReportMisc() {
-		// are there non-NFC class or id names?
-		// <b> tags found in source
-		// <i> tags found in source
+		// WARNING: are there non-NFC class or id names?
+		$nonNFCs = Information::getValues('classId_non_nfc');
+		
+		//self::$logger->debug("non NFCs: ".print_r($nonNFCs, true));
+		//self::$logger->debug("non ASCIIs: ".print_r($nonASCIIs, true));
+		
+		if (count($nonNFCs) > 0) {
+			Report::addReport(
+				'dir_category', REPORT_LEVEL_WARNING, 
+				lang('rep_misc_non_nfc'),
+				lang('rep_misc_non_nfc_expl', count($nonNFCs), Language::format(Utils::codesFromValArray($nonNFCs), LANG_FORMAT_OL_CODE)),
+				lang('rep_misc_non_nfc_todo'),
+				lang('rep_misc_non_nfc_link')
+			);
+		}
+		
+		// INFO: <b> tags found in source
+		$bTags = $this->doc->getElementsByTagName('b');
+		$count = 0;
+		if (count($bTags) > 0) {
+			foreach ($bTags as $bTag) {
+				if ($bTag->hasAttributes() || $bTag->attributes->getNamedItem('class') == null) {
+					$count++;
+				}
+			}
+			if ($count > 0)
+				Report::addReport(
+					'dir_category', REPORT_LEVEL_INFO, 
+					lang('rep_misc_tags_no_class', 'b'),
+					lang('rep_misc_tags_no_class_expl', 'b', count($bTags), $count),
+					lang('rep_misc_tags_no_class_todo', 'b'),
+					lang('rep_misc_tags_no_class_link')
+				);
+		}
+		
+		// INFO: <i> tags found in source
+		$bTags = $this->doc->getElementsByTagName('i');
+		$count = 0;
+		if (count($bTags) > 0) {
+			foreach ($bTags as $bTag) {
+				if ($bTag->hasAttributes() || $bTag->attributes->getNamedItem('class') == null) {
+					$count++;
+				}
+			}
+			if ($count > 0)
+				Report::addReport(
+					'dir_category', REPORT_LEVEL_INFO, 
+					lang('rep_misc_tags_no_class', 'i'),
+					lang('rep_misc_tags_no_class_expl', 'i', count($bTags), $count),
+					lang('rep_misc_tags_no_class_todo', 'i'),
+					lang('rep_misc_tags_no_class_link')
+				);
+		}
 	}
 }
 
