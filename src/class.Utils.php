@@ -7,7 +7,7 @@ class Utils {
 	public static function contentTypeToArray($contentType) {
 		if ($contentType == null)
 			return array ('mimetype' => null, 'charset' => null);
-		$matches = explode(';', trim(strtolower($contentType)));
+		$matches = explode(';', trim($contentType));
 		if (isset($matches[1])) {
 			$matches[1] = explode('=', $matches[1]);
 			$matches[1] = isset($matches[1][1]) && trim($matches[1][1])
@@ -15,7 +15,7 @@ class Utils {
 				: $matches[1][0];
 		} else
 			$matches[1] = null;
-		return array ('mimetype' => $matches[0], 'charset' => strtoupper($matches[1]));
+		return array ('mimetype' => $matches[0], 'charset' => $matches[1]);
 	}
 	
 	public static function charsetFromContentType($contentType) {
