@@ -479,8 +479,8 @@ class Checker {
 		if ($langAttr != null && $xmlLangAttr != null && $langAttr != $xmlLangAttr) {
 			Report::addReport(
 				$category, REPORT_LEVEL_ERROR, 
-				lang('rep_lang_conflict'),
-				lang('rep_lang_conflict_expl', $langAttr, $xmlLangAttr, htmlspecialchars($this->doc->HTMLTag())),
+				lang('rep_lang_conflict_html'),
+				lang('rep_lang_conflict_html_expl', $langAttr, $xmlLangAttr, htmlspecialchars($this->doc->HTMLTag())),
 				lang('rep_lang_conflict_todo'),
 				lang('rep_lang_conflict_link')
 			);
@@ -534,7 +534,7 @@ class Checker {
 			);
 		}
 		
-		// A language attribute value was incorrectly formed.
+		// WARNING: A language attribute value was incorrectly formed.
 		//self::$logger->error("Merge ".print_r(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), true));
 		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
 			foreach ((array) $element['values'] as $val)
@@ -552,9 +552,28 @@ class Checker {
 			);
 		}
 		
-		// A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
-		
-		
+		// ERROR: A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
+		// walk through htmlLangAttrs, scan xmlLangAttrs to find same code, compare values, do the opposite?
+		$nonMatchingAttrs = array();
+		array_walk(&$htmlLangAttrs, function (&$valArray, $key) use (&$xmlLangAttrs, &$nonMatchingAttrs) {
+			$code = $valArray['code'];
+			//$vals = $valArray['values'];
+			if (($el = Utils::findCodeIn($code, $xmlLangAttrs)) != null) {
+				if ($el['values'] != $valArray['values']) {
+					$nonMatchingAttrs[] = $code;
+				}
+			}
+		});
+		if (count($nonMatchingAttrs) > 0) {
+			Report::addReport(
+				$category, REPORT_LEVEL_WARNING, 
+				lang('rep_lang_conflict'),
+				lang('rep_lang_conflict_expl', Language::format($nonMatchingAttrs, LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_conflict_todo'),
+				lang('rep_lang_conflict_link')
+			);
+		}
+		//self::$logger->error(print_r($nonMatchingAttrs, true));
 		
 	}
 	
@@ -622,11 +641,11 @@ class Checker {
 		}
 		
 		// INFO: <i> tags found in source
-		$bTags = $this->doc->getElementsByTagName('i');
+		$iTags = $this->doc->getElementsByTagName('i');
 		$count = 0;
-		if (count($bTags) > 0) {
-			foreach ($bTags as $bTag) {
-				if ($bTag->hasAttributes() || $bTag->attributes->getNamedItem('class') == null) {
+		if (count($iTags) > 0) {
+			foreach ($iTags as $iTag) {
+				if ($iTag->hasAttributes() || $iTag->attributes->getNamedItem('class') == null) {
 					$count++;
 				}
 			}
@@ -634,7 +653,7 @@ class Checker {
 				Report::addReport(
 					'dir_category', REPORT_LEVEL_INFO, 
 					lang('rep_misc_tags_no_class', 'i'),
-					lang('rep_misc_tags_no_class_expl', 'i', count($bTags), $count),
+					lang('rep_misc_tags_no_class_expl', 'i', count($iTags), $count),
 					lang('rep_misc_tags_no_class_todo', 'i'),
 					lang('rep_misc_tags_no_class_link')
 				);
