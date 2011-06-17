@@ -108,8 +108,13 @@ class Net {
 	}
 	
 	public static function getDocumentByFileUpload($file) {
-		Message::addMessage(MSG_LEVEL_ERROR, "File upload not yet implemented.");
-		return;
+		Message::addMessage(MSG_LEVEL_WARNING, lang("message_file_upload_warning"));
+		$content = file_get_contents($file['tmp_name']);
+		/* // seems that php deletes temporary file at the end of the request anyway 
+		 * if (Conf::get('delete_uploaded_files'))
+		 *	unlink($file['tmp_name']);
+		 */
+		return array(null, null, $content);
 	}
 	
 	private static function fetchDocument($url) {
