@@ -81,7 +81,7 @@ class Checker {
 	private function addInfoCharsetHTTP() { 
 		$category = 'charset_category';
 		$title = 'charset_http';
-		$_code = 'Content-Type: '.$this->curl_info['content_type'];
+		$_code = $this->curl_info['content_type'] ? 'Content-Type: '.$this->curl_info['content_type'] : null;
 		$_val = $this->doc->charsetFromHTTP();
 		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
@@ -89,6 +89,8 @@ class Checker {
 			$display_value = 'charset_none_found';
 		if ($_code == null && $_val == null)
 			$display_value = 'val_none_found';
+		if (!$this->curl_info['url'])
+			$display_value = 'charset_na_upload';
 		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
