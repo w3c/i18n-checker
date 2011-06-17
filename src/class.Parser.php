@@ -326,8 +326,8 @@ abstract class Parser {
 				}
 			}
 		};
-		$body = $this->document->getElementsByTagName('body')->item(0);
-		$this->iterate($test, $body);
+		$html = $this->document->getElementsByTagName('html')->item(0);
+		$this->iterate($test, $html);
 		return $result;
 	} 
 	
