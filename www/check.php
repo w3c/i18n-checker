@@ -36,3 +36,5 @@ if (isset($_REQUEST['format']) && $_REQUEST['format'] == 'xml') {
 } else {
 	include(PATH_TEMPLATES.'/results.html.php');
 }
+
+$logger->debug("Check ended");
