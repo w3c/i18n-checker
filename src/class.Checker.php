@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once('class.N11n.php');
 require_once('class.Parser.php');
 require_once('class.Information.php');
@@ -322,7 +322,7 @@ class Checker {
 			(array) Information::getValuesStartingWith('charset_meta')
 		);*/
 		
-		$charsetVals = Utils::valuesFromValArray($charsets);
+		$charsetVals = array_unique(array_map('strtoupper', Utils::valuesFromValArray($charsets)));
 		//$charsetVals = null;
 		$charsetVals = $charsetVals == null ? array() : $charsetVals;
 		//self::$logger->error(print_r($charsetVals, true));
@@ -357,7 +357,7 @@ class Checker {
 			$nonUTF8CharsetCodes = Utils::codesFromValArray(
 				array_filter($charsets, function ($array) {
 					if ($array['values'] != null 
-						&& (!in_array("UTF-8", (array) $array['values'])))
+						&& (!in_array("UTF-8", array_map('strtoupper', (array) $array['values']))))
 						//|| count(array_unique((array) $array['values'])) > 1))
 						return true;
 					return false;
@@ -384,12 +384,14 @@ class Checker {
 			);
 		}
 		
+		//self::$logger->error(print_r(Information::getValues('charset_meta*'), true));
+		//self::$logger->error(print_r(Utils::codesFromValArray(Information::getValues('charset_meta*')), true));
 		// WARNING: Multiple encoding declarations using the meta tag
 		if (count(Information::getValues('charset_meta*')) > 1) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_multiple_meta'),
-				lang('rep_charset_multiple_meta_expl', Language::format(Utils::codesFromValArray(Information::get('charset_meta*')->values), LANG_FORMAT_OL_CODE)),
+				lang('rep_charset_multiple_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta*')), LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_multiple_meta_todo'),
 				lang('rep_charset_multiple_meta_link')
 			);
@@ -399,7 +401,7 @@ class Checker {
 		// WARNING: UTF-8 BOM found at start of file
 		//self::$logger->error(print_r(Information::getValues('charset_bom'), true));
 		if (($bom = Information::getFirstVal('charset_bom')) != null 
-			&& $bom == "UTF-8") {
+			&& strcasecmp($bom, "UTF-8") == 0) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_bom_found'),
@@ -415,13 +417,12 @@ class Checker {
 			(array) Information::getValues('charset_xml'),
 			(array) Information::getValues('charset_meta*')
 		);
-		$inDocCharsets = Utils::codesFromValArray(
+		$inDocCharsets = 
 			array_filter($inDocCharsets, function ($array) {
 				if ($array['values'] != null && !empty($array['values']))
 					return true;
 				return false;
-			})
-		);
+			});
 		//$inDocCharsets = array();
 		//self::$logger->error("In Doc: ".print_r($inDocCharsets, true));
 		if (!empty($charsetVals) && empty($inDocCharsets)) {
@@ -434,8 +435,9 @@ class Checker {
 			);
 		}
 		
-		// WARNING: BOM in content TODO: Shouldn't the message warn that it could be intentional like in this very message
-		if (preg_match('/.ï»¿/',$this->markup)) {
+		// WARNING: BOM in content
+		// In the following like is the invisible BOM.
+		if (preg_match('/﻿/', $this->markup)) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_bom_in_content'),
@@ -459,6 +461,7 @@ class Checker {
 		// Only the tag dumps of nodes containing (xml:)lang
 		$htmlLangCodes = Utils::codesFromValArray($htmlLangAttrs);
 		$xmlLangCodes = Utils::codesFromValArray($xmlLangAttrs);
+		
 		//self::$logger->debug("HTML ".print_r($htmlLangAttrs, true));
 		//self::$logger->debug("XML ".print_r($xmlLangAttrs, true));
 		//self::$logger->debug("diff html/xml".print_r(Utils::diffArray($htmlLangCodes, $xmlLangCodes),true));
@@ -474,7 +477,7 @@ class Checker {
 		$todo = 'rep_lang_no_lang_attr_todo_1';
 		if ($this->doc->mimetypeFromHTTP() == 'application/xhtml+xml' && $xmlLangAttr == null) {
 			$b = true;
-		} else if ($this->doc->isXML() && ($xmlLangAttr == null || $langAttr == null)) {
+		} else if ($this->doc->mimetypeFromHTTP() != 'application/xhtml+xml' && $this->doc->isXML() && ($xmlLangAttr == null || $langAttr == null)) {
 			$b = true;
 			$todo = 'rep_lang_no_lang_attr_todo_2';
 		} else if (!$this->doc->isXML() && $langAttr == null) {
@@ -510,36 +513,42 @@ class Checker {
 		//self::$logger->debug("HTML ".print_r($this->doc->getNodesWithAttr('lang'),true));
 		
 		// WARNING: This HTML file contains xml:lang attributes
-		if (!$this->doc->isXML() && $xmlLangAttrs != null) {
+		if (!$this->doc->isXML() && ($xmlLangAttrs != null || $xmlLangAttr != null)) {
+			$codes = array();
+			if ($xmlLangAttrs != null)
+				$codes = $xmlLangCodes;
+			if ($xmlLangAttr != null)
+				$codes[] = $this->doc->HTMLTag();
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_xml_attr_in_html'),
-				lang('rep_lang_xml_attr_in_html_expl', Language::format($xmlLangCodes, LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_xml_attr_in_html_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
 				lang('rep_lang_xml_attr_in_html_todo'),
 				lang('rep_lang_xml_attr_in_html_link')
 			);
 		}
 		
 		
-		// WARNING: Check that lang and xml:lang come in pairs in xhtml
+		// WARNING: Check that lang and xml:lang come in pairs in xhtml served as text/html
 		// self::$logger->error("HTML ".print_r($htmlLangCodes, true));
 		// self::$logger->error("HTML codes ".print_r($htmlLangCodes, true));
 		// self::$logger->error("XML ".print_r($xmlLangCodes, true));
-		if ($this->doc->isXML() && ($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) {
-			// XXX Hack: html5lib will append lang= to nodes that do not have it but have xml:lang= (for XML docs only)
-			/*if ($this->doc->isXML())
-				array_walk($diff, function (&$val) {
-					$val = preg_replace('/[ ]+xml:lang=[^>]+/', '', $val);
-				});*/
+		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() == "text/html" 
+			&& (($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null || $xmlLangAttr != $htmlLangAttrs)) {
+			$codes = array();
+			if ($diff != null)
+				$codes = $diff;
+			if ($xmlLangAttr != $htmlLangAttrs)
+				$codes[] = $this->doc->HTMLTag();
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_missing_xml_attr'),
-				lang('rep_lang_missing_xml_attr_expl', Language::format($diff, LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_missing_xml_attr_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
 				lang('rep_lang_missing_xml_attr_todo'),
 				lang('rep_lang_missing_attr_link')
 			);
 		}
-		if ($this->doc->isXML() && ($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) {
+		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() == "text/html" && ($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) {
 			// XXX Hack: html5lib will append lang= to nodes that do not have it but have xml:lang= (for XML docs only)
 			//if ($this->doc->isXML())
 			//	array_walk($diff, function (&$val) {
