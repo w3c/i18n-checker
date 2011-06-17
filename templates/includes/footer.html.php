@@ -6,7 +6,7 @@
 			<li><a href="<?php echo Conf::get('base_uri') ?>feedback" hreflang="en" title="<?php _lang('footer_feedback_title') ?>"><?php _lang('footer_feedback') ?></a></li>
 	</ul>
 	
-	<form action="<?php print $lang_action ?>" method="get" id="lang_choice">
+	<form action="<?php echo $lang_action ?>" method="get" id="lang_choice">
 		<fieldset>
 			<label for="lang">Language</label>
 			<select name="lang" id="lang" title="Select language">
@@ -15,7 +15,7 @@
 				<?php } ?>
 			</select>
 			<input id="lang_change" type="submit" value="OK" />
-			<?php if (isset($uri)) { ?><input name="uri" id="uri" type="hidden" value="<?php print $uri ?>" /><?php } ?>
+			<?php if (isset($uri)) { ?><input name="uri" id="uri" type="hidden" value="<?php echo htmlentities($uri) ?>" /><?php } ?>
 		</fieldset>
 	</form>
 	

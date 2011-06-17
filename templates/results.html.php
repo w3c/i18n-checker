@@ -18,7 +18,7 @@ include('includes/form.php');
 <?php if ($succeded) { ?>
 <div id="results" class="section">
 	<h1 class="title">
-		<a href="#result"><?php _lang('results', $uri) ?></a>
+		<a href="#result"><?php echo htmlentities(lang('results', $uri)) ?></a>
 	</h1>
 	
 	<div class="block<?php echo Report::getCount() == 0 ? ' noissues' : '' ?>">
