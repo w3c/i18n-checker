@@ -7,8 +7,9 @@ $js[] = "w3c_unicorn_index.js";
 $js[] = "w3c_unicorn_results.js";
 $lang_action = "check";
 $lang_action .= Conf::get('show_extension') ? '.php' : '';
-include('includes/head.html.php');
-include('includes/form.php');
+include(PATH_TEMPLATES.'/includes/head.html.php');
+include(PATH_TEMPLATES.'/includes/form.php');
+include(PATH_TEMPLATES.'/includes/messages.html.php');
 ?>
 
 <script type="text/javascript">
@@ -18,7 +19,7 @@ include('includes/form.php');
 <?php if ($succeded) { ?>
 <div id="results" class="section">
 	<h1 class="title">
-		<a href="#result"><?php echo htmlentities(lang('results', $uri)) ?></a>
+		<a href="#result"><?php if ($uri) echo htmlentities(lang('results', $uri)); else echo lang('results_upload') ?></a>
 	</h1>
 	
 	<div class="block<?php echo Report::getCount() == 0 ? ' noissues' : '' ?>">
