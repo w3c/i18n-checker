@@ -63,7 +63,19 @@ class Information {
 	}
 	
 	public static function getValues($name) {
+		// If $name end with * return all values starting with that key
+		if (preg_match('/\*$/', $name))
+			return self::getValuesStartingWith(preg_replace('/\*$/', '', $name));
 		return self::get($name) ? self::get($name)->values : null; 
+	}
+	
+	public static function getValuesStartingWith($name) {
+		$keys = array_keys(self::$infos);
+		//$result = array();
+		foreach ($keys as $key)
+			if (preg_match('/^'.$name.'/', $key) && self::$infos[$key]->values != null)
+				$result[] = self::$infos[$key]->values;
+		return isset($result) ? Utils::arrayFlatten($result) : null; 
 	}
 	
 	public static function getFirstVal($name) {
