@@ -480,7 +480,7 @@ class Checker {
 		 */
 		$b = false;
 		$todo = 'rep_lang_no_lang_attr_todo_1';
-		if ($this->doc->mimetypeFromHTTP() == 'application/xhtml+xml' && $xmlLangAttr == null) {
+		if ($this->doc->mimetypeFromHTTP() != 'text/html' && $xmlLangAttr == null) {
 			$b = true;
 		} else if ($this->doc->mimetypeFromHTTP() != 'application/xhtml+xml' && $this->doc->isXML() && ($xmlLangAttr == null || $langAttr == null)) {
 			$b = true;
@@ -538,7 +538,7 @@ class Checker {
 		// self::$logger->error("HTML ".print_r($htmlLangCodes, true));
 		// self::$logger->error("HTML codes ".print_r($htmlLangCodes, true));
 		// self::$logger->error("XML ".print_r($xmlLangCodes, true));
-		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() == "text/html" 
+		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() != "application/xhtml+xml" 
 			&& ($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) {
 			$codes = array();
 			if ($diff != null)
@@ -553,7 +553,7 @@ class Checker {
 				lang('rep_lang_missing_attr_link')
 			);
 		}
-		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() == "text/html" 
+		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() != "application/xhtml+xml" 
 			&& ($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) {
 			$codes = array();
 			if ($diff != null)
