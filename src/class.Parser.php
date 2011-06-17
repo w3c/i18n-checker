@@ -14,6 +14,7 @@ abstract class Parser {
 	protected $isHTML5;
 	protected $isXHTML;
 	protected $isXHTML5;
+	public $doctype; 
 	// DOMDocument
 	protected $document;
 	// Meta charset tags
@@ -30,6 +31,8 @@ abstract class Parser {
 	protected function __construct($markup, $contentType) {
 		$this->markup = $markup;
 		$this->contentType = $contentType;
+		$this->findDoctype();
+		$this->parseMeta();
 	}
 	
 	public static function getParser($markup, $contentType) {
@@ -45,13 +48,54 @@ abstract class Parser {
 		return preg_match("/<!DOCTYPE HTML>/i", substr($markup, '0', Conf::get('perf_head_length'))) == true;
 	}
 	
+	// FIXME: This has been refactored quickly and is not very nice
+	public function findDoctype() {
+			if (preg_match("/<!DOCTYPE [^>]*DTD HTML/i", substr($this->markup, '0', Conf::get('perf_head_length')))) {
+				$this->isHTML = true;
+				$this->doctype = "HTML";
+				$this->isHTML5 = false;
+				$this->isXHTML = false;
+				$this->isXHTML5 = false;
+				return;
+			}
+			if (self::is_HTML5($this->markup)) { 
+				$this->doctype = "HTML5";
+				$this->isHTML5 = true;
+				$this->isHTML = false;
+				$this->isXHTML = false;
+				if (Utils::mimeFromContentType($this->contentType) == "application/xhtml+xml") {
+			 		$this->doctype = "XHTML5";
+			 		$this->isXHTML5 = true;
+			 	} else {
+			 		$this->isXHTML5 = false;
+			 	}
+			 	return;
+			}
+			 
+			if (preg_match("/<!DOCTYPE [^>]*DTD XHTML[^>]+/i", substr($this->markup, '0', Conf::get('perf_head_length')), $matches)) {
+				$this->isXHTML = true;
+				$this->doctype = "XHTML";
+				self::$logger->error($matches[0]);
+				if (preg_match('/1\.0/', $matches[0]))
+					$this->doctype = "XHTML 1.0";
+				if (preg_match('/1\.1/', $matches[0]))
+					$this->doctype = "XHTML 1.1";
+				$this->isHTML = false;
+				$this->isHTML5 = false;
+				$this->isXHTML5 = false;
+				return;
+			}
+	}
+	
 	public function isHTML() {
 		if ($this->isHTML == null) {
-			if ($this->isHTML = preg_match("/<!DOCTYPE [^>]*DTD HTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true) {
+			/*if ($this->isHTML = preg_match("/<!DOCTYPE [^>]*DTD HTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true) {
+				$doctype = "HTML";
 				$this->isHTML5 = false;
 				$this->isXHTML5 = false;
 				$this->isXHTML = false;
-			}
+			}*/
+			$this->findDoctype();
 		}
 		return $this->isHTML;
 	}
@@ -60,34 +104,45 @@ abstract class Parser {
 		if ($this->isHTML5 == null) {
 			//$this->isHTML5 = self::is_HTML5($this->markup);
 			// If HTML5 DTD then it can't be HTML or XHTML but still can be XHTML5 (in which case both isHTML5 and isXHTML5 return true) 
-			if ($this->isHTML5 = self::is_HTML5($this->markup)) { 
+			/*if ($this->isHTML5 = self::is_HTML5($this->markup)) { 
+				$doctype = "HTML5";
 				$this->isHTML = false;
 				$this->isXHTML = false;
-			}
+				
+			}*/
+			$this->findDoctype();
 		}
 		return $this->isHTML5;
 	}
 	
 	public function isXHTML() {
 		if ($this->isXHTML == null) {
-			if ($this->isXHTML = preg_match("/<!DOCTYPE [^>]*DTD XHTML/i", substr($this->markup, '0', Conf::get('perf_head_length'))) == true) {
+			/*if ($this->isXHTML = preg_match("/<!DOCTYPE [^>]*DTD XHTML/i", substr($this->markup, '0', Conf::get('perf_head_length')), $matches) == true) {
+				$doctype = "XHTML";
+				if (preg_match('/1\.0/', $matches[0]))
+					$doctype = "XHTML 1.0";
+				if (preg_match('/1\.1/', $matches[0]))
+					$doctype = "XHTML 1.1";
 				$this->isHTML = false;
 				$this->isHTML5 = false;
 				$this->isXHTML5 = false;
-			}
+			}*/
+			$this->findDoctype();
 		}
 		return $this->isXHTML;
 	}
 	
 	public function isXHTML5() {
 		if ($this->isXHTML5 == null) {
-		 	if ($this->isHTML5() && Utils::mimeFromContentType($this->contentType) == "application/xhtml+xml") {
+		 	/*if ($this->isHTML5() && Utils::mimeFromContentType($this->contentType) == "application/xhtml+xml") {
+		 		$doctype = "XHTML5";
 		 		$this->isXHTML5 = true;
 				$this->isHTML = false;
 				$this->isXHTML = false;
 		 	} else {
 		 		$this->isXHTML5 = false;
-		 	}
+		 	}*/
+			$this->findDoctype();
 		}
 		return $this->isXHTML5;
 	}
@@ -106,7 +161,7 @@ abstract class Parser {
 	
 	public function charsetFromXML() {
 		preg_match('@<'.'?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i', substr($this->markup, '0', Conf::get('perf_head_length')), $matches);
-		return isset($matches[2]) ? strtoupper($matches[2]) : null;
+		return isset($matches[2]) ? $matches[2] : null;
 	}
 	
 	public function XMLDeclaration() {
@@ -125,8 +180,8 @@ abstract class Parser {
 	}
 	
 	public function charsetsFromHTML() {
-		if ($this->metaCharsets == null)
-			$this->parseMeta();
+		//if ($this->metaCharsets == null)
+		//	$this->parseMeta();
 		return $this->metaCharsets;
 	}
 	
@@ -147,8 +202,8 @@ abstract class Parser {
 	//public abstract function getNodesWithAttr($attr);
 	
 	public function langsFromMeta() {
-		if ($this->metaLanguages == null)
-			$this->parseMeta();
+		//if ($this->metaLanguages == null)
+		//	$this->parseMeta();
 		return $this->metaLanguages;
 	}
 	
@@ -193,8 +248,10 @@ abstract class Parser {
 		foreach ($metas as $meta) {
 			// check for charset attribute
 			if (($charset = $meta->attributes->getNamedItem('charset')) != null) {
-				$this->charsetsFromHTML[] = strtoupper($charset->value);
-				$this->metaCharsetTags[] = $this->dump($meta);
+				$this->metaCharsets[] = array ( 
+					'code'   => $this->dump($meta),
+					'values' => $charset->value
+				);
 			// check for http-equiv="content-language" (deprecated in HTML5)
 			// TODO: Add a warning if <meta http-equiv="content-language" content="en"> is used in HTML5?
 			// FIXME: case sensitity of getNamedItem
