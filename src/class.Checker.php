@@ -534,11 +534,11 @@ class Checker {
 		// self::$logger->error("HTML codes ".print_r($htmlLangCodes, true));
 		// self::$logger->error("XML ".print_r($xmlLangCodes, true));
 		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() == "text/html" 
-			&& (($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null || $xmlLangAttr != $htmlLangAttrs)) {
+			&& ($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) {
 			$codes = array();
 			if ($diff != null)
 				$codes = $diff;
-			if ($xmlLangAttr != $htmlLangAttrs)
+			if ($xmlLangAttr == null)
 				$codes[] = $this->doc->HTMLTag();
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
@@ -548,12 +548,13 @@ class Checker {
 				lang('rep_lang_missing_attr_link')
 			);
 		}
-		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() == "text/html" && ($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) {
-			// XXX Hack: html5lib will append lang= to nodes that do not have it but have xml:lang= (for XML docs only)
-			//if ($this->doc->isXML())
-			//	array_walk($diff, function (&$val) {
-			//		$val = preg_replace('/[ ]+lang=[^>]+/', '', $val);
-			//	});
+		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() == "text/html" 
+			&& ($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) {
+			$codes = array();
+			if ($diff != null)
+				$codes = $diff;
+			if ($langAttr == null)
+				$codes[] = $this->doc->HTMLTag();
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_missing_html_attr'),
