@@ -11,6 +11,7 @@ Message::addMessage(MSG_LEVEL_WARNING, 'The checker is still only a prototype, s
 	If you have suggestions for ways to improve the checker, please fill in the feedback form.');
 
 include(PATH_TEMPLATES.'/includes/head.html.php');
+include(PATH_TEMPLATES.'/includes/messages.html.php');
 include(PATH_TEMPLATES.'/includes/form.php'); ?>
 
 
