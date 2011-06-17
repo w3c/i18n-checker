@@ -152,7 +152,7 @@ abstract class Parser {
 	}
 	
 	public function mimetypeFromHTTP() {
-		return Utils::mimeFromContentType($this->contentType);
+		return ($mime = Utils::mimeFromContentType($this->contentType)) ? $mime : 'N/A';
 	}
 	
 	public function charsetFromHTTP() {
