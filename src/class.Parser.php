@@ -274,6 +274,10 @@ abstract class Parser {
 		return $result;
 	} 
 	
+	public function getElementsByTagName($tagName) {
+		return $this->document->getElementsByTagName($tagName);
+	}
+	
 	protected function iterate($callback, $node) {
 		foreach ($node->childNodes as $child) {
 			$callback($child);
