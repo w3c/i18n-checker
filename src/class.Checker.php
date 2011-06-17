@@ -73,6 +73,8 @@ class Checker {
 			$dtd = 'NA';
 		}
 		$this->doc->findDoctype();*/
+		if ($this->doc->isXHTML5())
+			Message::addMessage(MSG_LEVEL_WARNING, lang("message_xhtml5_partial_support"));
 		Information::addInfo(null, 'dtd', null, $this->doc->doctype);
 		Information::addInfo(null, 'mimetype', null, $this->doc->mimetypeFromHTTP());
 	}
@@ -145,15 +147,14 @@ class Checker {
 		$title = 'charset_xml';
 		$_code = $this->doc->XMLDeclaration();
 		$_val = $this->doc->charsetFromXML();
-		$value = null;
-		//if ($_code != null && $_val != null)
-			$value = array('code' => $_code, 'values' => $_val);
+		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
 		if ($_code != null && $_val == null)
 			$display_value = 'charset_none_found';
 		if ($_code == null && $_val == null)
 			$display_value = 'val_none_found';
-		Information::addInfo($category, $title, $value, $display_value);
+		if ($this->doc->isXML() || (!$this->doc->isXML() && $_code != null) || ($this->doc->isXHTML5() && $_code != null))
+			Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: CHARSET FROM META CONTENT-TYPE OR META CHARSET (HTML5)
@@ -172,7 +173,9 @@ class Checker {
 			else
 				$display_value = 'charset_none_found';
 		}
-		Information::addInfo($category, $title, $value, $display_value);
+		// XXX Review this. Don't add this field for XHTML served as application/xhtml+xml if it is empty
+		if (!$this->doc->isXML() || $this->doc->mimetypeFromHTTP() != 'application/xhtml+xml' || $display_value != null) 
+			Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: LANGUAGE FROM HTML LANG ATTRIBUTE
@@ -501,7 +504,7 @@ class Checker {
 		}
 
 		// ERROR: The lang attribute and the xml:lang attribute in the html tag have different values
-		if ($langAttr != null && $xmlLangAttr != null && $langAttr != $xmlLangAttr) {
+		if ($this->doc->isXML() && $langAttr != null && $xmlLangAttr != null && $langAttr != $xmlLangAttr) {
 			Report::addReport(
 				$category, REPORT_LEVEL_ERROR, 
 				lang('rep_lang_conflict_html'),
@@ -578,7 +581,7 @@ class Checker {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_malformed_attr'),
-				lang('rep_lang_malformed_attr_expl', Language::format(Utils::codesFromValArray($malformedAttrs), LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_malformed_attr_expl', Language::format(array_unique(Utils::codesFromValArray($malformedAttrs)), LANG_FORMAT_OL_CODE)),
 				lang('rep_lang_malformed_attr_todo'),
 				lang('rep_lang_malformed_attr_link')
 			);
@@ -587,7 +590,7 @@ class Checker {
 		// ERROR: A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
 		// walk through htmlLangAttrs, scan xmlLangAttrs to find same code, compare values, do the opposite?
 		$nonMatchingAttrs = array();
-		if (count($htmlLangAttrs) > 0)
+		if ($this->doc->isXML() && count($htmlLangAttrs) > 0)
 			array_walk(&$htmlLangAttrs, function (&$valArray, $key) use (&$xmlLangAttrs, &$nonMatchingAttrs) {
 				$code = $valArray['code'];
 				//$vals = $valArray['values'];
