@@ -3,16 +3,16 @@ require_once(realpath(dirname(__FILE__).'/../src/common.php'));
 require_once(PATH_SRC.'/class.Net.php');
 require_once(PATH_SRC.'/class.Checker.php');
 
-if (!isset($_GET['uri']) && !isset($_POST['file'])) {
+if (!isset($_GET['uri']) && !isset($_FILES['file'])) {
 	Message::addMessage(MSG_LEVEL_ERROR, lang("message_nothing_to_validate"));
-	include(PATH_TEMPLATES.'/index.html.php');
+	include(PATH_WEBDIR.'/index.php');
 	return;
 }
 // Get the document either by URI or attached as a file
 if (isset($_GET['uri']))
 	$document = Net::getDocumentByUri($_GET['uri']);
-elseif (isset($_POST['file']))
-	$document = Net::getDocumentByFileUpload($_POST['file']);
+elseif (isset($_FILES['file']))
+	$document = Net::getDocumentByFileUpload($_FILES['file']);
 // If no doc found or something went wrong redirect to home page with error messages
 if ($document == false) {
 	include(PATH_WEBDIR.'/index.php');
