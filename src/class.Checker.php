@@ -38,14 +38,10 @@ class Checker {
 		$this->addInfoDTDMimetype();
 		$this->addInfoCharsetHTTP();
 		$this->addInfoCharsetBom($bom);
-		
-		// TODO: how about issuing a warning/comment if xml:lang is found in a non-xml doc?
-		//if ($this->doc->isXML() || $this->doc->mimetypeFromHTTP() == 'application/xhtml+xml')
-			$this->addInfoCharsetXMLDeclaration();
+		$this->addInfoCharsetXMLDeclaration();
 		$this->addInfoCharsetMeta();
 		$this->addInfoLangAttr();
-		//if ($this->doc->isXML())
-			$this->addInfoXMLLangAttr();
+		$this->addInfoXMLLangAttr();
 		$this->addInfoLangHTTP();
 		$this->addInfoLangMeta();
 		$this->addInfoDirHTML();
@@ -61,18 +57,6 @@ class Checker {
 	}
 	
 	private function addInfoDTDMimetype() {
-		/*if ($this->doc->isXHTML()) {
-			$dtd = 'XHTML';
-		} elseif ($this->doc->isHTML()) {
-			$dtd = 'HTML';
-		} elseif ($this->doc->isXHTML5()) {
-			$dtd = 'XHTML5';
-		} elseif ($this->doc->isHTML5()) {
-			$dtd = 'HTML5';
-		} else {
-			$dtd = 'NA';
-		}
-		$this->doc->findDoctype();*/
 		if ($this->doc->isXHTML5())
 			Message::addMessage(MSG_LEVEL_WARNING, lang("message_xhtml5_partial_support"));
 		Information::addInfo(null, 'dtd', null, $this->doc->doctype);
@@ -118,26 +102,10 @@ class Checker {
 		$title = 'charset_bom';
 		$value = null;
 		$display_value = null;
-		/*$filestart = substr($this->markup,0,3);
-		if (ord($filestart{0})== 239 && ord($filestart{1})== 187 && ord($filestart{2})== 191) 
-			$bom = 'UTF-8';
-		else { 
-			$filestart = substr($this->markup,0,2);
-			if (ord($filestart{0})== 254 && ord($filestart{1})== 255)
-				$bom = 'UTF-16BE';
-			elseif (ord($filestart{0})== 255 && ord($filestart{1})== 254)
-				$bom = 'UTF-16LE';
-		}*/
-		if ($bom != '') {
-			// Convert to UTF-8
-			/*if ($bom == 'UTF-16LE')
-				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16LE');
-			elseif ($bom == 'UTF-16BE')
-				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16BE');*/
+		if ($bom != '')
 			$value = array ('code' => null, 'values' => $bom);
-		} else {
+		else
 			$display_value = 'val_no';
-		}
 		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
@@ -161,8 +129,6 @@ class Checker {
 	private function addInfoCharsetMeta() {
 		$category = 'charset_category';
 		$title = 'charset_meta';
-		//if ($this->doc->isHTML5() || $this->doc->isXHTML5())
-		//	$title = 'charset_meta_html5';
 		$value = $this->doc->charsetsFromHTML();
 		$display_value = null;
 		$vals = Utils::valuesFromValArray($value);
@@ -285,10 +251,7 @@ class Checker {
 			});
 		$title = 'classId_non_nfc';
 		$value = array_values($nodes);
-		
-		//array_unique(Utils::arrayFlatten(array_values($nodes)));
 		$display_value = count($value) == 0 ? 'val_none' : null;
-		//$code = array_keys($nodes);
 		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
@@ -319,19 +282,8 @@ class Checker {
 		
 		// Get all the charsets found
 		$charsets = (array) Information::getValuesStartingWith('charset_');
-		
-		/*array_merge(
-			(array) Information::getValues('charset_http'),
-			(array) Information::getValues('charset_bom'),
-			(array) Information::getValues('charset_xml'),
-			(array) Information::getValuesStartingWith('charset_meta')
-		);*/
-		
 		$charsetVals = array_unique(array_map('strtoupper', Utils::valuesFromValArray($charsets)));
-		//$charsetVals = null;
 		$charsetVals = $charsetVals == null ? array() : $charsetVals;
-		//self::$logger->error(print_r($charsetVals, true));
-		
 		$charsetCodes = Utils::codesFromValArray(
 			array_filter($charsets, function ($array) {
 				if ($array['values'] != null && !empty($array['values']))
@@ -339,7 +291,6 @@ class Checker {
 				return false;
 			})
 		);
-		//self::$logger->error(print_r($charsetCodes, true));
 		
 		// WARNING: No character encoding information
 		if (empty($charsetVals)) {
@@ -352,18 +303,15 @@ class Checker {
 				lang('rep_charset_none_link')
 			);
 			return;
-		} else {
-			//self::$logger->debug('List of all charsets found: '.print_r($charsets, true));
 		}
 		
 		// INFO: Non UTF-8 charset declared
 		if (!in_array("UTF-8", $charsetVals) || count(array_unique($charsetVals)) > 1) {
-			//self::$logger->error(print_r($charsets, true));
 			$nonUTF8CharsetCodes = Utils::codesFromValArray(
 				array_filter($charsets, function ($array) {
+					// XXX Review this
 					if ($array['values'] != null 
 						&& (!in_array("UTF-8", array_map('strtoupper', (array) $array['values']))))
-						//|| count(array_unique((array) $array['values'])) > 1))
 						return true;
 					return false;
 				})
@@ -379,7 +327,6 @@ class Checker {
 		
 		// ERROR: Conflicting character encoding declarations
 		if (count(array_unique($charsetVals)) != 1) {
-			// $http_conflict_msg
 			Report::addReport(
 				$category, REPORT_LEVEL_ERROR, 
 				lang('rep_charset_conflict'),
@@ -389,8 +336,6 @@ class Checker {
 			);
 		}
 		
-		//self::$logger->error(print_r(Information::getValues('charset_meta*'), true));
-		//self::$logger->error(print_r(Utils::codesFromValArray(Information::getValues('charset_meta*')), true));
 		// WARNING: Multiple encoding declarations using the meta tag
 		if (count(Information::getValues('charset_meta')) > 1) {
 			Report::addReport(
@@ -402,9 +347,7 @@ class Checker {
 			);
 		}
 		
-		// TODO: desambiguate ValuesArray against Values
 		// WARNING: UTF-8 BOM found at start of file
-		//self::$logger->error(print_r(Information::getValues('charset_bom'), true));
 		if (($bom = Information::getFirstVal('charset_bom')) != null 
 			&& strcasecmp($bom, "UTF-8") == 0) {
 			Report::addReport(
@@ -428,8 +371,6 @@ class Checker {
 					return true;
 				return false;
 			});
-		//$inDocCharsets = array();
-		//self::$logger->error("In Doc: ".print_r($inDocCharsets, true));
 		if (!empty($charsetVals) && empty($inDocCharsets)) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
@@ -441,7 +382,7 @@ class Checker {
 		}
 		
 		// WARNING: BOM in content
-		// In the following like is the invisible BOM.
+		// /!\ In the following line is the invisible BOM.
 		if (preg_match('/﻿/', substr($this->markup,3))) {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
@@ -466,11 +407,6 @@ class Checker {
 		// Only the tag dumps of nodes containing (xml:)lang
 		$htmlLangCodes = Utils::codesFromValArray($htmlLangAttrs);
 		$xmlLangCodes = Utils::codesFromValArray($xmlLangAttrs);
-		
-		//self::$logger->debug("HTML ".print_r($htmlLangAttrs, true));
-		//self::$logger->debug("XML ".print_r($xmlLangAttrs, true));
-		//self::$logger->debug("diff html/xml".print_r(Utils::diffArray($htmlLangCodes, $xmlLangCodes),true));
-		//self::$logger->debug("diff xml/html".print_r(Utils::diffArray($xmlLangCodes, $htmlLangCodes),true));
 		
 		// WARNING: The html tag doesn't have the right language attributes
 		/* 3 tests:
@@ -514,9 +450,6 @@ class Checker {
 			);
 		}
 		
-		//self::$logger->debug("XML ".print_r($this->doc->getNodesWithAttr('lang', true),true));
-		//self::$logger->debug("HTML ".print_r($this->doc->getNodesWithAttr('lang'),true));
-		
 		// WARNING: This HTML file contains xml:lang attributes
 		if (!$this->doc->isXML() && ($xmlLangAttrs != null || $xmlLangAttr != null)) {
 			$codes = array();
@@ -533,11 +466,7 @@ class Checker {
 			);
 		}
 		
-		
 		// WARNING: Check that lang and xml:lang come in pairs in xhtml served as text/html
-		// self::$logger->error("HTML ".print_r($htmlLangCodes, true));
-		// self::$logger->error("HTML codes ".print_r($htmlLangCodes, true));
-		// self::$logger->error("XML ".print_r($xmlLangCodes, true));
 		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() != "application/xhtml+xml" 
 			&& ($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) {
 			$codes = array();
@@ -570,7 +499,6 @@ class Checker {
 		}
 		
 		// WARNING: A language attribute value was incorrectly formed.
-		//self::$logger->error("Merge ".print_r(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), true));
 		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
 			foreach ((array) $element['values'] as $val)
 				if (preg_match("/^[a-zA-Z0-9]*[^a-zA-Z0-9\-]+[a-zA-Z0-9]*$/", $val))
@@ -588,12 +516,10 @@ class Checker {
 		}
 		
 		// ERROR: A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
-		// walk through htmlLangAttrs, scan xmlLangAttrs to find same code, compare values, do the opposite?
 		$nonMatchingAttrs = array();
 		if ($this->doc->isXML() && count($htmlLangAttrs) > 0)
 			array_walk(&$htmlLangAttrs, function (&$valArray, $key) use (&$xmlLangAttrs, &$nonMatchingAttrs) {
 				$code = $valArray['code'];
-				//$vals = $valArray['values'];
 				if (($el = Utils::findCodeIn($code, $xmlLangAttrs)) != null) {
 					if ($el['values'] != $valArray['values']) {
 						$nonMatchingAttrs[] = $code;
@@ -609,15 +535,12 @@ class Checker {
 				lang('rep_lang_conflict_link')
 			);
 		}
-		//self::$logger->error(print_r($nonMatchingAttrs, true));
 		
 	}
 	
 	private function addReportDirValues() {
 		// ERROR: Incorrect values used for dir attribute
 		$dirNodes = $this->doc->getNodesWithAttr('dir');
-		//self::$logger->debug(print_r($dirNodes, true));
-		
 		$isXHTML = $this->doc->isXHTML();
 		if (count($dirNodes) > 0) {
 			$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXHTML) {
@@ -636,17 +559,11 @@ class Checker {
 				);
 		}
 		
-		//self::$logger->debug("Invalids: ".print_r($invalidDirNodes, true));
-		
 	}
 	
 	private function addReportMisc() {
 		// WARNING: are there non-NFC class or id names?
 		$nonNFCs = Information::getValues('classId_non_nfc');
-		
-		//self::$logger->debug("non NFCs: ".print_r($nonNFCs, true));
-		//self::$logger->debug("non ASCIIs: ".print_r($nonASCIIs, true));
-		
 		if (count($nonNFCs) > 0) {
 			Report::addReport(
 				'dir_category', REPORT_LEVEL_WARNING, 
