@@ -1,7 +1,7 @@
 	<div id="frontforms">
 		<ul id="tabset_tabs">
-			<li><a href="#validate-by-uri"><?php _lang('validate-by-uri') ?></a></li><?php /*<li><a href="#validate-by-upload"><?php _lang('validate-by-upload') ?></a></li>
-			 <li><a href="#validate-by-input"><?php _lang('validate-by-input') ?></a></li> */ ?> 
+			<li><a href="#validate-by-uri"><?php _lang('validate-by-uri') ?></a></li><li><a href="#validate-by-upload"><?php _lang('validate-by-upload') ?></a></li>
+			<?php /* <li><a href="#validate-by-input"><?php _lang('validate-by-input') ?></a></li> */ ?> 
 		</ul>
 
 		<div id="fields">
@@ -24,7 +24,7 @@
 					</div>
 				</fieldset>
 			</form>
-			<?php /*<form action="check<?php print Conf::get('show_extension') ? '.php' : ''; ?>" method="post" enctype="multipart/form-data" id="validate-by-upload" class="ucn_form">
+			<form action="check<?php print Conf::get('show_extension') ? '.php' : ''; ?>" method="post" enctype="multipart/form-data" id="validate-by-upload" class="ucn_form">
 				<fieldset>
 					<legend><?php _lang('legend-by-upload') ?></legend>
 					<div class="input">
@@ -43,7 +43,7 @@
 					</div>
 				</fieldset>
 			</form>
-			<form action="check" method="post" id="validate-by-input" class="ucn_form">
+			<?php /*<form action="check" method="post" id="validate-by-input" class="ucn_form">
 				<fieldset>
 					<legend><?php _lang('legend-by-input') ?></legend>
 					<div class="input">
