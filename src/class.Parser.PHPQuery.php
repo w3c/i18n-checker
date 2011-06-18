@@ -1,5 +1,5 @@
 <?php
-require_once('lib/phpQuery.php');
+require_once(PATH_LIB.'/phpQuery.php');
 
 final class ParserPHPQuery extends Parser {
 	

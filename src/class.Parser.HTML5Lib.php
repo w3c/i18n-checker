@@ -1,5 +1,5 @@
 <?php
-require_once('lib/html5lib/Parser.php');
+require_once(PATH_LIB.'/html5lib/Parser.php');
 
 final class ParserHTML5Lib extends Parser {
 	
