@@ -1,40 +1,31 @@
 <?php
-require_once(realpath(dirname(__FILE__).'/../src/common.php'));
-require_once(PATH_SRC.'/class.Net.php');
-require_once(PATH_SRC.'/class.Checker.php');
-
+require_once(realpath(dirname(__FILE__).'/../src/class.Conf.php'));
+require_once(PATH_SRC.'/class.Language.php');
+require_once(PATH_SRC.'/class.Message.php');
+if (isset($_GET['debug_lang']) && $_GET['debug_lang'] == 'true')
+	Conf::set('debug_lang', 'true');
+$format = isset($_REQUEST['format']) && $_REQUEST['format'] == 'xml' ? 'xml' : 'html'; 
 if (!isset($_GET['uri']) && !isset($_FILES['file'])) {
 	Message::addMessage(MSG_LEVEL_ERROR, lang("message_nothing_to_validate"));
-	include(PATH_WEBDIR.'/index.php');
-	return;
+	include(PATH_TEMPLATES."/index.$format.php");
+	exit;
 }
-// Get the document either by URI or attached as a file
+require_once(PATH_SRC.'/class.Net.php');
 if (isset($_GET['uri']))
 	$document = Net::getDocumentByUri($_GET['uri']);
 elseif (isset($_FILES['file']))
 	$document = Net::getDocumentByFileUpload($_FILES['file']);
-// If no doc found or something went wrong redirect to home page with error messages
 if ($document == false) {
-	include(PATH_WEBDIR.'/index.php');
-	return;
+	include(PATH_TEMPLATES."/index.$format.php");
+	exit;
 }
-// Final uri (after redirections) or false if file upload
+require_once(PATH_SRC.'/class.Checker.php');
 $uri = $document[0];
-// Curl information (cf log file) or false if file upload
 $curl_info = $document[1];
-// The content of the document
 $content = $document[2];
-
 $checker = new Checker($curl_info, $content);
-$succeded = false;
-if ($checker->checkDocument())
-	$succeded = true;
-
-// Check the format parameter to determine output template
-if (isset($_REQUEST['format']) && $_REQUEST['format'] == 'xml') {
-	include(PATH_TEMPLATES.'/results.xml.php');
-} else {
-	include(PATH_TEMPLATES.'/results.html.php');
+if (!$checker->checkDocument()) {
+	include(PATH_TEMPLATES."/index.$format.php");
+	exit;
 }
-
-$logger->debug("Check ended");
+include(PATH_TEMPLATES."/results.$format.php");
