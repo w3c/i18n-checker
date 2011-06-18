@@ -1,8 +1,7 @@
 <?php
 if (ob_get_length() > 0 && !Conf::get('debug')) {
 	$logger = Logger::getLogger('Output');
-	$logger->error("Output buffer is not empty: \n".ob_get_contents());
-	ob_get_clean();
+	$logger->error("Output buffer is not empty: \n".ob_get_clean());
 }
 $logger = Logger::getLogger('Templates');
 ?>

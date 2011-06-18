@@ -1,9 +1,9 @@
 	<ul id="menu">
 			<li><a href="<?php echo Conf::get('base_uri') ?>" title="<?php _lang('footer_home_title') ?>"><?php _lang('footer_home') ?></a></li>
-			<li><a href="<?php echo Conf::get('base_uri') ?>about" title="<?php _lang('footer_about_title') ?>"><?php _lang('footer_about') ?></a></li>
+			<li><a href="<?php echo Conf::get('base_uri'), 'about', Conf::get('show_extension') ? '.php' : '' ?>" title="<?php _lang('footer_about_title') ?>"><?php _lang('footer_about') ?></a></li>
 			<li><a href="http://dvcs.w3.org/hg/" title="<?php _lang('footer_download_title') ?>"><?php _lang('footer_download') ?></a></li>
 			<!-- <li><a href="<?php echo Conf::get('base_uri') ?>translation.html" hreflang="en" title="<?php _lang('footer_translation_title') ?>"><?php _lang('footer_translation') ?></a></li> -->
-			<li><a href="<?php echo Conf::get('base_uri') ?>feedback" hreflang="en" title="<?php _lang('footer_feedback_title') ?>"><?php _lang('footer_feedback') ?></a></li>
+			<li><a href="<?php echo Conf::get('base_uri'), 'feedback', Conf::get('show_extension') ? '.php' : '' ?>" hreflang="en" title="<?php _lang('footer_feedback_title') ?>"><?php _lang('footer_feedback') ?></a></li>
 	</ul>
 	
 	<form action="<?php echo $lang_action ?>" method="get" id="lang_choice">
