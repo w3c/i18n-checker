@@ -49,7 +49,7 @@ class Language {
 				return $_REQUEST['lang'];
 			} else {
 				// TODO Add that message to en.properties or remove altogether
-				//Message::addMessage(MSG_LEVEL_WARNING, lang(message_requested_language_not_available));
+				// Message::addMessage(MSG_LEVEL_WARNING, lang(message_requested_language_not_available));
 				self::$logger->debug("Language ".$_REQUEST['lang']." is not available");
 				return Conf::get('default_language');
 			}
@@ -123,3 +123,11 @@ class Language {
 }
 
 Language::init();
+// Convenient shortcuts to Language::$lang, Language::lang($str) and Language::_lang($str)
+$lang = Language::$lang;
+function lang($arr) {
+	return call_user_func_array('Language::lang', func_get_args());
+}
+function _lang($arr) {
+	echo call_user_func_array('Language::lang', func_get_args());
+}
