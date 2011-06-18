@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once('class.N11n.php');
 require_once('class.Parser.php');
 require_once('class.Information.php');
