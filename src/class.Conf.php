@@ -6,19 +6,29 @@ class Conf {
 	static private $configuration;
 	
 	static function init() {
-		self::$logger = Logger::getLogger('Configuration');
-		$confFile = realpath(dirname(__FILE__).'/../conf/i18n.conf');
-		self::$logger->info("Loading configuration file: ".$confFile);
+		define("PATH_SRC", realpath(dirname(__FILE__)));
+		define("PATH_CONF", realpath(dirname(dirname(__FILE__)).'/conf'));
+		$confFile = PATH_CONF.'/i18n.conf';
+		if (!file_exists($confFile)) {
+			echo 'Configuration file not found. '.$confFile;
+			exit(1);
+		}
 		self::$configuration = parse_ini_file($confFile);
+		if (!self::$configuration) {
+			echo 'Error parsing configuration file.';
+			exit(1);
+		}
 		foreach (self::$configuration as $key => $value) {
 			if (strpos($key, "path_") === 0 && strpos($value, "/") !== 0) {
 				self::$configuration[$key] = realpath(dirname(__FILE__).'/../'.$value);
-				self::$logger->debug("- Found path property: ".$key." = ".$value." -> resolved to ".self::get($key));
 				define(strtoupper($key), self::get($key));
 			}
 		}
-		define("PATH_SRC", realpath(dirname(__FILE__)));
-		self::$logger->debug("- Loaded configuration: ".print_r(self::$configuration, true));
+		require_once(PATH_LIB.'/log4jphp/Logger.php');
+		Logger::configure(PATH_CONF.'/log4php.properties');
+		self::$logger = Logger::getLogger('Configuration');
+		if (self::$logger->isDebugEnabled())
+			self::$logger->debug("Loaded configuration file: ".$confFile."\n".print_r(self::$configuration, true));
 	}
 	
 	static function get($key) {
