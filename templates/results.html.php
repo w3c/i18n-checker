@@ -7,16 +7,19 @@ $js[] = "w3c_unicorn_index.js";
 $js[] = "w3c_unicorn_results.js";
 $lang_action = "check";
 $lang_action .= Conf::get('show_extension') ? '.php' : '';
-include(PATH_TEMPLATES.'/includes/head.html.php');
-include(PATH_TEMPLATES.'/includes/form.php');
-include(PATH_TEMPLATES.'/includes/messages.html.php');
+
+if (isset($_GET['debug_lang']) && $_GET['debug_lang'] == 'true')
+	Conf::set('debug_lang', 'true');
+
+include(PATH_TEMPLATES.'/html/head.php');
+include(PATH_TEMPLATES.'/html/form.php');
+include(PATH_TEMPLATES.'/html/messages.php');
 ?>
 
 <script type="text/javascript">
 	window.addEvent('domready', W3Cr.start);
 </script>
 
-<?php if ($succeded) { ?>
 <div id="results" class="section">
 	<h1 class="title">
 		<a href="#result"><?php if ($uri) echo htmlentities(lang('results', $uri)); else echo lang('results_upload') ?></a>
@@ -39,7 +42,6 @@ include(PATH_TEMPLATES.'/includes/messages.html.php');
 		} ?>
 	</div>
 </div>
-<?php } ?>
 
 <?php if (Information::getCount() > 0) { ?>
 <div id="infos" class="section">
@@ -57,14 +59,12 @@ include(PATH_TEMPLATES.'/includes/messages.html.php');
 					echo "<th>".lang('code')."</th>\n";
 			    echo "</tr>\n";
 			    foreach ($infoArray as $info) {
-			    //$logger->error(print_r($info, true));
 			    echo "<tr>\n";
 			    	echo "<td>".lang($info->title)."</td>\n";
 					echo "<td>";
 					if ($info->display_value != null) {
 						_lang($info->display_value);
 					} else if ($info->values != null) { 
-						//$logger->error(print_r($info->values, true));
 						for ($i = 0; $i < count($info->values); $i++) {
 							$valArray = $info->values[$i];
 							foreach ((array) $valArray['values'] as $value)
@@ -153,4 +153,4 @@ include(PATH_TEMPLATES.'/includes/messages.html.php');
 	<script type="text/javascript" src="http://www.w3.org/QA/Tools/don_prog.js"></script>
 </div>
 	
-<?php include('includes/footer.html.php');
+<?php include(PATH_TEMPLATES.'/html/footer.php');
