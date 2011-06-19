@@ -139,9 +139,10 @@ class Checker {
 			else
 				$display_value = 'charset_none_found';
 		}
-		// XXX Review this. Don't add this field for XHTML served as application/xhtml+xml if it is empty
-		if (!$this->doc->isXML() || $this->doc->mimetypeFromHTTP() != 'application/xhtml+xml' || $display_value != null) 
-			Information::addInfo($category, $title, $value, $display_value);
+		// XXX: review if better to use $vals or $value. Don't add this field for XHTML served as application/xhtml+xml if it is empty
+		if (empty($vals) && $this->doc->isXML() && $this->doc->mimetypeFromHTTP() != 'text/html') 
+			return;
+		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: LANGUAGE FROM HTML LANG ATTRIBUTE
