@@ -23,6 +23,10 @@ require_once(PATH_SRC.'/class.Checker.php');
 $uri = $document[0];
 $curl_info = $document[1];
 $content = $document[2];
+if (isset($_GET['debug_upload']) && $_GET['debug_upload'] == 'true'){
+	$uri = null;
+	$curl_info = null;
+}
 $checker = new Checker($curl_info, $content);
 if (!$checker->checkDocument()) {
 	include(PATH_TEMPLATES."/index.$format.php");
