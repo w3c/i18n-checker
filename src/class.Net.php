@@ -109,6 +109,7 @@ class Net {
 	
 	public static function getDocumentByFileUpload($file) {
 		Message::addMessage(MSG_LEVEL_WARNING, lang("message_file_upload_warning"));
+		Message::addMessage(MSG_LEVEL_WARNING, "The file upload feature is still experimental and not fully tested. Results should be considered with care.");
 		$content = file_get_contents($file['tmp_name']);
 		/* // seems that php deletes temporary file at the end of the request anyway 
 		 * if (Conf::get('delete_uploaded_files'))
