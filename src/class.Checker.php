@@ -201,7 +201,8 @@ class Checker {
 		$display_value = null;
 		if ($value == null)
 			$display_value = 'val_none_found';
-		Information::addInfo($category, $title, $value, $display_value);		
+		if (!empty($value))
+			Information::addInfo($category, $title, $value, $display_value);		
 	}
 	
 	// INFO: TEXT DIRECTION FROM HTML TAGS
@@ -422,7 +423,7 @@ class Checker {
 		$todo = 'rep_lang_no_lang_attr_todo_1';
 		if ($this->doc->mimetypeFromHTTP() != 'text/html' && $xmlLangAttr == null) {
 			$b = true;
-		} else if ($this->doc->mimetypeFromHTTP() != 'application/xhtml+xml' && $this->doc->isXML() && ($xmlLangAttr == null || $langAttr == null)) {
+		} else if ($this->doc->mimetypeFromHTTP() != 'application/xhtml+xml' && $this->doc->isXML() && $xmlLangAttr == null && $langAttr == null) {
 			$b = true;
 			$todo = 'rep_lang_no_lang_attr_todo_2';
 		} else if (!$this->doc->isXML() && $langAttr == null) {
@@ -472,9 +473,9 @@ class Checker {
 		
 		// WARNING: Check that lang and xml:lang come in pairs in xhtml served as text/html
 		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() != "application/xhtml+xml" 
-			&& ($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) {
+			&& (($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) || ($langAttr != null && $xmlLangAttr == null)) {
 			$codes = array();
-			if ($diff != null)
+			if (!empty($diff))// != null)
 				$codes = $diff;
 			if ($xmlLangAttr == null)
 				$codes[] = $this->doc->HTMLTag();
@@ -487,9 +488,9 @@ class Checker {
 			);
 		}
 		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() != "application/xhtml+xml" 
-			&& ($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) {
+			&& (($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) || ($langAttr == null && $xmlLangAttr != null)) {
 			$codes = array();
-			if ($diff != null)
+			if (!empty($diff))// != null)
 				$codes = $diff;
 			if ($langAttr == null)
 				$codes[] = $this->doc->HTMLTag();
