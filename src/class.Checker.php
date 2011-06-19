@@ -328,10 +328,13 @@ class Checker {
 		
 		// ERROR: Conflicting character encoding declarations
 		if (count(array_unique($charsetVals)) != 1) {
+			$codes = $charsetCodes;
+			if (($bom = Information::getFirstVal('charset_bom')) != null) // There is no code line for BOM, so add manually if present
+				$codes[] = "Byte order mark (BOM): $bom";
 			Report::addReport(
 				$category, REPORT_LEVEL_ERROR, 
 				lang('rep_charset_conflict'),
-				lang('rep_charset_conflict_expl', Language::format($charsetCodes, LANG_FORMAT_OL_CODE)),
+				lang('rep_charset_conflict_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_conflict_todo'),
 				lang('rep_charset_conflict_link')
 			);
