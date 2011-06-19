@@ -473,7 +473,7 @@ class Checker {
 		
 		// WARNING: Check that lang and xml:lang come in pairs in xhtml served as text/html
 		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() != "application/xhtml+xml" 
-			&& (($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) || ($langAttr != null && $xmlLangAttr == null)) {
+			&& ((($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) || ($langAttr != null && $xmlLangAttr == null))) {
 			$codes = array();
 			if (!empty($diff))// != null)
 				$codes = $diff;
@@ -488,7 +488,7 @@ class Checker {
 			);
 		}
 		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() != "application/xhtml+xml" 
-			&& (($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) || ($langAttr == null && $xmlLangAttr != null)) {
+			&& ((($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) || ($langAttr == null && $xmlLangAttr != null))) {
 			$codes = array();
 			if (!empty($diff))// != null)
 				$codes = $diff;
