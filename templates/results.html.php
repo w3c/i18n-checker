@@ -76,7 +76,7 @@ include(PATH_TEMPLATES.'/html/messages.php');
 					echo "<td>\n";
 						if ($info->values != null) {
 							$count = count($info->values);
-							echo $count > 1 ? '<ol>' : '';
+							echo $count > 1 ? '<ol class="code">' : '';
 							for ($i = 0; $i < $count; $i++) {
 								if (($code = $info->values[$i]['code']) != null) {
 									echo $count > 1 ? '<li>' : '';

@@ -1322,9 +1322,14 @@ body > .section {
 #report .msg ol, #report .msg p {
 	margin:5px 0;	
 }
-#report .msg ol.code {
+#report .msg ol.code, #infos ol.code {
 	list-style-type: lower-alpha;
-	padding-left: 1.5em;	
+	list-style-position: inside;
+}
+
+#infos ol.code {
+	list-style-type: decimal;
+	list-style-position: inside;
 }
 
 #report .msg ol li {
