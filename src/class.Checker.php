@@ -497,7 +497,7 @@ class Checker {
 			Report::addReport(
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_missing_html_attr'),
-				lang('rep_lang_missing_html_attr_expl', Language::format($diff, LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_missing_html_attr_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
 				lang('rep_lang_missing_html_attr_todo'),
 				lang('rep_lang_missing_attr_link')
 			);
