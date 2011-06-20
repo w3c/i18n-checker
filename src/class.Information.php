@@ -91,4 +91,8 @@ class Information {
 		return count(self::$infos);
 	}
 	
+	public static function clear() {
+		self::$infos = array();
+	}
+	
 }
