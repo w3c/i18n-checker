@@ -118,7 +118,7 @@ class Net {
 		return array(null, null, $content);
 	}
 	
-	private static function fetchDocument($url) {
+	public static function fetchDocument($url) {
 		$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 		
 		$ch = curl_init();
