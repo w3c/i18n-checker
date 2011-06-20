@@ -21,14 +21,31 @@ $logger->info("Initiating tests");
 
 echo '<div id="infos" class="tests block">';
 
-$logger->info("Parsing tests.properties");
-$testConf = parse_ini_file('tests.properties');
-
-if (!$testConf) {
-	$logger->error("Failed to parse tests.properties");
-	echo '<div><br />Failed to parse tests.properties!</div></div>';
-	include(PATH_TEMPLATES.'/html/footer.php');
-	exit(1);	
+if (isset($_GET['test_file'])) {
+	$file = Net::fetchDocument($_GET['test_file']);
+	if ($file[4] != "") {
+		$logger->error("Failed to parse submitted url: ".$_GET['test_file']);
+		echo '<div><br />Failed to parse submitted url as a tests.properties file! ('.$file[4].')</div></div>';
+		include(PATH_TEMPLATES.'/html/footer.php');
+		exit(1);
+	}
+	$tmpfname = tempnam(".", "TEST_");
+	$handle = fopen($tmpfname, "w");
+	fwrite($handle, $file[1]);
+	fclose($handle);
+	$testConf = parse_ini_file($tmpfname);
+	$remote = true;
+	unlink($tmpfname);
+} else {
+	$logger->info("Parsing tests.properties");
+	$testConf = parse_ini_file('tests.properties');
+	$remote = false;
+	if (!$testConf) {
+		$logger->error("Failed to parse tests.properties");
+		echo '<div><br />Failed to parse tests.properties!</div></div>';
+		include(PATH_TEMPLATES.'/html/footer.php');
+		exit(1);	
+	}
 }
 
 $test_url=$testConf['test_url'];
@@ -54,7 +71,7 @@ $startingTime = time();
 $passedCount = 0;
 $failedCount = 0;
 ?>
-<div class="top">Succefully parsed <b><?php echo $count ?></b> tests from tests.properties.</div>
+<div class="top">Succefully parsed <b><?php echo $count ?></b> tests from <?php echo $remote ? 'remote file ('.$_GET['test_file'].')' : 'tests.properties'?>.</div>
 
 <table>
 	<tbody>
