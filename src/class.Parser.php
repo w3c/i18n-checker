@@ -75,7 +75,6 @@ abstract class Parser {
 			if (preg_match("/<!DOCTYPE [^>]*DTD XHTML[^>]+/i", substr($this->markup, '0', Conf::get('perf_head_length')), $matches)) {
 				$this->isXHTML = true;
 				$this->doctype = "XHTML";
-				self::$logger->error($matches[0]);
 				if (preg_match('/1\.0/', $matches[0]))
 					$this->doctype = "XHTML 1.0";
 				if (preg_match('/1\.1/', $matches[0]))
