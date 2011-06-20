@@ -106,7 +106,7 @@ foreach ($tests as $category => $catTests) {
 			}
 			Information::clear();
 			Report::clear();
-			//_flush();
+			_flush();
 			sleep($testConf['test_sleep_between']);
 		}	
 		echo '</tr>';
