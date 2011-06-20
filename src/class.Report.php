@@ -9,6 +9,7 @@ class Report {
 	private static $logger;
 	public static $reports;
 	
+	public $id;
 	public $category;
 	public $severity;
 	public $title;
@@ -20,7 +21,8 @@ class Report {
 		self::$logger = Logger::getLogger('Report');
 	}
 	
-	private function __construct($category, $severity, $title, $explanation, $whattodo, $further) {
+	private function __construct($id, $category, $severity, $title, $explanation, $whattodo, $further) {
+		$this->id = $id;
 		$this->category = $category;
 		$this->severity = $severity;
 		$this->title = $title;
@@ -29,8 +31,9 @@ class Report {
 		$this->further = $further;
 	}
 	
-	public static function addReport($category, $severity, $title, $explanation, $whattodo, $further) {
-		self::$reports[] = new Report($category, $severity, $title, $explanation, $whattodo, $further);
+	// XXX Review how to pass here, better would be to call lang here and not in checker ?
+	public static function addReport($id, $category, $severity, $title, $explanation, $whattodo, $further) {
+		self::$reports[$id] = new Report($id, $category, $severity, $title, $explanation, $whattodo, $further);
 	}
 	
 	private static function filterReports($severity) {
@@ -90,6 +93,9 @@ class Report {
 		return self::$reports; // if sorting failed
 	}
 	
+	public static function clear() {
+		self::$reports = array();
+	}
 }
 
 Report::init();

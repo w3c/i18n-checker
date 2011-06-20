@@ -297,8 +297,9 @@ class Checker {
 		// WARNING: No character encoding information
 		if (empty($charsetVals)) {
 			self::$logger->debug('No charset information found for this document.');
-			Report::addReport($category, 
-				REPORT_LEVEL_WARNING, 
+			Report::addReport(
+				'rep_charset_none',
+				$category, REPORT_LEVEL_WARNING,
 				lang('rep_charset_none'),
 				lang('rep_charset_none_expl'),
 				lang('rep_charset_none_todo'),
@@ -319,7 +320,8 @@ class Checker {
 				})
 			);
 			Report::addReport(
-				$category, REPORT_LEVEL_INFO, 
+				'rep_charset_no_utf8',
+				$category, REPORT_LEVEL_INFO,
 				lang('rep_charset_no_utf8'),
 				lang('rep_charset_no_utf8_expl', Language::format($nonUTF8CharsetCodes, LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_no_utf8_todo'),
@@ -333,7 +335,8 @@ class Checker {
 			if (($bom = Information::getFirstVal('charset_bom')) != null) // There is no code line for BOM, so add manually if present
 				$codes[] = "Byte order mark (BOM): $bom";
 			Report::addReport(
-				$category, REPORT_LEVEL_ERROR, 
+				'rep_charset_conflict',
+				$category, REPORT_LEVEL_ERROR,
 				lang('rep_charset_conflict'),
 				lang('rep_charset_conflict_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_conflict_todo'),
@@ -344,6 +347,7 @@ class Checker {
 		// WARNING: Multiple encoding declarations using the meta tag
 		if (count(Information::getValues('charset_meta')) > 1) {
 			Report::addReport(
+				'rep_charset_multiple_meta',
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_multiple_meta'),
 				lang('rep_charset_multiple_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
@@ -356,6 +360,7 @@ class Checker {
 		if (($bom = Information::getFirstVal('charset_bom')) != null 
 			&& strcasecmp($bom, "UTF-8") == 0) {
 			Report::addReport(
+				'rep_charset_bom_found',
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_bom_found'),
 				lang('rep_charset_bom_found_expl'),
@@ -378,7 +383,8 @@ class Checker {
 			});
 		if (!empty($charsetVals) && empty($inDocCharsets)) {
 			Report::addReport(
-				$category, REPORT_LEVEL_WARNING, 
+				'rep_charset_no_in_doc',
+				$category, REPORT_LEVEL_WARNING,
 				lang('rep_charset_no_in_doc'),
 				lang('rep_charset_no_in_doc_expl', Information::get('charset_http')->values[0]['code']),
 				lang('rep_charset_no_in_doc_todo'),
@@ -390,6 +396,7 @@ class Checker {
 		// /!\ In the following line is the invisible BOM.
 		if (preg_match('/﻿/', substr($this->markup,3))) {
 			Report::addReport(
+				'rep_charset_bom_in_content',
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_charset_bom_in_content'),
 				lang('rep_charset_bom_in_content_expl'),
@@ -436,7 +443,8 @@ class Checker {
 				$expl[] = lang('rep_lang_no_lang_attr_expl_CL', Utils::arrayToCS($a[0]['values']), htmlspecialchars($a[0]['code']));
 			}
 			Report::addReport(
-				$category, REPORT_LEVEL_WARNING, 
+				'rep_lang_no_lang_attr',
+				$category, REPORT_LEVEL_WARNING,
 				lang('rep_lang_no_lang_attr'),
 				$expl,
 				lang($todo),
@@ -447,7 +455,8 @@ class Checker {
 		// ERROR: The lang attribute and the xml:lang attribute in the html tag have different values
 		if ($this->doc->isXML() && $langAttr != null && $xmlLangAttr != null && $langAttr != $xmlLangAttr) {
 			Report::addReport(
-				$category, REPORT_LEVEL_ERROR, 
+				'rep_lang_conflict_html',
+				$category, REPORT_LEVEL_ERROR,
 				lang('rep_lang_conflict_html'),
 				lang('rep_lang_conflict_html_expl', $langAttr, $xmlLangAttr, htmlspecialchars($this->doc->HTMLTag())),
 				lang('rep_lang_conflict_todo'),
@@ -463,6 +472,7 @@ class Checker {
 			if ($xmlLangAttr != null)
 				$codes[] = $this->doc->HTMLTag();
 			Report::addReport(
+				'rep_lang_xml_attr_in_html',
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_xml_attr_in_html'),
 				lang('rep_lang_xml_attr_in_html_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
@@ -480,6 +490,7 @@ class Checker {
 			if ($xmlLangAttr == null)
 				$codes[] = $this->doc->HTMLTag();
 			Report::addReport(
+				'rep_lang_missing_xml_attr',
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_missing_xml_attr'),
 				lang('rep_lang_missing_xml_attr_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
@@ -495,6 +506,7 @@ class Checker {
 			if ($langAttr == null)
 				$codes[] = $this->doc->HTMLTag();
 			Report::addReport(
+				'rep_lang_missing_html_attr',
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_missing_html_attr'),
 				lang('rep_lang_missing_html_attr_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
@@ -512,6 +524,7 @@ class Checker {
 		});
 		if ($malformedAttrs != null) {
 			Report::addReport(
+				'rep_lang_malformed_attr',
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_malformed_attr'),
 				lang('rep_lang_malformed_attr_expl', Language::format(array_unique(Utils::codesFromValArray($malformedAttrs)), LANG_FORMAT_OL_CODE)),
@@ -533,6 +546,7 @@ class Checker {
 			});
 		if (count($nonMatchingAttrs) > 0) {
 			Report::addReport(
+				'rep_lang_conflict',
 				$category, REPORT_LEVEL_WARNING, 
 				lang('rep_lang_conflict'),
 				lang('rep_lang_conflict_expl', Language::format($nonMatchingAttrs, LANG_FORMAT_OL_CODE)),
@@ -556,6 +570,7 @@ class Checker {
 			});
 			if (count($invalidDirNodes) > 0)
 				Report::addReport(
+					'rep_dir_incorrect',
 					'dir_category', REPORT_LEVEL_ERROR, 
 					lang('rep_dir_incorrect'),
 					lang('rep_dir_incorrect_expl', Language::format(Utils::codesFromValArray($invalidDirNodes), LANG_FORMAT_OL_CODE)),
@@ -571,7 +586,8 @@ class Checker {
 		$nonNFCs = Information::getValues('classId_non_nfc');
 		if (count($nonNFCs) > 0) {
 			Report::addReport(
-				'dir_category', REPORT_LEVEL_WARNING, 
+				'rep_misc_non_nfc',
+				'nonLatin_category', REPORT_LEVEL_WARNING, 
 				lang('rep_misc_non_nfc'),
 				lang('rep_misc_non_nfc_expl', count($nonNFCs), Language::format(Utils::codesFromValArray($nonNFCs), LANG_FORMAT_OL_CODE)),
 				lang('rep_misc_non_nfc_todo'),
@@ -590,7 +606,8 @@ class Checker {
 			}
 			if ($count > 0)
 				Report::addReport(
-					'dir_category', REPORT_LEVEL_INFO, 
+					'rep_misc_tags_no_class',
+					'markup_category', REPORT_LEVEL_INFO, 
 					lang('rep_misc_tags_no_class', 'b'),
 					lang('rep_misc_tags_no_class_expl', 'b', count($bTags), $count),
 					lang('rep_misc_tags_no_class_todo', 'b'),
@@ -609,7 +626,8 @@ class Checker {
 			}
 			if ($count > 0)
 				Report::addReport(
-					'dir_category', REPORT_LEVEL_INFO, 
+					'rep_misc_tags_no_class',
+					'markup_category', REPORT_LEVEL_INFO, 
 					lang('rep_misc_tags_no_class', 'i'),
 					lang('rep_misc_tags_no_class_expl', 'i', count($iTags), $count),
 					lang('rep_misc_tags_no_class_todo', 'i'),
