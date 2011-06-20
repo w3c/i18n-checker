@@ -1179,6 +1179,50 @@ body > .section {
 	width:20%;
 }
 
+#infos.tests {
+	font-size: small;
+	padding: 0.5em 2.5em;
+	padding-top: 0;
+}
+#infos.tests > div:first-child {
+	margin-bottom:1em;
+}
+#infos.tests > div:last-child {
+	margin-top:1em;
+}
+#infos.tests tr td, #infos.tests tr th {
+	width:5%;
+	text-align:center;
+}
+#infos.tests tr:hover {
+	background-color:#EAEBEE;
+}
+#infos.tests tr:hover td {
+	background-color:inherit;
+}
+#infos.tests tr td:nth-child(2), #infos.tests tr th:nth-child(2) {
+	width:auto !important;
+	text-align:left;
+}
+#infos.tests tr > *:first-child {
+	width:0.5em !important;
+	background-color:#EAEBEE;
+}
+#infos.tests .success a {
+	color:green;
+	background-color:transparent;
+}
+#infos.tests .success {
+	background-color:#AFFFAF;
+}
+#infos.tests .fail a {
+	color:#B10000;
+	background-color:transparent;
+}
+#infos.tests .fail {
+	background-color:#FFB0B0;
+}
+
 #infos td strong {
 	background-color:#F17900;
 	font-size:17px;
@@ -1330,6 +1374,15 @@ body > .section {
 #infos ol.code {
 	list-style-type: decimal;
 	list-style-position: inside;
+}
+
+#infos .more {
+	background-color: #EAEBEE;
+	margin: -0.4em;
+	margin-top: 0.4em;
+	padding: 0.1em;
+	font-size: smaller;
+	padding-left: 1.6em;	
 }
 
 #report .msg ol li {
