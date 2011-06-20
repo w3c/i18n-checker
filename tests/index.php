@@ -118,7 +118,7 @@ foreach ($tests as $category => $catTests) {
 </table>
 
 <?php echo '<div class="result">Ran a total of <b>', $passedCount + $failedCount, '</b> checks in <b>', time() - $startingTime, '</b> seconds. <b>',
-	$failedCount, '/', $failedCount + $passedCount, '</b> checks failed.</div>' ?>
+	$failedCount, '</b> checks failed.</div>' ?>
 
 </div>
 
