@@ -5,7 +5,7 @@ require_once(PATH_SRC.'/class.Message.php');
 $title = "W3C I18n Checker";
 $css[] = "base_ucn.css";
 $css[] = "minimum.css";
-include(PATH_TEMPLATES.'/includes/head.html.php');
+include(PATH_TEMPLATES.'/html/head.php');
 ?>
 
-<?php include(PATH_TEMPLATES.'/includes/footer.html.php');
+<?php include(PATH_TEMPLATES.'/html/footer.php');
