@@ -1,13 +1,27 @@
 <?php
+/**
+ * Contains and initializes the ParserPHPQuery class.
+ * @package i18nChecker
+ */
+/**
+ * 
+ */
 require_once(PATH_LIB.'/phpQuery.php');
-
+/**
+ * ParserPHPQuery class
+ * 
+ * @package i18nChecker
+ * @author Thomas Gambet <tgambet@w3.org>
+ * @copyright 2011 W3C ® (MIT, ERCIM, Keio)
+ * @license http://www.w3.org/Consortium/Legal/copyright-software
+ */
 final class ParserPHPQuery extends Parser {
 	
 	private static $logger;
 	private $doc;
 	private $forcedHTML = false;
 	
-	public static function init() {
+	public static function _init() {
 		self::$logger = Logger::getLogger('Parser.PHPQuery');
 	}
 	
@@ -141,4 +155,4 @@ final class ParserPHPQuery extends Parser {
 	} */
 }
 
-ParserPHPQuery::init();
+ParserPHPQuery::_init();

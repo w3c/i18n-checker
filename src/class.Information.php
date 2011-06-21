@@ -1,5 +1,18 @@
 <?php
-
+/**
+ * Contains the Information class.
+ * @package i18nChecker
+ */
+/**
+ * An Information on the result page
+ * 
+ * An Information is a row of the information table on the i18n-checker result page.
+ * 
+ * @package i18nChecker
+ * @author Thomas Gambet <tgambet@w3.org>
+ * @copyright 2011 W3C ® (MIT, ERCIM, Keio)
+ * @license http://www.w3.org/Consortium/Legal/copyright-software
+ */
 class Information {
 	
 	public static $infos;

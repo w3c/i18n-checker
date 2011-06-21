@@ -1,8 +1,23 @@
 <?php 
+/**
+ * Contains and initializes the Parser class.
+ * @package i18nChecker
+ */
+/**
+ * 
+ */
 require_once('class.Parser.PHPQuery.php');
 require_once('class.Parser.HTML5Lib.php');
 require_once('class.Utils.php');
-
+/**
+ * Parser class
+ * 
+ * @todo review
+ * @package i18nChecker
+ * @author Thomas Gambet <tgambet@w3.org>
+ * @copyright 2011 W3C ® (MIT, ERCIM, Keio)
+ * @license http://www.w3.org/Consortium/Legal/copyright-software
+ */
 abstract class Parser {
 	
 	private static $logger;
@@ -24,7 +39,7 @@ abstract class Parser {
 	protected $metaLanguages;
 	//protected $langsFromMeta;
 	
-	public static function init() {
+	public static function _init() {
 		self::$logger = Logger::getLogger('Parser');
 	}
 	
@@ -343,4 +358,4 @@ abstract class Parser {
 	}
 }
 
-Parser::init();
+Parser::_init();

@@ -1,10 +1,24 @@
 <?php
-
+/**
+ * Contains and initializes the Net class.
+ * @package i18nChecker
+ */
+/**
+ * HTTP related functions
+ * 
+ * This class defines functions to fetch and return the content and important 
+ * information about remote or uploaded documents. 
+ * 
+ * @package i18nChecker
+ * @author Thomas Gambet <tgambet@w3.org>
+ * @copyright 2011 W3C ® (MIT, ERCIM, Keio)
+ * @license http://www.w3.org/Consortium/Legal/copyright-software
+ */
 class Net {
 	
 	private static $logger;
 	
-	public static function init() {
+	public static function _init() {
 		self::$logger = Logger::getLogger('Net');
 	}
 	
@@ -42,15 +56,7 @@ class Net {
 		$curl_info = $result[2];
 		$curl_error = $result[3];
 		
-		self::$logger->info("Effective URI: ".$uri);
-		
-		// Add the content-language header value that we parsed before to $curl_info
-		if (isset($_REQUEST['doc_content_language'])) {
-			$curl_info['content_language'] = $_REQUEST['doc_content_language'];
-			unset($_REQUEST['doc_content_language']);
-			self::$logger->debug("Found Content-Language header: ".$curl_info['content_language']);
-		} 
-		
+		self::$logger->debug("Effective URI: ".$uri);	
 		self::$logger->debug("Curl Info: ".print_r($curl_info, true));
 		
 		// Report errors to the user. Most common cases should be internationalized.
@@ -122,19 +128,25 @@ class Net {
 		$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
 		
 		$ch = curl_init();
-		curl_setopt( $ch, CURLOPT_USERAGENT, Conf::get('curl_user_agent') );
-		curl_setopt( $ch, CURLOPT_URL, $url );
+		curl_setopt($ch, CURLOPT_USERAGENT, Conf::get('curl_user_agent'));
+		curl_setopt($ch, CURLOPT_URL, $url);
 		if (Conf::get('curl_cookiejar_enabled'))
-			curl_setopt( $ch, CURLOPT_COOKIEJAR, Conf::get('curl_cookiejar_path') );
-		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
-		curl_setopt( $ch, CURLOPT_ENCODING, "" );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt( $ch, CURLOPT_AUTOREFERER, true );
-		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );    # required for https urls
-		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, Conf::get('curl_connect_timeout') );
-		curl_setopt( $ch, CURLOPT_TIMEOUT, Conf::get('curl_timeout') );
-		curl_setopt( $ch, CURLOPT_MAXREDIRS, Conf::get('curl_maxredirs') );
-		curl_setopt( $ch, CURLOPT_HEADERFUNCTION, 'self::getLanguageHeader' );
+			curl_setopt( $ch, CURLOPT_COOKIEJAR, Conf::get('curl_cookiejar_path'));
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_ENCODING, "");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);    # required for https urls
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, Conf::get('curl_connect_timeout'));
+		curl_setopt($ch, CURLOPT_TIMEOUT, Conf::get('curl_timeout'));
+		curl_setopt($ch, CURLOPT_MAXREDIRS, Conf::get('curl_maxredirs'));
+		// Curl does not parse the Content-Language header so we need a callback function (cf CURLOPT_HEADERFUNCTION)
+		curl_setopt($ch, CURLOPT_HEADERFUNCTION, function ($ch, $curl_info) use (&$_REQUEST) {
+			$pattern = '/Content-Language:(.*?)\n/';
+			if (preg_match($pattern, $curl_info, $result))
+				$_REQUEST['doc_content_language'] = trim($result[1]);
+			return strlen($curl_info);
+		});
 		
 		self::$logger->debug("CURL Options: ".
 				"\n\t\t User-Agent: ".Conf::get('curl_user_agent').
@@ -155,17 +167,15 @@ class Net {
 		$error = curl_error($ch);
 		curl_close($ch);
 		
-		return array( $response['url'], $content, $response, $code, $error );
-	}
-	
-	// Curl does not parse the Content-Language header so we need a callback function (cf CURLOPT_HEADERFUNCTION)
-	private static function getLanguageHeader($ch, $curl_info) {
-		$pattern = '/Content-Language:(.*?)\n/';
-		if (preg_match($pattern, $curl_info, $result)) {
-			$_REQUEST['doc_content_language'] = trim($result[1]);
-		}
-		return strlen($curl_info);
+		// Add the content-language header value that we parsed before to $curl_info
+		if (isset($_REQUEST['doc_content_language']) && $_REQUEST['doc_content_language'] != "") {
+			$response['content_language'] = $_REQUEST['doc_content_language'];
+			unset($_REQUEST['doc_content_language']);
+			self::$logger->debug("Found Content-Language header: ".$response['content_language']);
+		} 
+		
+		return array($response['url'], $content, $response, $code, $error);
 	}
 }
 
-Net::init();
+Net::_init();

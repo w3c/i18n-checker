@@ -1,9 +1,25 @@
 <?php
+/**
+ * Contains and initializes the Checker class.
+ * @package i18nChecker
+ */
+/**
+ * 
+ */
 require_once('class.N11n.php');
 require_once('class.Parser.php');
 require_once('class.Information.php');
 require_once('class.Report.php');
-
+/**
+ * The I18n Checker
+ * 
+ * This class holds the logic of the i18n checker.
+ * 
+ * @package i18nChecker
+ * @author Richard Ishida <ishida@w3.org> & Thomas Gambet <tgambet@w3.org>
+ * @copyright 2011 W3C ® (MIT, ERCIM, Keio)
+ * @license http://www.w3.org/Consortium/Legal/copyright-software
+ */
 class Checker {
 
 	private static $logger;
@@ -11,7 +27,7 @@ class Checker {
 	private $markup;
 	private $doc;
 	
-	public static function init() {
+	public static function _init() {
 		self::$logger = Logger::getLogger('Checker');
 	}
 	
@@ -139,7 +155,6 @@ class Checker {
 			else
 				$display_value = 'charset_none_found';
 		}
-		// XXX: review if better to use $vals or $value. Don't add this field for XHTML served as application/xhtml+xml if it is empty
 		if (empty($vals) && $this->doc->isXML() && $this->doc->mimetypeFromHTTP() != 'text/html') 
 			return;
 		Information::addInfo($category, $title, $value, $display_value);
@@ -637,4 +652,4 @@ class Checker {
 	}
 }
 
-Checker::init();
+Checker::_init();

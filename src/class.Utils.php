@@ -1,5 +1,18 @@
 <?php 
-
+/**
+ * Contains the Utils class.
+ * @package i18nChecker
+ */
+/**
+ * A utility class
+ * 
+ * Contains several useful functions to be used by the checker logic.
+ * 
+ * @package i18nChecker
+ * @author Thomas Gambet <tgambet@w3.org>
+ * @copyright 2011 W3C ® (MIT, ERCIM, Keio)
+ * @license http://www.w3.org/Consortium/Legal/copyright-software
+ */
 class Utils {
 	
 	private function __construct() {}

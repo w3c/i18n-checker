@@ -1,12 +1,30 @@
 <?php
-
+/**
+ * Contains the Report class.
+ * @package i18nChecker
+ */
+/**
+ * Information severity level for a report message
+ */
 define("REPORT_LEVEL_INFO", "info");
+/**
+ * Warning severity level for a report message
+ */
 define("REPORT_LEVEL_WARNING", "warning");
+/**
+ * Error severity level for a report message
+ */
 define("REPORT_LEVEL_ERROR", "error");
-
+/**
+ * Report class
+ * 
+ * @package i18nChecker
+ * @author Thomas Gambet <tgambet@w3.org>
+ * @copyright 2011 W3C ® (MIT, ERCIM, Keio)
+ * @license http://www.w3.org/Consortium/Legal/copyright-software
+ */
 class Report {
 	
-	private static $logger;
 	public static $reports;
 	
 	public $id;
@@ -16,10 +34,6 @@ class Report {
 	public $explanation;
 	public $whattodo;
 	public $further;
-	
-	public static function init() {
-		self::$logger = Logger::getLogger('Report');
-	}
 	
 	private function __construct($id, $category, $severity, $title, $explanation, $whattodo, $further) {
 		$this->id = $id;
@@ -74,9 +88,8 @@ class Report {
 	}
 	
 	public static function getReportsSorted() {
-		$logger = &self::$logger;
 		$sortedReports = self::$reports; // copy before, sorting is done in place
-		$sort = function($first, $second) use (&$logger) {
+		$sort = function($first, $second) {
 			if ($first->severity == $second->severity)
 				return 0;
 			if ($first->severity == REPORT_LEVEL_ERROR) // ERROR lower than all
@@ -98,4 +111,4 @@ class Report {
 	}
 }
 
-Report::init();
+Report::_init();

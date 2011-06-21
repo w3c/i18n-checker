@@ -1,31 +1,68 @@
 <?php 
-
+/**
+ * Contains and initializes the Checker class.
+ * @package i18nChecker
+ */
+/**
+ * Format modifier to use for lists
+ */
 define("LANG_FORMAT_OL", 0);
+/**
+ * Format modifier to use for lists that contain escaped <<code>> elements
+ */
 define("LANG_FORMAT_OL_CODE", 1);
-
+/**
+ * Language class
+ * 
+ * This class is in charge of:
+ * - loading all language files from the language directory defined in the checker configuration file
+ * - deciding which available language serve to a client based on request headers or parameters
+ * - generating language strings based on parameters
+ * 
+ * @todo lang negociation
+ * @package i18nChecker
+ * @author Thomas Gambet <tgambet@w3.org>
+ * @copyright 2011 W3C ® (MIT, ERCIM, Keio)
+ * @license http://www.w3.org/Consortium/Legal/copyright-software
+ */
 class Language {
-	
+	/**
+	 * Logger for this class
+	 * @var Logger
+	 */
 	static private $logger;
-	
-	// Current language code
+	/**
+	 * Resolved language code for current request
+	 * @var string
+	 */
 	static public $lang;
-	
-	// Current language array
+	/**
+	 * Loaded language array for current request
+	 * @var array
+	 */
 	static public $language;
-	
-	// Available languages (code => displayName) 
+	/**
+	 * Available languages found in the language directory in the form: array(langCode => displayName)
+	 * @var array
+	 */
 	static public $languages; 
-	
-	public static function init() {
+	/**
+	 * Finds all available languages, determines the language for the current requests and load its language file
+	 */
+	public static function _init() {
 		self::$logger = Logger::getLogger('Language');
-		self::$languages = self::getListOfAvailableLanguages(Conf::get('path_languages'));
+		self::$languages = self::getListOfAvailableLanguages(PATH_LANGUAGES);
 		self::$logger->debug("Found languages: ".print_r(self::$languages, true));
 		self::$lang = self::resolveLanguage();
 		self::$logger->info("Current language resolved to: ".self::$lang);
-		self::$language = self::loadLanguage(self::$lang, Conf::get('path_languages'));
+		self::$language = self::loadLanguage(self::$lang, PATH_LANGUAGES);
 		self::$logger->debug("- Loaded strings: ".print_r(self::$language, true));
 	}
-	
+	/**
+	 * Scan the directory passed as parameter to find language files
+	 * @param string $dir path to the directory to scan
+	 * @return array an array with the keys being the language codes and the values the display name in the considered language
+	 */
 	private static function getListOfAvailableLanguages($dir) {
 		self::$logger->debug("Scanning language directory: ".$dir);
 		$langFiles = scandir($dir);
@@ -41,7 +78,12 @@ class Language {
 		}
 		return $languages;
 	}
-	
+	/**
+	 * Determines the language to use with the current request based on the parameter 'lang' if present
+	 * and set to an available language or returns the default language defined in the configuration file
+	 * @todo language negociation
+	 * @return string the resolved language code
+	 */
 	private static function resolveLanguage() {
 		if (isset($_REQUEST['lang'])) {
 			self::$logger->debug("Found lang parameter: ".$_REQUEST['lang']);
@@ -57,8 +99,13 @@ class Language {
 			return Conf::get('default_language');
 		}
 	}
-	
-	// $dir: directory where languages files are located
+	/**
+	 * Loads a specific language files and completes it with the default language file values if
+	 * keys are missing.
+	 * @param string $lang the language to load
+	 * @param string $dir the directory where the language file is located
+	 * @return array the loaded language file
+	 */
 	private static function loadLanguage($lang, $dir) {
 		self::$logger->debug("Loading language file: ".$dir.'/'.$lang.'.properties');
 		$language = parse_ini_file($dir.'/'.$lang.'.properties');
@@ -78,15 +125,24 @@ class Language {
 		}
 		return $language;
 	}
-	
-	public static function lang($str) {
-		$str = (string) $str;
-		if (Conf::get('debug_lang') || !array_key_exists($str, self::$language) || self::$language[$str] == "") {
+	/**
+	 * Returns the language string associated with $key. If other parameters are passed to this function
+	 * they will be used in place of the '%<<i>>' values inside the string.
+	 * For instance if the language file contains: mykey="This string contained a dynamic parameter: %1"<br>
+	 * Calling lang('mykey', 'param1') will return "This string contained a dynamic parameter: param1".
+	 * 
+	 * @param string $key the key used in the language file
+	 * @param string $param (optional) other string parameters can be passed to this function
+	 * @return string the generated internationalized string
+	 */
+	public static function lang($key) {
+		$key = (string) $key;
+		if (Conf::get('debug_lang') || !array_key_exists($key, self::$language) || self::$language[$key] == "") {
 			if (!Conf::get('debug_lang'))
-				self::$logger->warn("Unknown language key or value is empty: ".$str);
-			return "[".$str."]";
+				self::$logger->warn("Unknown language key or value is empty: ".$key);
+			return "[".$key."]";
 		}
-		$result = self::$language[$str];
+		$result = self::$language[$key];
 		$numargs = func_num_args();
 	    if ($numargs >= 2) {
 	        $arg_list = func_get_args();
@@ -96,8 +152,11 @@ class Language {
 	    }
 	    return $result;
 	}
-	
-	public static function _lang($str) {
+	/**
+	 * Equivalent to 'echo lang($key)'
+	 * @param string $key the key used in the language file
+	 */
+	public static function _lang($key) {
 		echo call_user_func_array('lang', func_get_args());
 	}
 	
@@ -122,12 +181,27 @@ class Language {
 	}
 }
 
-Language::init();
-// Convenient shortcuts to Language::$lang, Language::lang($str) and Language::_lang($str)
+Language::_init();
+/**
+ * Convenient shortcut to Language::$lang
+ * @see Language::$lang
+ */
 $lang = Language::$lang;
+/**
+ * Convenient shortcut to Language::lang($arr)
+ * @see Language::lang
+ * @param mixed $arr
+ * @return string
+ */
 function lang($arr) {
 	return call_user_func_array('Language::lang', func_get_args());
 }
+/**
+ * Convenient shortcut to Language::_lang($arr)
+ * @see Language::lang
+ * @param mixed $arr
+ * @return string
+ */
 function _lang($arr) {
 	echo call_user_func_array('Language::lang', func_get_args());
 }
