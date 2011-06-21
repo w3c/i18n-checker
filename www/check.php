@@ -2,9 +2,16 @@
 require_once(realpath(dirname(__FILE__).'/../src/class.Conf.php'));
 require_once(PATH_SRC.'/class.Language.php');
 require_once(PATH_SRC.'/class.Message.php');
+// Check debug_lang parameter
 if (isset($_GET['debug_lang']) && $_GET['debug_lang'] == 'true')
 	Conf::set('debug_lang', 'true');
-$format = isset($_REQUEST['format']) && $_REQUEST['format'] == 'xml' ? 'xml' : 'html'; 
+// Check format parameter
+$format = isset($_REQUEST['format']) && $_REQUEST['format'] != "" ? $_REQUEST['format'] : Conf::get('default_format');
+if (!file_exists(PATH_TEMPLATES."/results.$format.php")) {
+	$format = Conf::get('default_format');
+	Message::addMessage(MSG_LEVEL_WARNING, lang("message_requested_format_unavailable", $_REQUEST['format'], $format));
+}
+// Check uri parameter or uploaded file
 if (!isset($_GET['uri']) && !isset($_FILES['file'])) {
 	Message::addMessage(MSG_LEVEL_ERROR, lang("message_nothing_to_validate"));
 	include(PATH_TEMPLATES."/index.$format.php");
