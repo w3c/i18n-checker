@@ -110,5 +110,3 @@ class Report {
 		self::$reports = array();
 	}
 }
-
-Report::_init();
