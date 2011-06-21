@@ -4,9 +4,9 @@
  * @package i18nChecker
  */
 /**
- * A utility class
+ * Utility class
  * 
- * Contains several useful functions to be used by the checker logic.
+ * Contains several useful functions used by the checker logic.
  * 
  * @package i18nChecker
  * @author Thomas Gambet <tgambet@w3.org>
