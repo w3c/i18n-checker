@@ -45,18 +45,16 @@ class Report {
 		$this->further = $further;
 	}
 	
-	// XXX Review how to pass here, better would be to call lang here and not in checker ?
 	public static function addReport($id, $category, $severity, $title, $explanation, $whattodo, $further) {
 		self::$reports[$id] = new Report($id, $category, $severity, $title, $explanation, $whattodo, $further);
 	}
 	
 	private static function filterReports($severity) {
-		$callBack = function($report) use ($severity) {
-			if ($report->severity == $severity)
-				return true;
-			return false;
-		};
-		return array_filter(self::$reports, $callBack);
+		return array_filter(self::$reports, function($report) use ($severity) {
+					if ($report->severity == $severity)
+						return true;
+					return false;
+				});
 	}
 	
 	public static function getCount() {
