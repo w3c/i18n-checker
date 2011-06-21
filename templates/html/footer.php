@@ -6,7 +6,7 @@
 			<li><a href="http://www.w3.org/International/2007/06/surveyform-2.php?docname=http%3A%2F%2Fvalidator.w3.org%2Fi18n-checker&amp;referer=http%3A%2F%2Fvalidator.w3.org%2Fi18n-checker<?php //echo Conf::get('base_uri'), 'feedback', Conf::get('show_extension') ? '.php' : '' ?>" hreflang="en" title="<?php _lang('footer_feedback_title') ?>"><?php _lang('footer_feedback') ?></a></li>
 	</ul>
 	
-	<form action="<?php echo $lang_action ?>" method="get" id="lang_choice">
+	<form action="<?php echo isset($lang_action) ? $lang_action : '' ?>" method="get" id="lang_choice">
 		<fieldset>
 			<label for="lang">Language</label>
 			<select name="lang" id="lang" title="Select language">
