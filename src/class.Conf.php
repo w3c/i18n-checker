@@ -9,7 +9,7 @@
  * This class is in charge of:
  * - loading the configuration file located by default in ../conf/i18n.conf.
  * - initializing log4php using the properties file located in ../conf/log4php.properties.
- * Log4php classes must be present in a 'log4php' directory under the library folder as defined in i18n.conf. 
+ * Log4php classes must be present in a directory named log4php under the library folder defined in i18n.conf. 
  * 
  * @package i18nChecker
  * @author Thomas Gambet <tgambet@w3.org>
