@@ -5,7 +5,7 @@ require_once(PATH_SRC.'/class.Message.php');
 $title = "W3C I18n Checker";
 $css[] = "base_ucn.css";
 $css[] = "minimum.css";
-include(PATH_TEMPLATES.'/includes/head.html.php');
+include(PATH_TEMPLATES.'/html/head.php');
 ?>
 <div style="margin: 1.5em 2.3em 1em;">
 
@@ -134,4 +134,4 @@ include(PATH_TEMPLATES.'/includes/head.html.php');
 
 </div>
 
-<?php include(PATH_TEMPLATES.'/includes/footer.html.php');
+<?php include(PATH_TEMPLATES.'/html/footer.php');
