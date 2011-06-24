@@ -13,6 +13,7 @@ header('Content-Type: text/html; charset=UTF-8');
 $title = "W3C I18n Checker Tests";
 $css[] = "base_ucn.css";
 $js[] = "mootools-1.2.5-core-more-yc.js";
+//$js[] = "mootools-new.js";
 $lang_action = "";
 include(PATH_TEMPLATES.'/html/head.php');
 
@@ -44,7 +45,7 @@ if (isset($_GET['test_file'])) {
 		$logger->error("Failed to parse tests.properties");
 		echo '<div><br />Failed to parse tests.properties!</div></div>';
 		include(PATH_TEMPLATES.'/html/footer.php');
-		exit(1);	
+		exit(1);
 	}
 }
 
@@ -125,7 +126,7 @@ foreach ($tests as $category => $catTests) {
 			Report::clear();
 			_flush();
 			sleep($testConf['test_sleep_between']);
-		}	
+		}
 		echo '</tr>';
 	}
 }
@@ -141,7 +142,7 @@ foreach ($tests as $category => $catTests) {
 
 <script type="text/javascript">
 	var td = $$('#infos td[title]');
-	td.each(function(element) { 
+	td.each(function(element) {
 		element.store('tip:text', element.title);
 		element.removeProperty('title');
 	});
@@ -151,7 +152,7 @@ foreach ($tests as $category => $catTests) {
 	intro.set('html', intro.get('html') + ' ' + resText.get('html'));
 </script>
 
-<?php 
+<?php
 
 include(PATH_TEMPLATES.'/html/footer.php');
 
@@ -216,8 +217,8 @@ function checkResult($test) {
 	
 	if (empty($test['reports'])) {
 		$logger->info("Report is set but empty. Checking that no report were returned");
-		$returnedReports = array_keys(Report::$reports);
-		if (count($returnedReports) > 0) {
+		if (Report::$reports != null && count(Report::$reports) > 0) {
+			$returnedReports = array_keys(Report::$reports);
 			$logger->info("FAILED: Reports where returned but none were expected: ".implode(', ', $returnedReports));
 			return array(
 				'success' => false,
@@ -261,7 +262,7 @@ function getReportKeys($reportArray) {
 	$result = array();
 	foreach ($reportArray as $report)
 		$result[] = $report['name'];
-	return $result; 
+	return $result;
 }
 
 function startCheck($url) {
@@ -275,7 +276,7 @@ function startCheck($url) {
 }
 
 function constructUri($id, $format, $serveas) {
-	global $test_url, $test_param_id, $test_param_format, $test_param_serveas; 
+	global $test_url, $test_param_id, $test_param_format, $test_param_serveas;
 	return $test_url.'?'.$test_param_id.'='.$id.'&'.$test_param_format.'='.$format.'&'.$test_param_serveas.'='.$serveas;
 }
 
