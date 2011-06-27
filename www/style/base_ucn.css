@@ -233,7 +233,8 @@ select.ucn_text_mime {
 }
 
 img.loader {
-	margin: 1em;
+	margin-top: 2.1em;
+	float: right;
 }
 
 #don_program {
