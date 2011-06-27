@@ -1391,16 +1391,17 @@ body > .section {
 }
 
 code {
-  background-color:#EAEBEE;
-  border:1px dotted #CCCCCC;
-  color:black;
-  display:inline;
-  font-family:Monaco, 'Courier New', monospace;
-  font-size:small;
-  padding-left:0.2em;
-  padding-right:0.2em;
-  white-space:normal;
-  line-height:1.4em;
+	background-color:#EAEBEE;
+	border:1px dotted #CCCCCC;
+	color:black;
+	display:inline;
+	font-family:Monaco, 'Courier New', monospace;
+	font-size:small;
+	padding-left:0.2em;
+	padding-right:0.2em;
+	white-space:normal;
+	line-height:1.4em;
+	border-radius: 3px; 
 }
 
 #infos table ol li {
