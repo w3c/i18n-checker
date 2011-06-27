@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=UTF-8');
 $title = "W3C I18n Checker";
 $css[] = "base_ucn.css";
-$js[] = "mootools-1.2.5-core-more-yc.js";
+$js[] = "mootools-1.3.2.js";
 $js[] = "w3c_unicorn_index.js";
 
 if (isset($_GET['debug_lang']) && $_GET['debug_lang'] == 'true')

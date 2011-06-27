@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=UTF-8');
 $title = "W3C I18n Checker";
 $css[] = "base_ucn.css";
-$js[] = "mootools-1.2.5-core-more-yc.js";
+$js[] = "mootools-1.3.2.js";
 $js[] = "w3c_unicorn_index.js";
 $js[] = "w3c_unicorn_results.js";
 $lang_action = "check";
@@ -11,14 +11,21 @@ $lang_action .= Conf::get('show_extension') ? '.php' : '';
 if (isset($_GET['debug_lang']) && $_GET['debug_lang'] == 'true')
 	Conf::set('debug_lang', 'true');
 
-include(PATH_TEMPLATES.'/html/head.php');
-include(PATH_TEMPLATES.'/html/form.php');
+define('IS_AJAX', isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
+
+if (!IS_AJAX) {
+	include(PATH_TEMPLATES.'/html/head.php');
+	include(PATH_TEMPLATES.'/html/form.php');
+}
 include(PATH_TEMPLATES.'/html/messages.php');
 ?>
 
+<?php if (!IS_AJAX) { ?>
 <script type="text/javascript">
 	window.addEvent('domready', W3Cr.start);
 </script>
+<?php } ?>
+
 
 <div id="results" class="section">
 	<h1 class="title">
@@ -85,6 +92,7 @@ include(PATH_TEMPLATES.'/html/messages.php');
 								}
 							}
 							echo $count > 1 ? '</ol>' : '';
+							echo $count > 4 ? '<div class="more"><a href="#">4 more...</a></div>' : '';
 						}
 					echo '</td>';
 			    echo '</tr>';
@@ -149,8 +157,14 @@ include(PATH_TEMPLATES.'/html/messages.php');
 	</div>
 </div> */ ?>
 
+<?php 
+if (!IS_AJAX) {
+?>
+
 <div id="don_program">
 	<script type="text/javascript" src="http://www.w3.org/QA/Tools/don_prog.js"></script>
 </div>
 	
-<?php include(PATH_TEMPLATES.'/html/footer.php');
+<?php 
+	include(PATH_TEMPLATES.'/html/footer.php');
+}

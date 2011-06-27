@@ -12,8 +12,7 @@ require_once(PATH_SRC.'/class.Checker.php');
 header('Content-Type: text/html; charset=UTF-8');
 $title = "W3C I18n Checker Tests";
 $css[] = "base_ucn.css";
-$js[] = "mootools-1.2.5-core-more-yc.js";
-//$js[] = "mootools-new.js";
+$js[] = "mootools-1.3.2.js";
 $lang_action = "";
 include(PATH_TEMPLATES.'/html/head.php');
 
