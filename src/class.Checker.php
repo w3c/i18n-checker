@@ -229,7 +229,7 @@ class Checker {
 		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
 		if ($_val == null)
-			$value = lang('dir_default_ltr');
+			$display_value = 'dir_default_ltr';
 		Information::addInfo($category, $title, $value, $display_value);	
 	}
 	
@@ -312,14 +312,25 @@ class Checker {
 		// WARNING: No character encoding information
 		if (empty($charsetVals)) {
 			self::$logger->debug('No charset information found for this document.');
-			Report::addReport(
-				'rep_charset_none',
-				$category, REPORT_LEVEL_WARNING,
-				lang('rep_charset_none'),
-				lang('rep_charset_none_expl'),
-				lang('rep_charset_none_todo'),
-				lang('rep_charset_none_link')
-			);
+			if (! $this->doc->isServedAsXML) {
+				Report::addReport(
+					'rep_charset_none',
+					$category, REPORT_LEVEL_WARNING,
+					lang('rep_charset_none'),
+					lang('rep_charset_none_expl'),
+					lang('rep_charset_none_todo'),
+					lang('rep_charset_none_link')
+				);
+			} else {
+				Report::addReport(
+					'rep_no_encoding_xml',
+					$category, REPORT_LEVEL_WARNING,
+					lang('rep_no_encoding_xml'),
+					lang('rep_no_encoding_xml_expl'),
+					lang('rep_no_encoding_xml_todo'),
+					lang('rep_no_encoding_xml_link')
+				);
+			}
 			return;
 		}
 		
@@ -359,6 +370,123 @@ class Checker {
 			);
 		}
 		
+		$debug = true;
+		if ($debug) {
+			#print_r(Information::$infos);
+			#echo '$charsets:';
+			#print_r($charsets);
+			#echo '$charsetVals';
+			#print_r($charsetVals);
+			#echo '<p>$charsetCodes</p>';
+			#echo '<pre>';print_r($charsetCodes); echo '</pre>';
+			#echo 'Information::getValues("charset_xml")';
+			#print_r(Information::getValues('charset_xml'));
+			#echo 'Information::getFirstVal("charset_xml")';
+			#print_r(Information::getFirstVal('charset_xml'));
+		}
+		
+		// WARNING/ERROR: XML Declaration used
+		if (Information::getFirstVal('charset_xml') != null) {
+			if ($this->doc->doctype == 'HTML' || $this->doc->doctype == 'HTML5') {
+				Report::addReport(
+					'rep_charset_xml_decl_used',
+					$category, REPORT_LEVEL_ERROR, 
+					lang('rep_charset_xml_decl_used'),
+					lang('rep_charset_xml_decl_used_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_xml_decl_used_todo'),
+					lang('rep_charset_xml_decl_used_link')
+				);
+			}
+			if ($this->doc->doctype == 'XHTML 1.0' && (! $this->doc->isServedAsXML)) {
+				Report::addReport(
+					'rep_charset_xml_decl_used',
+					$category, REPORT_LEVEL_WARNING, 
+					lang('rep_charset_xml_decl_used'),
+					lang('rep_charset_xml_decl_used_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_xml_decl_used_todo'),
+					lang('rep_charset_xml_decl_used_link')
+				);
+			}
+		}
+		
+		#if ($debug) { echo "<p>n".'Utils::codesFromValArray(Information::getValues("charset_meta"))'."</p>"; print_r(Utils::codesFromValArray(Information::getValues('charset_meta'))); }
+		#if ($debug) { echo "<p>".'$charsetCodes'."</p>"; print_r($charsetCodes); }
+		
+		// WARNING: Meta charset tag will cause validation to fail
+		$_html5Meta = false;
+		foreach ($charsetCodes as $code) {
+			#if ($debug) { echo "<p>".'$code'."</p>"; print_r($code); }
+			if (! preg_match('/http-equiv/', $code)) { $_html5Meta = true; }
+		}
+		if (Information::getFirstVal('charset_meta') != null  && $_html5Meta) {
+			if ($this->doc->doctype != 'HTML5' && $this->doc->doctype != 'XHTML5') {
+				Report::addReport(
+					'rep_meta_charset_invalid',
+					$category, REPORT_LEVEL_WARNING, 
+					lang('rep_meta_charset_invalid'),
+					lang('rep_meta_charset_invalid_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+					lang('rep_meta_charset_invalid_todo'),
+					lang('rep_meta_charset_invalid_link')
+				);
+			}
+		}
+		
+		#if ($debug) { echo "<p>n".'$inDocCharsets'."</p>"; print_r($inDocCharsets); }
+		#if ($debug) { echo "<p>".'Information::getFirstVal("charset_meta")'."</p><pre>"; print_r(Information::getFirstVal('charset_meta')); echo "</pre>"; }
+		
+		// COMMENT: Meta encoding declarations don't work with XML
+		if (Information::getFirstVal('charset_meta') != null) {
+			if ($this->doc->isServedAsXML && strtoupper(Information::getFirstVal('charset_meta')) == 'UTF-8' || strtoupper(Information::getFirstVal('charset_meta') == 'UTF-16')) {
+				Report::addReport(
+					'rep_meta_ineffective',
+					$category, REPORT_LEVEL_INFO, 
+					lang('rep_meta_ineffective'),
+					lang('rep_meta_ineffective_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+					lang('rep_meta_ineffective_todo'),
+					lang('rep_meta_ineffective_link')
+				);
+			}
+		}
+		
+		// WARNING: Incorrect use of meta encoding declaration
+		$inDocCharsets = array_merge(
+			(array) Information::getValues('charset_http'),
+			(array) Information::getValues('charset_bom'),
+			(array) Information::getValues('charset_xml')
+		);
+		$inDocCharsets = 
+			array_filter($inDocCharsets, function ($array) {
+				if ($array['values'] != null && !empty($array['values']))
+					return true;
+				return false;
+			});
+		#if ($debug) { echo "<p>n".'$inDocCharsets'."</p>"; print_r($inDocCharsets); }
+		#if ($debug) { echo "<p>".'Information::getFirstVal("charset_bom")'."</p><pre>"; print_r(Information::getFirstVal('charset_bom')); echo "</pre>"; }
+		if (Information::getFirstVal('charset_meta') != null && empty($inDocCharsets) && Information::getFirstVal('charset_meta') != 'UTF-8' && Information::getFirstVal('charset_meta') != 'UTF-16') {
+			if ($this->doc->doctype == 'XHTML 1.0' && ! $this->doc->isServedAsXML) {
+				#if ($debug) { echo "<p>YES</p>"; }
+				Report::addReport(
+					'rep_incorrect_use_meta',
+					$category, REPORT_LEVEL_WARNING,
+					lang('rep_incorrect_use_meta'),
+					lang('rep_incorrect_use_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+					lang('rep_incorrect_use_meta_todo'),
+					lang('rep_incorrect_use_meta_link')
+				);
+			}
+			if (($this->doc->doctype == 'XHTML 1.0' || $this->doc->doctype == 'XHTML 1.0') && $this->doc->isServedAsXML) {
+				#if ($debug) { echo "<p>YES</p>"; }
+				Report::addReport(
+					'rep_incorrect_use_meta',
+					$category, REPORT_LEVEL_ERROR,
+					lang('rep_incorrect_use_meta'),
+					lang('rep_incorrect_use_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+					lang('rep_incorrect_use_meta_todo'),
+					lang('rep_incorrect_use_meta_link')
+				);
+			}
+		}
+		
 		// WARNING: Multiple encoding declarations using the meta tag
 		if (count(Information::getValues('charset_meta')) > 1) {
 			Report::addReport(
@@ -396,6 +524,7 @@ class Checker {
 					return true;
 				return false;
 			});
+		#if ($debug) { echo "\n".'$inDocCharsets'."\n"; print_r($inDocCharsets); }
 		if (!empty($charsetVals) && empty($inDocCharsets)) {
 			Report::addReport(
 				'rep_charset_no_in_doc',
@@ -405,6 +534,61 @@ class Checker {
 				lang('rep_charset_no_in_doc_todo'),
 				lang('rep_charset_no_in_doc_link')
 			);
+		}
+		
+		// WARNING: No visible in-document encoding specified
+		$inDocCharsets = array_merge(
+			(array) Information::getValues('charset_xml'),
+			(array) Information::getValues('charset_meta')
+			);
+		$inDocCharsets = 
+			array_filter($inDocCharsets, function ($array) {
+				if ($array['values'] != null && !empty($array['values']))
+					return true;
+				return false;
+				});
+		#if ($debug) { echo "\n".'$inDocCharsets'."\n"; print_r($inDocCharsets); }
+		#if ($debug) { echo "\n".'Information::getFirstVal("charset_bom")'."\n"; print_r(Information::getFirstVal('charset_bom')); }
+		if (Information::getFirstVal('charset_bom') != null && empty($inDocCharsets)) {
+			if ((($this->doc->doctype == 'HTML5' || $this->doc->doctype == 'HTML5') && Information::getFirstVal('charset_bom') == 'UTF-8') || 
+				($this->doc->doctype == 'HTML' || $this->doc->doctype == 'XHTML 1.0' || $this->doc->doctype == 'XHTML 1.1')) {
+				Report::addReport(
+					'rep_no_visible_charset',
+					$category, REPORT_LEVEL_WARNING,
+					lang('rep_no_visible_charset'),
+					lang('rep_no_visible_charset_expl', htmlspecialchars(Information::get('charset_http')->values[0]['code'])),
+					lang('rep_no_visible_charset_todo'),
+					lang('rep_no_visible_charset_link')
+				);
+			}
+		}
+		
+		// WARNING: No effective character encoding information
+		$inDocCharsets = array_merge(
+			(array) Information::getValues('charset_http'),
+			(array) Information::getValues('charset_bom'),
+			(array) Information::getValues('charset_meta')
+		);
+		$inDocCharsets = 
+			array_filter($inDocCharsets, function ($array) {
+				if ($array['values'] != null && !empty($array['values']))
+					return true;
+				return false;
+			});
+		#if ($debug) { echo "<p>n".'$inDocCharsets'."</p>"; print_r($inDocCharsets); }
+		#if ($debug) { echo "<p>".'Information::getFirstVal("charset_bom")'."</p><pre>"; print_r(Information::getFirstVal('charset_bom')); echo "</pre>"; }
+		if (Information::getFirstVal('charset_xml') != null && empty($inDocCharsets)) {
+			if ($this->doc->doctype == 'HTML5' || $this->doc->doctype == 'HTML' || ($this->doc->doctype == 'XHTML 1.0' && ! $this->doc->isServedAsXML)) {
+				#if ($debug) { echo "<p>YES</p>"; }
+				Report::addReport(
+					'rep_no_effective_charset',
+					$category, REPORT_LEVEL_WARNING,
+					lang('rep_no_effective_charset'),
+					lang('rep_no_effective_charset_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
+					lang('rep_no_effective_charset_todo'),
+					lang('rep_no_effective_charset_link')
+				);
+			}
 		}
 		
 		// WARNING: BOM in content
