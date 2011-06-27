@@ -30,6 +30,7 @@ abstract class Parser {
 	protected $isXHTML;
 	protected $isXHTML5;
 	public $doctype; 
+	public $isServedAsXML;
 	// DOMDocument
 	protected $document;
 	// Meta charset tags
@@ -48,6 +49,7 @@ abstract class Parser {
 		$this->contentType = $contentType;
 		$this->findDoctype();
 		$this->parseMeta();
+		$this->getMimeType();
 	}
 	
 	public static function getParser($markup, $contentType) {
@@ -167,6 +169,10 @@ abstract class Parser {
 	
 	public function mimetypeFromHTTP() {
 		return ($mime = Utils::mimeFromContentType($this->contentType)) ? $mime : 'N/A';
+	}
+	
+	private function getMimeType() {
+		if (self::mimetypeFromHTTP() == 'text/html') { $this->isServedAsXML = false; }  else { $this->isServedAsXML = true; }
 	}
 	
 	public function charsetFromHTTP() {
