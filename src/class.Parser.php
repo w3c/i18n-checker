@@ -334,7 +334,7 @@ abstract class Parser {
 					//	return;
 					$result[] = array(
 						'code' => $t->dumpTag($node),
-						'values' => count(($p = array_filter(Utils::arrayTrim(preg_split('/[ ]+/', $a->value))))) == 1 ? $p[0] : $p // array_filter(Utils::arrayTrim(preg_split('/[ ]+/', $a->value))) // array_filter with no callback parameter will remove empty elements
+						'values' => count(($p = array_values(array_filter(Utils::arrayTrim(preg_split('/[ ]+/', $a->value)))))) == 1 ? $p[0] : $p // array_filter(Utils::arrayTrim(preg_split('/[ ]+/', $a->value))) // array_filter with no callback parameter will remove empty elements
 					);
 					/*$result[] = array(
 						'code' => $t->dumpTag($node),
