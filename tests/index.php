@@ -13,7 +13,6 @@ header('Content-Type: text/html; charset=UTF-8');
 $title = "W3C I18n Checker Tests";
 $css[] = "base_ucn.css";
 $js[] = "mootools-1.3.2.js";
-$lang_action = "";
 include(PATH_TEMPLATES.'/html/head.php');
 
 $logger = Logger::getLogger('Tests');
@@ -48,13 +47,16 @@ if (isset($_GET['test_file'])) {
 	}
 }
 
-$test_url=$testConf['test_url'];
-$test_param_id=$testConf['test_param_id'];
-$test_param_format=$testConf['test_param_format'];
-$test_param_serveas=$testConf['test_param_serveas'];
-$test_categories=$testConf['test_categories'];
-$test_info_categories=$testConf['test_info_categories'];
+$test_url = Conf::get('test_url') != null ? Conf::get('test_url') : $testConf['test_url'] ;
+$test_param_id = $testConf['test_param_id'];
+$test_param_format = $testConf['test_param_format'];
+$test_param_serveas = $testConf['test_param_serveas'];
+$test_categories = $testConf['test_categories'];
+$test_info_categories = $testConf['test_info_categories'];
 $test_formats=explode(',',$testConf['test_formats']);
+
+if (isset($_GET['test_cat']))
+	$test_categories = (array) $_GET['test_cat'];
 
 $tests = array();
 $categories = array('charset','lang');
@@ -281,7 +283,7 @@ function constructUri($id, $format, $serveas) {
 
 function generateTestURL($uri) {
 	global $testConf;
-	return $testConf['test_url_validator'].'?uri='.urlencode($uri);
+	return Conf::get('base_uri').'check.php?uri='.urlencode($uri);
 }
 
 function getTests($category, $testConf) {
@@ -296,7 +298,7 @@ function getTests($category, $testConf) {
 				'info_charset'   => isset($testConf[$key.'_info_charset']) ? getInfoChecks($testConf[$key.'_info_charset']) : null,
 				'info_lang'   	 => isset($testConf[$key.'_info_lang']) ? getInfoChecks($testConf[$key.'_info_lang']) : null,
 				'info_dir'   	 => isset($testConf[$key.'_info_dir']) ? getInfoChecks($testConf[$key.'_info_dir']) : null,
-				'info_classId' 	 => isset($testConf[$key.'_info_nonLat']) ? getInfoChecks($testConf[$key.'_info_nonLat']) : null,
+				'info_classId' 	 => isset($testConf[$key.'_info_classId']) ? getInfoChecks($testConf[$key.'_info_classId']) : null,
 				'info_headers' 	 => isset($testConf[$key.'_info_headers']) ? getInfoChecks($testConf[$key.'_info_headers']) : null,
 				'reports' 		 => isset($testConf[$key.'_report']) ? getReportChecks($testConf[$key.'_report']) : null 
 			);
