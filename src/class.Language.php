@@ -67,7 +67,7 @@ class Language {
 		self::$logger->debug("Scanning language directory: ".$dir);
 		$langFiles = scandir($dir);
 		foreach ($langFiles as $fileName) {
-			if ($fileName == "." || $fileName == "..")
+			if (is_dir($fileName))
 				continue;
 			if (!preg_match("/[^\.]+\.properties/", $fileName)) {
 				self::$logger->warn("Invalid language filename syntax: ".$fileName);
@@ -163,14 +163,24 @@ class Language {
 	public static function format($value, $type) {
 		switch ($type) {
 			case LANG_FORMAT_OL:
+				$valArray = array_values((array) $value); // cast to array and reindex
+				if (empty($valArray))
+					return null;
+				if (count($valArray) == 1)
+					return $valArray[0];
 				$result = '<ol>';
-				foreach ((array) $value as $val)
+				foreach ($valArray as $val)
 					$result .= '<li>'.$val.'</li>';
 				$result .= '</ol>';
 				return $result;
 			case LANG_FORMAT_OL_CODE:
+				$valArray = array_values((array) $value);
+				if (empty($valArray))
+					return null;
+				if (count($valArray) == 1)
+					return '<code>'.htmlspecialchars($valArray[0]).'</code>';
 				$result = '<ol class="code">';
-				foreach ((array) $value as $val)
+				foreach ($valArray as $val)
 					$result .= '<li><code>'.htmlspecialchars($val).'</code></li>';
 				$result .= '</ol>';
 				return $result;
