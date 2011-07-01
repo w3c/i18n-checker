@@ -51,7 +51,7 @@ var W3Cr = {
 			}
 		});
 		// specific i18n checker
-		$els = $$('#infos strong[class^="classId_non_ascii"]');
+		/*$els = $$('#infos strong[class^="classId_non_ascii"]');
 		if ($els.length >= 1) {
 			$e = new Element('strong').set('text', $els.length);
 			$e.inject($els.getLast(), 'after');
@@ -67,7 +67,7 @@ var W3Cr = {
 		}
 		$els.each(function(value) {
 			value.setStyle('display', 'none');
-		});
+		});*/
 		
 	},
 	
