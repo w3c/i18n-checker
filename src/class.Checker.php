@@ -119,7 +119,7 @@ class Checker {
 		$value = null;
 		$display_value = null;
 		if ($bom != '')
-			$value = array ('code' => null, 'values' => $bom);
+			$value = array ('code' => "Byte order mark (BOM): $bom", 'values' => $bom);
 		else
 			$display_value = 'val_no';
 		Information::addInfo($category, $title, $value, $display_value);
@@ -241,13 +241,13 @@ class Checker {
 		
 		// Remove nodes for which all class names are ASCII
 		//self::$logger->error(print_r($nodes, true));
-		// FIXME! use array_filter
 		if (count($nodes) > 0)
-			array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
+			$nodes = array_filter($nodes, function (&$valArray) {
 				$valArray['values'] = preg_filter('/[^\x20-\x7E]/', '$0', $valArray['values']);
-				if (count($valArray['values']) == 0)
-					unset($nodes[$key]);
-			});
+				if (empty($valArray['values']))
+					return false;
+				return true;
+			});	
 		
 		$category = 'classId_category';
 		$title = 'classId_non_ascii';
@@ -256,16 +256,18 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value);
 		
 		// Remove nodes for which all class names are NFC
-		// FIXME: i shoudln't unset elements while walking through the array. clone first or use array_filter
 		if (count($nodes) > 0)
-			array_walk(&$nodes, function (&$valArray, $key) use (&$nodes) {
+			// FIXME? case class="nonASCII nonNFC" may report two nonNFC names if $valArray[values] is not edited. the check should be value by value.
+			$nodes = array_filter($nodes, function (&$valArray) {
 				if (is_array($valArray['values'])) 
 					$classStr = implode('', $valArray['values']);
 				else
 					$classStr = $valArray['values']; 
 				if (N11n::nfc($classStr) == $classStr)
-					unset($nodes[$key]);
-			});
+					return false;
+				return true;
+			});		
+		
 		$title = 'classId_non_nfc';
 		$value = array_values($nodes);
 		$display_value = count($value) == 0 ? 'val_none' : null;
@@ -358,8 +360,6 @@ class Checker {
 		// ERROR: Conflicting character encoding declarations
 		if (count(array_unique($charsetVals)) != 1) {
 			$codes = $charsetCodes;
-			if (($bom = Information::getFirstVal('charset_bom')) != null) // There is no code line for BOM, so add manually if present
-				$codes[] = "Byte order mark (BOM): $bom";
 			Report::addReport(
 				'rep_charset_conflict',
 				$category, REPORT_LEVEL_ERROR,
@@ -370,7 +370,7 @@ class Checker {
 			);
 		}
 		
-		$debug = true;
+		$debug = false;
 		if ($debug) {
 			#print_r(Information::$infos);
 			#echo '$charsets:';
@@ -388,12 +388,13 @@ class Checker {
 		// WARNING/ERROR: XML Declaration used
 		if (Information::getFirstVal('charset_xml') != null) {
 			if ($this->doc->doctype == 'HTML' || $this->doc->doctype == 'HTML5') {
+				if ($this->doc->doctype == 'HTML') { $_expl = 'rep_charset_xml_decl_used_expl_html'; } else { $_expl = 'rep_charset_xml_decl_used_expl_html5'; }
 				Report::addReport(
 					'rep_charset_xml_decl_used',
 					$category, REPORT_LEVEL_ERROR, 
 					lang('rep_charset_xml_decl_used'),
-					lang('rep_charset_xml_decl_used_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
-					lang('rep_charset_xml_decl_used_todo'),
+					lang($_expl, Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_xml_decl_used_todo_html'),
 					lang('rep_charset_xml_decl_used_link')
 				);
 			}
@@ -402,8 +403,8 @@ class Checker {
 					'rep_charset_xml_decl_used',
 					$category, REPORT_LEVEL_WARNING, 
 					lang('rep_charset_xml_decl_used'),
-					lang('rep_charset_xml_decl_used_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
-					lang('rep_charset_xml_decl_used_todo'),
+					lang('rep_charset_xml_decl_used_expl_xhtml', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_xml_decl_used_todo_xhtml'),
 					lang('rep_charset_xml_decl_used_link')
 				);
 			}
@@ -416,7 +417,7 @@ class Checker {
 		$_html5Meta = false;
 		foreach ($charsetCodes as $code) {
 			#if ($debug) { echo "<p>".'$code'."</p>"; print_r($code); }
-			if (! preg_match('/http-equiv/', $code)) { $_html5Meta = true; }
+			if (preg_match('/<meta/', $code) && ! preg_match('/http-equiv/', $code)) { $_html5Meta = true; }
 		}
 		if (Information::getFirstVal('charset_meta') != null  && $_html5Meta) {
 			if ($this->doc->doctype != 'HTML5' && $this->doc->doctype != 'XHTML5') {
@@ -436,7 +437,8 @@ class Checker {
 		
 		// COMMENT: Meta encoding declarations don't work with XML
 		if (Information::getFirstVal('charset_meta') != null) {
-			if ($this->doc->isServedAsXML && strtoupper(Information::getFirstVal('charset_meta')) == 'UTF-8' || strtoupper(Information::getFirstVal('charset_meta') == 'UTF-16')) {
+			#if ($this->doc->isServedAsXML && strtoupper(Information::getFirstVal('charset_meta')) == 'UTF-8' || strtoupper(Information::getFirstVal('charset_meta') == 'UTF-16')) {
+			if ($this->doc->isServedAsXML) {
 				Report::addReport(
 					'rep_meta_ineffective',
 					$category, REPORT_LEVEL_INFO, 
@@ -461,8 +463,8 @@ class Checker {
 				return false;
 			});
 		#if ($debug) { echo "<p>n".'$inDocCharsets'."</p>"; print_r($inDocCharsets); }
-		#if ($debug) { echo "<p>".'Information::getFirstVal("charset_bom")'."</p><pre>"; print_r(Information::getFirstVal('charset_bom')); echo "</pre>"; }
-		if (Information::getFirstVal('charset_meta') != null && empty($inDocCharsets) && Information::getFirstVal('charset_meta') != 'UTF-8' && Information::getFirstVal('charset_meta') != 'UTF-16') {
+		#if ($debug) { echo "<p>".'Information::getFirstVal("charset_meta")'."</p><pre>"; print_r(Information::getFirstVal('charset_meta')); echo "</pre>"; }
+		if (Information::getFirstVal('charset_meta') != null && empty($inDocCharsets) && strtoupper(Information::getFirstVal('charset_meta')) != 'UTF-8' && strtoupper(Information::getFirstVal('charset_meta')) != 'UTF-16') {
 			if ($this->doc->doctype == 'XHTML 1.0' && ! $this->doc->isServedAsXML) {
 				#if ($debug) { echo "<p>YES</p>"; }
 				Report::addReport(
@@ -474,7 +476,7 @@ class Checker {
 					lang('rep_incorrect_use_meta_link')
 				);
 			}
-			if (($this->doc->doctype == 'XHTML 1.0' || $this->doc->doctype == 'XHTML 1.0') && $this->doc->isServedAsXML) {
+			if (($this->doc->doctype == 'XHTML 1.0' || $this->doc->doctype == 'XHTML 1.1') && $this->doc->isServedAsXML) {
 				#if ($debug) { echo "<p>YES</p>"; }
 				Report::addReport(
 					'rep_incorrect_use_meta',
@@ -491,7 +493,7 @@ class Checker {
 		if (count(Information::getValues('charset_meta')) > 1) {
 			Report::addReport(
 				'rep_charset_multiple_meta',
-				$category, REPORT_LEVEL_WARNING, 
+				$category, REPORT_LEVEL_ERROR, 
 				lang('rep_charset_multiple_meta'),
 				lang('rep_charset_multiple_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_multiple_meta_todo'),
@@ -618,13 +620,29 @@ class Checker {
 		// Only the tag dumps of nodes containing (xml:)lang
 		$htmlLangCodes = Utils::codesFromValArray($htmlLangAttrs);
 		$xmlLangCodes = Utils::codesFromValArray($xmlLangAttrs);
-		
+
+$debug = true;
+/*
+if ($debug) { 
+	echo "<p>".'$langAttr'."</p>"; 
+	echo "<pre>"; print_r($langAttr); echo "</pre>";
+	echo "<p>".'$xmlLangAttr'."</p>"; 
+	echo "<pre>"; print_r($xmlLangAttr);  echo "</pre>";
+	echo "<p>".'$htmlLangAttrs'."</p>"; 
+	echo "<pre>"; print_r($htmlLangAttrs);  echo "</pre>";
+	echo "<p>".'$xmlLangAttrs'."</p>"; 
+	echo "<pre>"; print_r($xmlLangAttrs);  echo "</pre>";
+	echo "<p>".'$htmlLangCodes'."</p>"; 
+	echo "<pre>"; print_r($htmlLangCodes);  echo "</pre>";
+	echo "<p>".'$xmlLangCodes'."</p>"; 
+	echo "<pre>"; print_r($xmlLangCodes);  echo "</pre>";
+	}
+*/		
 		// WARNING: The html tag doesn't have the right language attributes
 		/* 3 tests:
 		 * - mimetype:text/html + doctype HTML  => lang != null
 		 * - mimetype:text/html + doctype XHTML => lang != null && xml:lang != null
 		 * - mimetype:application/xhtml+xml     => xml:lang != null 
-		 */
 		$b = false;
 		$todo = 'rep_lang_no_lang_attr_todo_1';
 		if ($this->doc->mimetypeFromHTTP() != 'text/html' && $xmlLangAttr == null) {
@@ -650,21 +668,68 @@ class Checker {
 				lang('rep_lang_no_lang_attr_link')
 			);
 		}
-
-		// ERROR: The lang attribute and the xml:lang attribute in the html tag have different values
-		if ($this->doc->isXML() && $langAttr != null && $xmlLangAttr != null && $langAttr != $xmlLangAttr) {
+		 */
+		
+		
+		// WARNING: Content-Language meta element
+		if ($this->doc->langsFromMeta() != null) {
+			if ($this->doc->doctype == 'HTML5') { $_reportlevel = REPORT_LEVEL_ERROR; }
+			else { $_reportlevel = REPORT_LEVEL_WARNING; }
 			Report::addReport(
-				'rep_lang_conflict_html',
-				$category, REPORT_LEVEL_ERROR,
-				lang('rep_lang_conflict_html'),
-				lang('rep_lang_conflict_html_expl', $langAttr, $xmlLangAttr, htmlspecialchars($this->doc->HTMLTag())),
-				lang('rep_lang_conflict_todo'),
-				lang('rep_lang_conflict_link')
-			);
-		}
+				'rep_content_lang_meta',
+				$category, $_reportlevel,
+				lang('rep_content_lang_meta'),
+				lang('rep_content_lang_meta_expl', Language::format(Information::$infos['lang_meta']->values[0]['code'], LANG_FORMAT_OL_CODE)),
+				lang('rep_content_lang_meta_todo'),
+				lang('rep_content_lang_meta_link')
+				);
+			}
+
+		// WARNING: The html tag has no language attribute
+		if ($langAttr == null && $xmlLangAttr == null) {
+			if ($this->doc->doctype == 'HTML' || $this->doc->doctype == 'HTML5') { $_todo = 'rep_lang_no_lang_attr_todo_html'; }
+			else if ($this->doc->doctype == 'XHTML 1.0' && ! $this->doc->isServedAsXML) { $_todo = 'rep_lang_no_lang_attr_todo_xhtml'; }
+			else { $_todo = 'rep_lang_no_lang_attr_todo_xml'; }
+			Report::addReport(
+				'rep_lang_no_lang_attr',
+				$category, REPORT_LEVEL_WARNING,
+				lang('rep_lang_no_lang_attr'),
+				lang('rep_lang_no_lang_attr_expl', htmlspecialchars($this->doc->HTMLTag())),
+				lang($_todo),
+				lang('rep_lang_no_lang_attr_link')
+				);
+			}
+
+		// WARNING: The html tag has no effective language declaration
+		if ($langAttr == null && ($xmlLangAttr != null)) {
+			if ($this->doc->doctype == 'HTML' || $this->doc->doctype == 'HTML5' || ($this->doc->doctype == 'XHTML 1.0' && ! $this->doc->isServedAsXML)) {
+				if ($this->doc->doctype == 'XHTML 1.0') { $_todo = 'rep_html_no_effective_lang_todo_xhtml'; }
+				else { $_todo = 'rep_html_no_effective_lang_todo_html'; }
+				Report::addReport(
+					'rep_html_no_effective_lang',
+					$category, REPORT_LEVEL_WARNING,
+					lang('rep_html_no_effective_lang'),
+					lang('rep_html_no_effective_lang_expl', Language::format(Utils::codesFromValArray(Information::getValues('lang_attr_lang')), LANG_FORMAT_OL_CODE)),
+					lang($_todo),
+					lang('rep_html_no_effective_lang_link')
+					);
+				}
+			}
+		if ($xmlLangAttr == null && ($langAttr != null)) {
+			if ($this->doc->isServedAsXML) {
+				Report::addReport(
+					'rep_html_no_effective_lang',
+					$category, REPORT_LEVEL_WARNING,
+					lang('rep_html_no_effective_lang'),
+					lang('rep_html_no_effective_lang_expl', Language::format(Utils::codesFromValArray(Information::getValues('lang_attr_lang')), LANG_FORMAT_OL_CODE)),
+					lang('rep_html_no_effective_lang_todo_xml'),
+					lang('rep_html_no_effective_lang_link')
+					);
+				}
+			}
 		
 		// WARNING: This HTML file contains xml:lang attributes
-		if (!$this->doc->isXML() && ($xmlLangAttrs != null || $xmlLangAttr != null)) {
+		if ($this->doc->doctype == 'HTML' && ($xmlLangAttrs != null || $xmlLangAttr != null)) {
 			$codes = array();
 			if ($xmlLangAttrs != null)
 				$codes = $xmlLangCodes;
@@ -672,7 +737,7 @@ class Checker {
 				$codes[] = $this->doc->HTMLTag();
 			Report::addReport(
 				'rep_lang_xml_attr_in_html',
-				$category, REPORT_LEVEL_WARNING, 
+				$category, REPORT_LEVEL_ERROR, 
 				lang('rep_lang_xml_attr_in_html'),
 				lang('rep_lang_xml_attr_in_html_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
 				lang('rep_lang_xml_attr_in_html_todo'),
@@ -680,8 +745,65 @@ class Checker {
 			);
 		}
 		
+		// WARNING: A tag uses a lang attribute without an associated xml:lang attribute
+/*		if ($langAttr != null && $xmlLangAttr == null) {
+			if ($this->doc->doctype == 'XHTML 1.0' || $this->doc->doctype == 'XHTML 1.1') {
+				Report::addReport(
+					'rep_lang_missing_xml_attr',
+					$category, REPORT_LEVEL_WARNING,
+					lang('rep_lang_missing_xml_attr'),
+					lang('rep_lang_missing_xml_attr_expl', Language::format(Utils::codesFromValArray(Information::getValues('lang_attr_lang')), LANG_FORMAT_OL_CODE)),
+					lang('rep_lang_missing_xml_attr_todo'),
+					lang('rep_lang_missing_xml_attr_link')
+					);
+				}
+			}
+*/		
+
+		// WARNING: A tag uses a lang attribute without an associated xml:lang attribute
+		if ($this->doc->doctype == 'XHTML 1.0' || $this->doc->doctype == 'XHTML 1.1') {
+			if ( (($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) || ($langAttr != null && $xmlLangAttr == null)) {
+				$codes = array();
+				if (!empty($diff))// != null)
+					$codes = $diff;
+				if ($langAttr != null && $xmlLangAttr == null)
+					$codes[] = $this->doc->HTMLTag();
+				if ($this->doc->isServedAsXML) { $_reportlevel = REPORT_LEVEL_ERROR; $_expl = 'rep_lang_missing_xml_attr_expl_xml'; }
+				else { $_reportlevel = REPORT_LEVEL_WARNING; $_expl = 'rep_lang_missing_xml_attr_expl_xhtml'; }
+				Report::addReport(
+					'rep_lang_missing_xml_attr',
+					$category, $_reportlevel, 
+					lang('rep_lang_missing_xml_attr'),
+					lang($_expl, Language::format($codes, LANG_FORMAT_OL_CODE)),
+					lang('rep_lang_missing_xml_attr_todo'),
+					lang('rep_lang_missing_attr_link')
+					);
+				}
+			}
+
+		// WARNING: A tag uses an xml:lang attribute without an associated lang attribute
+		if ((($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) || ($langAttr == null && $xmlLangAttr != null)) {
+			if (($this->doc->doctype == 'XHTML 1.0' && ! $this->doc->isServedAsXML) || $this->doc->doctype == 'HTML5') {
+				$codes = array();
+				if (!empty($diff))// != null)
+					$codes = $diff;
+				if ($langAttr == null && $xmlLangAttr != null)
+					$codes[] = $this->doc->HTMLTag();
+				if ($this->doc->doctype == 'HTML5') { $_reportlevel = REPORT_LEVEL_ERROR; } 
+				else { $_reportlevel = REPORT_LEVEL_WARNING; } 
+				Report::addReport(
+					'rep_lang_missing_html_attr',
+					$category, $_reportlevel, 
+					lang('rep_lang_missing_html_attr'),
+					lang('rep_lang_missing_html_attr_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
+					lang('rep_lang_missing_html_attr_todo'),
+					lang('rep_lang_missing_attr_link')
+					);
+				}
+			}
+
 		// WARNING: Check that lang and xml:lang come in pairs in xhtml served as text/html
-		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() != "application/xhtml+xml" 
+/*		if ($this->doc->isXML() && $this->doc->mimetypeFromHTTP() != "application/xhtml+xml" 
 			&& ((($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) || ($langAttr != null && $xmlLangAttr == null))) {
 			$codes = array();
 			if (!empty($diff))// != null)
@@ -713,6 +835,7 @@ class Checker {
 				lang('rep_lang_missing_attr_link')
 			);
 		}
+*/
 		
 		// WARNING: A language attribute value was incorrectly formed.
 		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
@@ -720,11 +843,11 @@ class Checker {
 				if (preg_match("/^[a-zA-Z0-9]*[^a-zA-Z0-9\-]+[a-zA-Z0-9]*$/", $val))
 					return true; // keep only those that do not match
 				return false;
-		});
+			});
 		if ($malformedAttrs != null) {
 			Report::addReport(
 				'rep_lang_malformed_attr',
-				$category, REPORT_LEVEL_WARNING, 
+				$category, REPORT_LEVEL_ERROR, 
 				lang('rep_lang_malformed_attr'),
 				lang('rep_lang_malformed_attr_expl', Language::format(array_unique(Utils::codesFromValArray($malformedAttrs)), LANG_FORMAT_OL_CODE)),
 				lang('rep_lang_malformed_attr_todo'),
@@ -734,8 +857,14 @@ class Checker {
 		
 		// ERROR: A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
 		$nonMatchingAttrs = array();
-		if ($this->doc->isXML() && count($htmlLangAttrs) > 0)
-			array_walk(&$htmlLangAttrs, function (&$valArray, $key) use (&$xmlLangAttrs, &$nonMatchingAttrs) {
+#		if ($this->doc->isXML() && count($htmlLangAttrs) > 0)
+		// add the html tag first
+		if ($langAttr != null && $xmlLangAttr != null && $langAttr != $xmlLangAttr) {
+			$nonMatchingAttrs[] = $this->doc->HTMLTag();
+			}
+		// now add others in the body
+		if (count($htmlLangAttrs) > 0)
+			array_walk($htmlLangAttrs, function (&$valArray, $key) use (&$xmlLangAttrs, &$nonMatchingAttrs) {
 				$code = $valArray['code'];
 				if (($el = Utils::findCodeIn($code, $xmlLangAttrs)) != null) {
 					if ($el['values'] != $valArray['values']) {
@@ -746,7 +875,7 @@ class Checker {
 		if (count($nonMatchingAttrs) > 0) {
 			Report::addReport(
 				'rep_lang_conflict',
-				$category, REPORT_LEVEL_WARNING, 
+				$category, REPORT_LEVEL_ERROR, 
 				lang('rep_lang_conflict'),
 				lang('rep_lang_conflict_expl', Language::format($nonMatchingAttrs, LANG_FORMAT_OL_CODE)),
 				lang('rep_lang_conflict_todo'),
@@ -754,6 +883,18 @@ class Checker {
 			);
 		}
 		
+		// ERROR: The lang attribute and the xml:lang attribute in the html tag have different values
+/*		if ($langAttr != null && $xmlLangAttr != null && $langAttr != $xmlLangAttr) {
+			Report::addReport(
+				'rep_lang_conflict_html',
+				$category, REPORT_LEVEL_ERROR,
+				lang('rep_lang_conflict_html'),
+				lang('rep_lang_conflict_html_expl', $langAttr, $xmlLangAttr, htmlspecialchars($this->doc->HTMLTag())),
+				lang('rep_lang_conflict_todo'),
+				lang('rep_lang_conflict_link')
+			);
+		}
+*/		
 	}
 	
 	private function addReportDirValues() {
@@ -797,9 +938,9 @@ class Checker {
 		// INFO: <b> tags found in source
 		$bTags = $this->doc->getElementsByTagName('b');
 		$count = 0;
-		if (count($bTags) > 0) {
+		if ($bTags->length > 0) {
 			foreach ($bTags as $bTag) {
-				if ($bTag->hasAttributes() || $bTag->attributes->getNamedItem('class') == null) {
+				if (! $bTag->hasAttributes() || $bTag->attributes->getNamedItem('class') == null) {
 					$count++;
 				}
 			}
@@ -808,7 +949,7 @@ class Checker {
 					'rep_misc_tags_no_class',
 					'markup_category', REPORT_LEVEL_INFO, 
 					lang('rep_misc_tags_no_class', 'b'),
-					lang('rep_misc_tags_no_class_expl', 'b', count($bTags), $count),
+					lang('rep_misc_tags_no_class_expl', 'b', $bTags->length, $count),
 					lang('rep_misc_tags_no_class_todo', 'b'),
 					lang('rep_misc_tags_no_class_link')
 				);
@@ -817,9 +958,9 @@ class Checker {
 		// INFO: <i> tags found in source
 		$iTags = $this->doc->getElementsByTagName('i');
 		$count = 0;
-		if (count($iTags) > 0) {
+		if ($iTags->length > 0) {
 			foreach ($iTags as $iTag) {
-				if ($iTag->hasAttributes() || $iTag->attributes->getNamedItem('class') == null) {
+				if (! $iTag->hasAttributes() || $iTag->attributes->getNamedItem('class') == null) {
 					$count++;
 				}
 			}
@@ -828,7 +969,7 @@ class Checker {
 					'rep_misc_tags_no_class',
 					'markup_category', REPORT_LEVEL_INFO, 
 					lang('rep_misc_tags_no_class', 'i'),
-					lang('rep_misc_tags_no_class_expl', 'i', count($iTags), $count),
+					lang('rep_misc_tags_no_class_expl', 'i', $iTags->length, $count),
 					lang('rep_misc_tags_no_class_todo', 'i'),
 					lang('rep_misc_tags_no_class_link')
 				);
