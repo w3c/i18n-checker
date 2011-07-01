@@ -1226,12 +1226,18 @@ body > .section {
 
 #infos td strong {
 	background-color:#F17900;
-	font-size:17px;
+	font-size:18px;
 	padding:2px 5px;
 	color:white;
 	line-height:28px;
-}
-
+	border-radius: 5px;
+	}
+#infos td strong { /* experimental extension */
+	text-shadow: 1px 1px 1px rgba(0,0,0,.3);
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	box-shadow: 0 2px 2px -1px rgba(0, 0, 0, .4), 0 .9em .5em -0.2em rgba(255, 255, 255, .2) inset;
+	}
 #results .noissues {
 	color: white;
 	font-weight:bold;
@@ -1240,6 +1246,24 @@ body > .section {
 	border:1px solid #17882A;
 	padding: 0.3em !important;
 	margin-top:10px;
+}
+
+#results .noissues {
+	color: white;
+	font-weight:500;
+	font-size:1.3em;
+	background-color: #55B05A;
+	border:1px solid #55B05A;
+	padding: 0.2em !important;
+	margin-top:10px;
+	font-family: "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+}
+
+#results .noissues { /* experimental extension */
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	box-shadow: 0 2px 2px -1px rgba(0, 0, 0, .4), 0 .9em .5em -0.2em rgba(255, 255, 255, .2) inset;
 }
 
 .backtop {
@@ -1370,6 +1394,11 @@ body > .section {
 #report .msg ol.code, #infos ol.code {
 	list-style-type: lower-alpha;
 	list-style-position: inside;
+}
+
+#report .highlight {
+	font-weight:bold;
+	font-size:120%;
 }
 
 #infos ol.code {
