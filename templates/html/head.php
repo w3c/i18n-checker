@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang ?>" lang="<?php echo $lang ?>">
 <head>
 	<title><?php echo $title ?></title>
+	<link rel="shortcut icon" href="<?php echo Conf::get('base_uri') ?>images/favicon.ico" type="image/x-icon" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rev="start" href="<?php echo Conf::get('base_uri') ?>" title="Home Page" />
 <?php if (isset($css)) foreach($css as $sheet) { ?>
