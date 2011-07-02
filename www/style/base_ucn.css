@@ -1223,7 +1223,13 @@ body > .section {
 #infos.tests .fail {
 	background-color:#FFB0B0;
 }
-
+#infos.tests .undef a {
+	color:#6D5A02;
+	background-color:transparent;
+}
+#infos.tests .undef {
+	background-color:#FFED73;
+}
 #infos td strong {
 	background-color:#F17900;
 	font-size:18px;
