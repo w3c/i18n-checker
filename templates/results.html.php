@@ -92,7 +92,7 @@ include(PATH_TEMPLATES.'/html/messages.php');
 								}
 							}
 							echo $count > 1 ? '</ol>' : '';
-							echo $count > 4 ? '<div class="more"><a href="#">4 more...</a></div>' : '';
+							//echo $count > 4 ? '<div class="more"><a href="#">4 more...</a></div>' : '';
 						}
 					echo '</td>';
 			    echo '</tr>';
