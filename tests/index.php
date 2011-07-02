@@ -10,6 +10,8 @@ require_once(PATH_SRC.'/class.Net.php');
 require_once(PATH_SRC.'/class.Checker.php');
 require_once(PATH_SRC.'/class.Test.php');
 
+set_time_limit(Conf::get('test_execution_time_limit'));
+
 header('Content-Type: text/html; charset=UTF-8');
 $title = "W3C I18n Checker Tests";
 $css[] = "base_ucn.css";
@@ -117,7 +119,7 @@ foreach ($tests as $category => $catTests) {
 			Information::clear();
 			Report::clear();
 			_flush();
-			sleep(Conf::get('test_sleep_between'));
+			usleep(Conf::get('test_sleep_between'));
 		}
 		echo '</tr>';
 	}
