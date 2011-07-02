@@ -1246,26 +1246,14 @@ body > .section {
 	}
 #results .noissues {
 	color: white;
-	font-weight:bold;
-	font-size:1.1em;
-	background-color: #1DAA34;
-	border:1px solid #17882A;
-	padding: 0.3em !important;
-	margin-top:10px;
-}
-
-#results .noissues {
-	color: white;
-	font-weight:500;
-	font-size:1.3em;
+	font-size:1.2em;
 	background-color: #55B05A;
 	border:1px solid #55B05A;
-	padding: 0.2em !important;
+	padding: 0.3em !important;
 	margin-top:10px;
 	font-family: "Bitstream Vera Sans", Verdana, Arial, sans-serif;
-}
-
-#results .noissues { /* experimental extension */
+	
+	/* experimental extension */
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 	border-radius:5px;
