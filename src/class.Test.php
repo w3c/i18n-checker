@@ -59,17 +59,15 @@ class Test {
 	}
 	
 	static function checkResult($test) {
-		global $test_info_categories;
 		// Loop through info subcategories (info_charset, info_lang, etc...)
-		foreach ($test_info_categories as $info_category) {
+		$infoHasBeenChecked = false;
+		foreach (Conf::get('test_info_categories') as $info_category) {
 			if ($test[$info_category] === null) {
 				self::$logger->info("$info_category is not set for this test. Ignoring.");
 				continue;
 			}
+			$infoHasBeenChecked = true;
 			self::$logger->info("- Starting check for info category $info_category");
-			//$test[$info_category] = getInfoTests($test[$info_category]);
-			//self::$logger->info("Infos to check are: ".$test[$info_category] == null ? 'none present' : print_r($test[$info_category], true));
-			
 			if (empty($test[$info_category])) {
 				//Information::getValuesStartingWith('charset_')
 				$realCatName = preg_replace('/info_/', '', $info_category).'_';
@@ -112,6 +110,10 @@ class Test {
 		
 		if ($test['reports'] === null) {
 			self::$logger->info("There is no report check for this test.");
+			if (!$infoHasBeenChecked)
+				return array(
+					'success' => null
+				);
 			return array(
 				'success' => true
 			);
@@ -178,12 +180,10 @@ class Test {
 	}
 	
 	static function constructUri($id, $format, $serveas) {
-		global $test_url, $test_param_id, $test_param_format, $test_param_serveas;
-		return $test_url.'?'.$test_param_id.'='.$id.'&'.$test_param_format.'='.$format.'&'.$test_param_serveas.'='.$serveas;
+		return Conf::get('test_url').'?'.Conf::get('test_param_id').'='.$id.'&'.Conf::get('test_param_format').'='.$format.'&'.Conf::get('test_param_serveas').'='.$serveas;
 	}
 	
 	static function generateTestURL($uri) {
-		global $testConf;
 		return Conf::get('base_uri').'check.php?uri='.urlencode($uri);
 	}
 	
