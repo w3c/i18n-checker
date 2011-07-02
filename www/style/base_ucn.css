@@ -1191,6 +1191,9 @@ body > .section {
 #infos.tests > div:last-child {
 	margin-top:1em;
 }
+#infos.tests td.warning {
+	background:url(../images/icone_warning_b.png) no-repeat 99% center;
+}
 #infos.tests tr td, #infos.tests tr th {
 	width:5%;
 	text-align:center;

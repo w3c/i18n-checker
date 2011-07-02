@@ -83,7 +83,7 @@ foreach ($tests as $category => $catTests) {
 		$logger->info("# Starting test ".$test['name']." #");
 		$logger->debug("Test data: ".print_r($test, true));
 		echo '<tr>';
-		echo '<td>', $i, '</td><td>', $test['name'], '</td>';
+		echo '<td>', $i, '</td><td', $test['warning'] ? ' class="warning" title="'.$test['warning'].'"' : '', '>', $test['name'], '</td>';
 		$i++;
 		$testFor = explode(',', $test['test_for']);
 		foreach ($test_formats as $format) {
@@ -130,7 +130,7 @@ foreach ($tests as $category => $catTests) {
 </table>
 
 <?php echo '<div class="result">Ran a total of <b>', $passedCount + $failedCount, '</b> checks in <b>', time() - $startingTime, '</b> seconds. <b>',
-	$failedCount, '</b> checks failed.</div>' ?>
+	$failedCount, '</b> check(s) failed.</div>' ?>
 
 </div>
 
