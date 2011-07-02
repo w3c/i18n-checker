@@ -28,7 +28,8 @@ var W3Cr = {
 		$$('#report .section').each(function(section) {
 			W3Cr.close(section);
 		});
-		$$('#infos strong[class]').each(function(value) {
+		// specific i18n checker
+		/*$$('#infos strong[class]').each(function(value) {
 			var className = value.getProperty('class');
 			var code = $$('#infos code[class=' + className + ']')[0];
 			if (code != null) {
@@ -49,9 +50,9 @@ var W3Cr = {
 					value.removeClass('emphasized');
 				});
 			}
-		});
-		// specific i18n checker
-		/*$els = $$('#infos strong[class^="classId_non_ascii"]');
+		});*/
+		// Count the values in the non-ascii and non-nfc names and replace the values by the count
+		$els = $$('#infos strong[class^="classId_non_ascii"]');
 		if ($els.length >= 1) {
 			$e = new Element('strong').set('text', $els.length);
 			$e.inject($els.getLast(), 'after');
@@ -67,8 +68,11 @@ var W3Cr = {
 		}
 		$els.each(function(value) {
 			value.setStyle('display', 'none');
-		});*/
-		
+		});
+		// Hide BOM code line
+		$bomCode = $$('code.charset_bom_0');
+		if ($bomCode != null)
+			$bomCode.setStyle('display', 'none');
 	},
 	
 	toggle: function(section) {
