@@ -314,6 +314,18 @@ class Checker {
 			})
 		);
 		
+#print_r(Information::$infos);
+#echo '<p>$charsets:</p>';
+#echo '<pre>'; print_r($charsets); echo '</pre>';
+#echo '<p>$charsetVals</p>';
+#echo '<pre>'; print_r($charsetVals); echo '</pre>'; 
+#echo '<p>$charsetCodes</p>';
+#echo '<pre>';print_r($charsetCodes); echo '</pre>';
+#echo 'Information::getValues("charset_xml")';
+#print_r(Information::getValues('charset_xml'));
+#echo 'Information::getFirstVal("charset_xml")';
+#print_r(Information::getFirstVal('charset_xml'));
+		
 		// WARNING: No character encoding information
 		if (empty($charsetVals)) {
 			self::$logger->debug('No charset information found for this document.');
@@ -339,7 +351,7 @@ class Checker {
 			return;
 		}
 		
-		// INFO: Non UTF-8 charset declared
+		// INFO: Non-UTF8 character encoding declared
 		if (!in_array("UTF-8", $charsetVals) || count(array_unique($charsetVals)) > 1) {
 			$nonUTF8CharsetCodes = Utils::codesFromValArray(
 				array_filter($charsets, function ($array) {
@@ -371,21 +383,6 @@ class Checker {
 				lang('rep_charset_conflict_todo'),
 				lang('rep_charset_conflict_link')
 			);
-		}
-		
-		$debug = false;
-		if ($debug) {
-			#print_r(Information::$infos);
-			#echo '$charsets:';
-			#print_r($charsets);
-			#echo '$charsetVals';
-			#print_r($charsetVals);
-			#echo '<p>$charsetCodes</p>';
-			#echo '<pre>';print_r($charsetCodes); echo '</pre>';
-			#echo 'Information::getValues("charset_xml")';
-			#print_r(Information::getValues('charset_xml'));
-			#echo 'Information::getFirstVal("charset_xml")';
-			#print_r(Information::getFirstVal('charset_xml'));
 		}
 		
 		// WARNING/ERROR: XML Declaration used
@@ -901,16 +898,27 @@ if ($debug) {
 	}
 	
 	private function addReportDirValues() {
+		
 		// ERROR: Incorrect values used for dir attribute
 		$dirNodes = $this->doc->getNodesWithAttr('dir');
 		$isXHTML = $this->doc->isXHTML1x;
 		if (count($dirNodes) > 0) {
-			$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXHTML) {
-				$b = $isXHTML ? preg_match('/(rtl)|(ltr)/', $array['values']) : preg_match('/(rtl)|(ltr)/i', $array['values']);
-				if ($b)
-					return false;
-				return true;
-			});
+			if ($this->doc->isHTML5) {
+				$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXHTML) {
+					$b = $isXHTML ? preg_match('/(rtl)|(ltr)|(auto)/', $array['values']) : preg_match('/(rtl)|(ltr)|(auto)/i', $array['values']);
+					if ($b)
+						return false;
+					return true;
+					});
+				}
+			else {
+				$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXHTML) {
+					$b = $isXHTML ? preg_match('/(rtl)|(ltr)/', $array['values']) : preg_match('/(rtl)|(ltr)/i', $array['values']);
+					if ($b)
+						return false;
+					return true;
+					});
+				}
 			if (count($invalidDirNodes) > 0)
 				Report::addReport(
 					'rep_dir_incorrect',
@@ -977,6 +985,28 @@ if ($debug) {
 					lang('rep_misc_tags_no_class_link')
 				);
 		}
+
+		// ERROR: <bdo> tag without dir
+		$foundTags = $this->doc->getElementsByTagName('bdo');
+		$count = 0;
+		if ($foundTags->length > 0) {
+			foreach ($foundTags as $tag) {
+				if (! $tag->hasAttributes() || $tag->attributes->getNamedItem('dir') == null) {
+					$count++;
+				}
+			}
+			if ($count > 0)
+				Report::addReport(
+					'rep_markup_bdo_no_dir',
+					'markup_category', REPORT_LEVEL_ERROR, 
+					lang('rep_markup_bdo_no_dir', 'b'),
+					lang('rep_markup_bdo_no_dir_expl', 'b', $foundTags->length, $count),
+					lang('rep_markup_bdo_no_dir_todo', 'b'),
+					lang('rep_markup_bdo_no_dir_link')
+				);
+		}
+		
+
 	}
 }
 
