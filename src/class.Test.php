@@ -18,7 +18,7 @@ class Test {
 	private static $logger;
 	
 	public static function _init() {
-		self::$logger = Logger::getLogger('Test');
+		self::$logger = Logger::getLogger('TestClass');
 	}
 	
 	static function load() {
@@ -112,7 +112,7 @@ class Test {
 			self::$logger->info("There is no report check for this test.");
 			if (!$infoHasBeenChecked)
 				return array(
-					'success' => null
+					'success' => 'undef'
 				);
 			return array(
 				'success' => true
@@ -154,6 +154,31 @@ class Test {
 				'reason'  => 'Returned unexpected report(s): '.implode('.', $diff)
 			);
 		}
+		foreach ($test['reports'] as $testReport) {
+			if (!empty($testReport['checks'])) {
+				self::$logger->info("Checking additional conditions for report: ".$testReport['name']);
+				foreach ($testReport['checks'] as $condition) {
+					self::$logger->error(print_r($condition,true));
+					switch ($condition['type']) {
+						case 'severity':
+							if (Report::$reports[$testReport['name']]->severity == $condition['value'])
+								self::$logger->info("- Severity must be ".$condition['value'].": PASSED");
+							else {
+								self::$logger->info("- Severity must be ".$condition['value'].": FAILED");
+								return array(
+									'success' => false,
+									'reason'  => 'An additional condition on report '.$testReport['name'].' has not been met. Severity was expected to be '.$condition['value'].' but is '.Report::$reports[$testReport['name']]->severity.'.'
+								);
+							}
+						default:
+							self::$logger->warn("- Unknown condition: ".$condition['type']);
+					}
+				}
+			}
+		}
+		//self::$logger->error(print_r($test['reports'],true));
+		
+		
 		// run additional report checks like severity
 		// TODO
 		
