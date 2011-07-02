@@ -6,6 +6,7 @@ require_once(PATH_SRC.'/class.Message.php');
 if (isset($_GET['debug_lang']) && $_GET['debug_lang'] == 'true')
 	Conf::set('debug_lang', 'true');
 // Check mimetype parameter
+$forcedMimeType = null;
 if (isset($_REQUEST['mimetype']) && $_REQUEST['mimetype'] != '') {
 	switch ($_REQUEST['mimetype']) {
 		case "html":
