@@ -165,7 +165,6 @@ class Test {
 			if (!empty($testReport['checks'])) {
 				self::$logger->info("Checking additional conditions for report: ".$testReport['name']);
 				foreach ($testReport['checks'] as $condition) {
-					self::$logger->error(print_r($condition,true));
 					switch ($condition['type']) {
 						case "severity":
 							if (Report::$reports[$testReport['name']]->severity == $condition['value'])
