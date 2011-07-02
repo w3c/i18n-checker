@@ -44,6 +44,10 @@ $test_formats=explode(',',Conf::get('test_formats'));
 if (isset($_GET['test_cat']))
 	$test_categories = (array) $_GET['test_cat'];
 
+$testFakeUpload = false;
+if (isset($_GET['test_debug_upload']) && $_GET['test_debug_upload'] == "true")
+	$testFakeUpload = true;
+
 $tests = array();
 $categories = array('charset','lang');
 
@@ -94,11 +98,16 @@ foreach ($tests as $category => $catTests) {
 			$logger->info("- Starting test for format $format -");
 			$format = explode(':', $format);
 			$uri = isset($test['url']) ? $test['url'] : Test::constructUri($test['id'], $format[0], isset($format[1]) ? $format[1] : 'html');
+			$testUri = Test::generateTestURL($uri, $testFakeUpload);
 			$logger->info("Test file uri resolved to: $uri");
-			$b = Test::startCheck($uri);
+			$logger->info("Test uri resolved to: $testUri");
+			if (isset($format[1]) && $format[1] == 'xml')
+				$b = Test::startCheck($uri, $testFakeUpload, 'application/xhtml+xml');
+			else
+				$b = Test::startCheck($uri, $testFakeUpload);
 			if (!$b) {
-				$logger->error("An error occured while executing test: ".Test::generateTestURL($uri));
-				echo '<td class="undef" title="An error occured while running this test"><a href="', Test::generateTestURL($uri),'>✘</a></td>';
+				$logger->error("An error occured while executing test: ".$testUri);
+				echo '<td class="undef" title="An error occured while running this test"><a href="', $testUri,'>✘</a></td>';
 				continue;
 			}
 			$logger->info("Check executed successfully. Checking results...");
@@ -106,15 +115,15 @@ foreach ($tests as $category => $catTests) {
 			if ($result['success'] === 'undef') {
 				$logger->warn("-> Nothing has been checked for test: ".$test['name']);
 				$passedCount++;
-				echo '<td class="undef" title="Nothing has been checked"><a href="', Test::generateTestURL($uri),'">✘</a></td>';
+				echo '<td class="undef" title="Nothing has been checked"><a href="', $testUri,'">✘</a></td>';
 			} else if ($result['success']) {
 				$logger->info("-> Test is successful");
 				$passedCount++;
-				echo '<td class="success" title="', $result['reason'], '"><a href="', Test::generateTestURL($uri),'">✔</a></td>';
+				echo '<td class="success" title="', $result['reason'], '"><a href="', $testUri,'">✔</a></td>';
 			} else {
 				$logger->info("-> Test failed");
 				$failedCount++;
-				echo '<td class="fail" title="', $result['reason'], '"><a href="', Test::generateTestURL($uri),'">✘</a></td>';
+				echo '<td class="fail" title="', $result['reason'], '"><a href="', $testUri,'">✘</a></td>';
 			}
 			Information::clear();
 			Report::clear();
