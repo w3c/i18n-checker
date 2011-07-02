@@ -224,7 +224,7 @@ input#ucn_uri,textarea {
 }
 
 input#ucn_file {
-	width: 85%;
+	/*width: 70%; not supported by firefox*/
 	padding-left: 0.4em;
 }
 

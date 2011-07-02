@@ -33,6 +33,12 @@
 							<label title="<?php _lang('instruction-by-upload') ?>" for="ucn_file"><span><?php _lang('local_file_label') ?></span>
 								<input type="file" id="ucn_file" name="file" size="30" />
 							</label>
+							<label><span style="padding-left:5px"><?php _lang('label_mimetype')?></span><select name="mimetype" class="option_input">
+							 		<option value="auto" selected="selected">auto</option>
+									<option value="html">text/html</option>
+									<option value="xml">application/xhtml+xml</option>
+								</select>
+							</label>
 						</p>
 					</div>
 					<div class="submit">
