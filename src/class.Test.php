@@ -167,7 +167,7 @@ class Test {
 				foreach ($testReport['checks'] as $condition) {
 					self::$logger->error(print_r($condition,true));
 					switch ($condition['type']) {
-						case 'severity':
+						case "severity":
 							if (Report::$reports[$testReport['name']]->severity == $condition['value'])
 								self::$logger->info("- Severity must be ".$condition['value'].": PASSED");
 							else {
@@ -177,10 +177,15 @@ class Test {
 									'reason'  => 'An additional condition on report '.$testReport['name'].' has not been met. Severity was expected to be '.$condition['value'].' but is '.Report::$reports[$testReport['name']]->severity.'.'
 								);
 							}
-						case 'tags':
-							self::$logger->info("- Number of reported tags must be ".$condition['value'].": ");
-							self::$logger->info(Report::$reports[$testReport['name']]->explanation);
-							
+							break;
+						case "codes":
+							//self::$logger->info("- Number of reported code elements must be ".$condition['value'].": ");
+							//self::$logger->info(Report::$reports[$testReport['name']]->explanation[2]);
+							break;
+						case "tags":
+							//self::$logger->info("- Number of reported tags must be ".$condition['value'].": ");
+							//self::$logger->info(Report::$reports[$testReport['name']]->explanation[2]);
+							break;
 						default:
 							self::$logger->warn("- Unknown condition: ".$condition['type']);
 					}
@@ -203,7 +208,7 @@ class Test {
 	
 	static function startCheck($url) {
 		$document = Net::getDocumentByUri($url);
-		$uri = $document[0];
+		//$uri = $document[0];
 		$curl_info = $document[1];
 		$content = $document[2];
 		$checker = new Checker($curl_info, $content);
@@ -233,7 +238,8 @@ class Test {
 					'info_dir'   	 => isset($testConf[$key.'_info_dir']) ? self::getInfoChecks($testConf[$key.'_info_dir']) : null,
 					'info_classId' 	 => isset($testConf[$key.'_info_classId']) ? self::getInfoChecks($testConf[$key.'_info_classId']) : null,
 					'info_headers' 	 => isset($testConf[$key.'_info_headers']) ? self::getInfoChecks($testConf[$key.'_info_headers']) : null,
-					'reports' 		 => isset($testConf[$key.'_report']) ? self::getReportChecks($testConf[$key.'_report']) : null 
+					'reports' 		 => isset($testConf[$key.'_report']) ? self::getReportChecks($testConf[$key.'_report']) : null,
+					'warning' 		 => isset($testConf[$key.'_warning']) ? $testConf[$key.'_warning'] : null 
 				);
 			}
 		}
