@@ -27,7 +27,6 @@ final class ParserHTML5Lib extends Parser {
 		try {
 			// XXX Hack: Only way i found to force html is to remove the doctype declaration first
 			$this->document = HTML5_Parser::parse(preg_replace('/<!DOCTYPE[^>]+(\n[^>]+)?>/', '', $markup, Conf::get('perf_head_length')));
-			/*$this->document = HTML5_Parser::parse($markup);*/
 			self::$logger->debug("Successfully parsed document using html5lib.");
 		} catch (Exception $e) {
 			self::$logger->debug("Document parsing failed: ".$e->getMessage(), $e);
