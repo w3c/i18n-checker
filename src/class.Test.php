@@ -83,7 +83,7 @@ class Test {
 					);
 				}
 				self::$logger->info("No values were returned.");
-				$reason .= "No values were returned in category $info_category as expected.  ";
+				$reason .= "No values were returned in category $info_category.  ";
 			}
 			
 			foreach ($test[$info_category] as $check) {
@@ -107,7 +107,7 @@ class Test {
 						'reason'  => 'Returned unexpected value(s): '.implode(', ', $diff)
 					);
 				}
-				$reason .= "Found values ".implode(', ', (array) $expectedValues).' for '.$check['name']." as expected.  ";
+				$reason .= "Found value(s) ".implode(', ', (array) $expectedValues).' for '.$check['name'].".  ";
 			}
 		}
 		
@@ -160,7 +160,7 @@ class Test {
 				'reason'  => 'Returned unexpected report(s): '.implode(', ', $diff)
 			);
 		}
-		$reason .= "Found reports ".implode(', ', (array) $expectedReports)." as expected.  ";
+		$reason .= "Found report(s) ".implode(', ', (array) $expectedReports).".  ";
 		foreach ($test['reports'] as $testReport) {
 			if (!empty($testReport['checks'])) {
 				self::$logger->info("Checking additional conditions for report: ".$testReport['name']);
@@ -205,22 +205,26 @@ class Test {
 		return $result;
 	}
 	
-	static function startCheck($url) {
+	static function startCheck($url, $testFakeUpload, $forcedMimeType = null) {
 		$document = Net::getDocumentByUri($url);
-		//$uri = $document[0];
 		$curl_info = $document[1];
+		if ($testFakeUpload)
+			$curl_info = null;
 		$content = $document[2];
 		$checker = new Checker($curl_info, $content);
-		$b = $checker->checkDocument();
+		$b = $checker->checkDocument($forcedMimeType);
 		return $b;
 	}
 	
 	static function constructUri($id, $format, $serveas) {
-		return Conf::get('test_url').'?'.Conf::get('test_param_id').'='.$id.'&'.Conf::get('test_param_format').'='.$format.'&'.Conf::get('test_param_serveas').'='.$serveas;
+		$uri = Conf::get('test_url').'?'.Conf::get('test_param_id').'='.$id.'&'.Conf::get('test_param_format').'='.$format.'&'.Conf::get('test_param_serveas').'='.$serveas;
+		return $uri;
 	}
 	
-	static function generateTestURL($uri) {
-		return Conf::get('base_uri').'check.php?uri='.urlencode($uri);
+	static function generateTestURL($uri, $testFakeUpload) {
+		$uri = Conf::get('base_uri').'check.php?uri='.urlencode($uri);
+		$uri = $testFakeUpload ? $uri.'&debug_upload=true' : $uri;
+		return $uri;
 	}
 	
 	static function getTests($category, $testConf) {
