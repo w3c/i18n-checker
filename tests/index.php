@@ -101,10 +101,14 @@ foreach ($tests as $category => $catTests) {
 			}
 			$logger->info("Check executed successfully. Checking results...");
 			$result = Test::checkResult($test);
-			if ($result['success']) {
+			if ($result['success'] == null) {
+				$logger->warn("-> Nothing has been checked. Check the test.");
+				$passedCount++;
+				echo '<td class="undef" title="Nothing has been checked"><a href="', Test::generateTestURL($uri),'">✘</a></td>';
+			} else if ($result['success']) {
 				$logger->info("-> Test is successful");
 				$passedCount++;
-				echo '<td class="success"><a href="', Test::generateTestURL($uri),'">✔</a></td>';
+				echo '<td class="success" title="', $result['reason'], '"><a href="', Test::generateTestURL($uri),'">✔</a></td>';
 			} else {
 				$logger->info("-> Test failed");
 				$failedCount++;
