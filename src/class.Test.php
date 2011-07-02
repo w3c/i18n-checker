@@ -61,6 +61,7 @@ class Test {
 	static function checkResult($test) {
 		// Loop through info subcategories (info_charset, info_lang, etc...)
 		$infoHasBeenChecked = false;
+		$reason = "";
 		foreach (Conf::get('test_info_categories') as $info_category) {
 			if ($test[$info_category] === null) {
 				self::$logger->info("$info_category is not set for this test. Ignoring.");
@@ -82,6 +83,7 @@ class Test {
 					);
 				}
 				self::$logger->info("No values were returned.");
+				$reason .= "No values were returned in category $info_category as expected.  ";
 			}
 			
 			foreach ($test[$info_category] as $check) {
@@ -94,7 +96,7 @@ class Test {
 					self::$logger->info("FAILED: Somes expected values where not returned or were incorrect for ".$check['name'].": ".implode(', ', $diff));
 					return array(
 						'success' => false,
-						'reason'  => 'Missing or incorrect value(s) for '.$check['name'].': '.implode(', ', $diff)
+						'reason'  => 'Missing or incorrect value(s) for '.$check['name'].': '.implode(',', $diff)
 					);
 				}
 				$diff = array_diff((array) $returnedValues, (array) $expectedValues);
@@ -105,6 +107,7 @@ class Test {
 						'reason'  => 'Returned unexpected value(s): '.implode(', ', $diff)
 					);
 				}
+				$reason .= "Found values ".implode(', ', (array) $expectedValues).' for '.$check['name']." as expected.  ";
 			}
 		}
 		
@@ -115,7 +118,8 @@ class Test {
 					'success' => 'undef'
 				);
 			return array(
-				'success' => true
+				'success' => true,
+				'reason'  => $reason
 			);
 		}
 		
@@ -129,8 +133,10 @@ class Test {
 					'reason'  => "No reports were expected. Found: ".implode(', ', $returnedReports)
 				);
 			}
+			$reason .= "No reports were returned as expected.  ";
 			return array(
-				'success' => true
+				'success' => true,
+				'reason'  => $reason
 			);
 		}
 		self::$logger->info("Starting report check");
@@ -140,20 +146,21 @@ class Test {
 		self::$logger->info("Returned reports are: ".implode(', ', $returnedReports));
 		$diff = array_diff((array) $expectedReports, (array) $returnedReports);
 		if (!empty($diff)) {
-			self::$logger->info("FAILED: Somes expected reports where not returned: ".implode(',', $diff));
+			self::$logger->info("FAILED: Somes expected reports where not returned: ".implode(', ', $diff));
 			return array(
 				'success' => false,
-				'reason'  => 'Missing expected report(s): '.implode(',', $diff)
+				'reason'  => 'Missing expected report(s): '.implode(', ', $diff)
 			);
 		}
 		$diff = array_diff((array) $returnedReports, (array) $expectedReports);
 		if (!empty($diff)) {
-			self::$logger->info("FAILED: Somes reports were returned that were not expected: ".implode('.', $diff));
+			self::$logger->info("FAILED: Somes reports were returned that were not expected: ".implode(', ', $diff));
 			return array(
 				'success' => false,
-				'reason'  => 'Returned unexpected report(s): '.implode('.', $diff)
+				'reason'  => 'Returned unexpected report(s): '.implode(', ', $diff)
 			);
 		}
+		$reason .= "Found reports ".implode(', ', (array) $expectedReports)." as expected.  ";
 		foreach ($test['reports'] as $testReport) {
 			if (!empty($testReport['checks'])) {
 				self::$logger->info("Checking additional conditions for report: ".$testReport['name']);
@@ -170,20 +177,20 @@ class Test {
 									'reason'  => 'An additional condition on report '.$testReport['name'].' has not been met. Severity was expected to be '.$condition['value'].' but is '.Report::$reports[$testReport['name']]->severity.'.'
 								);
 							}
+						case 'tags':
+							self::$logger->info("- Number of reported tags must be ".$condition['value'].": ");
+							self::$logger->info(Report::$reports[$testReport['name']]->explanation);
+							
 						default:
 							self::$logger->warn("- Unknown condition: ".$condition['type']);
 					}
 				}
 			}
 		}
-		//self::$logger->error(print_r($test['reports'],true));
-		
-		
-		// run additional report checks like severity
-		// TODO
 		
 		return array(
-			'success' => true
+			'success' => true,
+			'reason'  => $reason
 		);
 	}
 	
