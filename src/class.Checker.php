@@ -45,7 +45,7 @@ class Checker {
 		try {
 			$contentType = isset($this->curl_info['content_type']) ? $this->curl_info['content_type'] : null;
 			if ($forcedMimeType != null)
-				$contentType = preg_replace('/^.+;/', $forcedMimeType.';', $contentType);
+				$contentType = $contentType == null ? $forcedMimeType.'; charset=utf-8' : preg_replace('/^.+;/', $forcedMimeType.';', $contentType);
 			$this->doc = Parser::getParser($this->markup, $contentType);
 		} catch (Exception $e) {
 			Message::addMessage(MSG_LEVEL_ERROR, 'Exception: '.$e->getMessage());
