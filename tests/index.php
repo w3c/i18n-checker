@@ -96,13 +96,13 @@ foreach ($tests as $category => $catTests) {
 			$b = Test::startCheck($uri);
 			if (!$b) {
 				$logger->error("An error occured while executing test: ".Test::generateTestURL($uri));
-				echo '<td><a href="', Test::generateTestURL($uri),'Check error</a></td>';
+				echo '<td class="undef" title="An error occured while running this test"><a href="', Test::generateTestURL($uri),'>✘</a></td>';
 				continue;
 			}
 			$logger->info("Check executed successfully. Checking results...");
 			$result = Test::checkResult($test);
-			if ($result['success'] == null) {
-				$logger->warn("-> Nothing has been checked. Check the test.");
+			if ($result['success'] === 'undef') {
+				$logger->warn("-> Nothing has been checked for test: ".$test['name']);
 				$passedCount++;
 				echo '<td class="undef" title="Nothing has been checked"><a href="', Test::generateTestURL($uri),'">✘</a></td>';
 			} else if ($result['success']) {
@@ -145,6 +145,7 @@ foreach ($tests as $category => $catTests) {
 </script>
 
 <?php
+include(PATH_TEMPLATES.'/html/messages.php');
 
 include(PATH_TEMPLATES.'/html/footer.php');
 
