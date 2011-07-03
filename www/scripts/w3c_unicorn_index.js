@@ -26,10 +26,11 @@ var W3C = {
 		
 		$$('input#lang_change').setStyle('display', 'none');
 		
-		W3C.LanguagesForm.addEvent('change', function(event) {
-			action = W3C.LanguagesForm.getProperty('action') ? W3C.LanguagesForm.getProperty('action') : "";
-			window.location = action + "?" + this.toQueryString().replace('uri=http%3A%2F%2F', 'uri=') + window.location.hash;
-		});
+		if (W3C.LanguagesForm != null)
+			W3C.LanguagesForm.addEvent('change', function(event) {
+				action = W3C.LanguagesForm.getProperty('action') ? W3C.LanguagesForm.getProperty('action') : "";
+				window.location = action + "?" + this.toQueryString().replace('uri=http%3A%2F%2F', 'uri=') + window.location.hash;
+			});
 		
 		W3C.TabLinks.each(function(link, i) {
 			link.addEvent('click', function (event) {

@@ -6,6 +6,8 @@ header('Content-Type: text/html; charset=UTF-8');
 $title = "W3C I18n Checker";
 $css[] = "base_ucn.css";
 include(PATH_TEMPLATES.'/html/head.php');
+// Hide language selection for now - this page is not internationalized
+$hideLangSelection = true;
 ?>
 <div style="margin: 1.5em 2.3em 1em;">
 

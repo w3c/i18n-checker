@@ -6,6 +6,7 @@
 			<li><a href="http://www.w3.org/International/2007/06/surveyform-2.php?docname=http%3A%2F%2Fvalidator.w3.org%2Fi18n-checker&amp;referer=http%3A%2F%2Fvalidator.w3.org%2Fi18n-checker<?php //echo Conf::get('base_uri'), 'feedback', Conf::get('show_extension') ? '.php' : '' ?>" hreflang="en" title="<?php _lang('footer_feedback_title') ?>"><?php _lang('footer_feedback') ?></a></li>
 	</ul>
 	
+	<?php if (!isset($hideLangSelection) || $hideLangSelection != true) { ?>
 	<form action="<?php echo isset($lang_action) ? $lang_action : '' ?>" method="get" id="lang_choice">
 		<fieldset>
 			<label for="lang">Language</label>
@@ -18,6 +19,7 @@
 			<?php if (isset($uri)) { ?><input name="uri" id="uri" type="hidden" value="<?php echo htmlentities($uri) ?>" /><?php } ?>
 		</fieldset>
 	</form>
+	<?php } ?>
 	
 	<div id="footer">
 		<div class="leftCol w3cLargeLogo">
