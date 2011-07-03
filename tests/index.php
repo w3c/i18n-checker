@@ -17,6 +17,7 @@ $title = "W3C I18n Checker Tests";
 $css[] = "base_ucn.css";
 $js[] = "mootools-1.3.2.js";
 include(PATH_TEMPLATES.'/html/head.php');
+$hideLangSelection = true;
 
 $logger = Logger::getLogger('Tests');
 $logger->info("Initiating tests");
