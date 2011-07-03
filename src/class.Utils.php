@@ -146,6 +146,11 @@ class Utils {
 		return isset($result) ? $result : null;
 	}
 	
+	public static function charsetFromXMLDeclaration($xmlDeclaration) {
+		preg_match('@<'.'?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i', $xmlDeclaration, $matches);
+		return isset($matches[2]) ? $matches[2] : null;
+	}
+	
 	public static function _empty($array) {
 		return empty($array);
 	}
