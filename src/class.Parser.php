@@ -157,7 +157,7 @@ abstract class Parser {
 	
 	public function dirFromHTML() {
 		$dir = $this->document->getElementsByTagName('html')->item(0)->attributes->getNamedItem('dir');
-		return ($dir != null) ? strtoupper($dir->value) : null;
+		return ($dir != null) ? $dir->value : null;
 	}
 	
 	// XXX: if phpQuery::loadDocument was implemented could be refactored in Parser. eg:
