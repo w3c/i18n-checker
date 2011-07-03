@@ -231,8 +231,10 @@ class Checker {
 		$_val = $this->doc->dirFromHTML();
 		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
-		if ($_val == null)
+		if ($_val == null) {
 			$display_value = 'dir_default_ltr';
+			$value['code'] = null;
+		}
 		Information::addInfo($category, $title, $value, $display_value);	
 	}
 	
