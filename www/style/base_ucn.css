@@ -1239,8 +1239,10 @@ body > .section {
 #infos td strong {
 	background-color:#F17900;
 	font-size:18px;
-	padding:2px 5px;
+	padding:3px 5px;
+	padding-top: 4px;
 	color:white;
+	font-weight: normal;
 	line-height:28px;
 	border-radius: 5px;
 	}
@@ -1380,9 +1382,13 @@ body > .section {
 	margin:10px 0;
 }
 
-#report li:nth-of-type(2n+1) h2.title {
+#report li h2.title {
 	background-color: #EDEDED;
 }
+
+/*#report li:nth-of-type(2n+1) h2.title {
+	background-color: #EDEDED;
+}*/
 
 #report li:nth-of-type(2n) h2.title {
 	background-color: #E1E1E1;
