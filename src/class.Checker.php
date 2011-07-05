@@ -26,7 +26,8 @@ class Checker {
 	private $curl_info;
 	private $markup;
 	private $doc;
-	
+	private $isUTF16;
+
 	public static function _init() {
 		self::$logger = Logger::getLogger('Checker');
 	}
@@ -47,7 +48,8 @@ class Checker {
 				$contentType = $contentType == null ? $forcedMimeType.'; charset=utf-8' : preg_replace('/^.+;/', $forcedMimeType.';', $contentType);
 			$this->doc = Parser::getParser($this->markup, $contentType);
 		} catch (Exception $e) {
-			Message::addMessage(MSG_LEVEL_ERROR, 'Exception: '.$e->getMessage());
+			//Message::addMessage(MSG_LEVEL_ERROR, 'Exception: '.$e->getMessage());
+			Message::addMessage(MSG_LEVEL_ERROR, lang('message_parsing_failed'));
 			self::$logger->error('Exception raised for URI: '.$this->curl_info['url'], $e);
 			return false;
 		}
@@ -59,12 +61,12 @@ class Checker {
 		$this->addInfoCharsetXMLDeclaration();
 		$this->addInfoCharsetMeta();
 		$this->addInfoLangAttr();
-		$this->addInfoXMLLangAttr();
 		$this->addInfoLangHTTP();
 		$this->addInfoLangMeta();
 		$this->addInfoDirHTML();
 		$this->addInfoClassId();
 		$this->addInfoRequestHeaders();
+		$this->isUTF16 = ($bom == 'UTF-16LE' || $bom == 'UTF-16BE') ? true : false;
 		
 		// Generate report
 		$this->addReportCharsets();
@@ -73,6 +75,24 @@ class Checker {
 		$this->addReportMisc();
 		return true;
 	}
+
+	private function convertEncoding() {
+		# this should be adapted to take into account HTTP headers set to UTF16/-LE/-BE
+		$filestart = substr($this->markup,0,3);
+		if (ord($filestart{0})== 239 && ord($filestart{1})== 187 && ord($filestart{2})== 191) 
+			return 'UTF-8';
+		else { 
+			$filestart = substr($this->markup,0,2);
+			if (ord($filestart{0})== 254 && ord($filestart{1})== 255) {
+				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16BE');
+				return 'UTF-16BE';
+			} else if (ord($filestart{0})== 255 && ord($filestart{1})== 254) {
+				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16LE');
+				return 'UTF-16LE';
+			}
+		}
+	}
+	
 	
 	private function addInfoDTDMimetype() {
 		if ($this->doc->isXHTML5)
@@ -96,22 +116,6 @@ class Checker {
 		if (!$this->curl_info['url'])
 			$display_value = 'charset_na_upload';
 		Information::addInfo($category, $title, $value, $display_value);
-	}
-	
-	private function convertEncoding() {
-		$filestart = substr($this->markup,0,3);
-		if (ord($filestart{0})== 239 && ord($filestart{1})== 187 && ord($filestart{2})== 191) 
-			return 'UTF-8';
-		else { 
-			$filestart = substr($this->markup,0,2);
-			if (ord($filestart{0})== 254 && ord($filestart{1})== 255) {
-				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16BE');
-				return 'UTF-16BE';
-			} else if (ord($filestart{0})== 255 && ord($filestart{1})== 254) {
-				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16LE');
-				return 'UTF-16LE';
-			}
-		}
 	}
 	
 	// INFO: BYTE ORDER MARK.
@@ -162,35 +166,24 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value);
 	}
 	
-	// INFO: LANGUAGE FROM HTML LANG ATTRIBUTE
+	// INFO: LANGUAGE FROM HTML LANG AND XML:LANG ATTRIBUTES
 	private function addInfoLangAttr() {
 		$category = 'lang_category';
 		$title = 'lang_attr_lang';
 		$_code = $this->doc->HTMLTag();
-		$_val = $this->doc->getHTMLTagAttr('lang');
+		$_val = array();
+		if (($_langAttr = $this->doc->getHTMLTagAttr('lang')) != null)
+			$_val[] = $_langAttr;
+		if (($_xmlLangAttr = $this->doc->getHTMLTagAttr('lang', true)) != null)
+			$_val[] = $_xmlLangAttr;
+		$_val = empty($_val) ? null : array_unique($_val); // unify
 		$value = array('code' => $_code, 'values' => $_val);
 		$display_value = null;
-		if ($_code != null && $_val == null)
+		if ($_code != null && empty($_val))
 			$display_value = 'val_none';
-		if ($_code == null && $_val == null)
+		if ($_code == null && empty($_val))
 			$display_value = 'no_html_tag_found';
 		Information::addInfo($category, $title, $value, $display_value);
-	}
-	
-	// INFO: LANGUAGE FROM HTML XML:LANG ATTRIBUTE
-	private function addInfoXMLLangAttr() {
-		$category = 'lang_category';
-		$title = 'lang_attr_xmllang';
-		$_code = $this->doc->HTMLTag();
-		$_val = $this->doc->getHTMLTagAttr('lang', true);
-		$value = array('code' => $_code, 'values' => $_val);
-		$display_value = null;
-		if ($_code != null && $_val == null)
-			$display_value = 'val_none';
-		if ($_code == null && $_val == null)
-			$display_value = 'no_html_tag_found';
-		if ($this->doc->isXML || $_val != null) // If no xml:lang is null add the line only if doc is xml to begin with
-			Information::addInfo($category, $title, $value, $display_value);
 	}
 	
 	// INFO: LANGUAGE FROM HTTP CONTENT-LANGUAGE
@@ -599,15 +592,91 @@ class Checker {
 				lang('rep_charset_bom_in_content_link')
 			);
 		}
-		
-	}
+
+		// CHARSET REPORT: Meta character encoding declaration used in UTF-16 page
+		// CHARSET REPORT: UTF-16 encoding declaration in a non-UTF-16 document
+		if (strtoupper(Information::getFirstVal('charset_meta')) == "UTF-16") {
+			// check whether this is a UTF-16 encoded file
+			if ($this->isUTF16) {
+				if ($this->doc->isHTML5) { // disallow meta for html5
+					Report::addReport(
+						'rep_charset_utf16_meta',
+						$category, REPORT_LEVEL_ERROR,
+						lang('rep_charset_utf16_meta'),
+						lang('rep_charset_utf16_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+						lang('rep_charset_utf16_meta_todo'),
+						lang('rep_charset_utf16_meta_link')
+						);
+					}
+				}
+				
+			else {
+				Report::addReport(
+					'rep_charset_bogus_utf16',
+					$category, REPORT_LEVEL_ERROR,
+					lang('rep_charset_bogus_utf16'),
+					lang('rep_charset_bogus_utf16_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_bogus_utf16_todo'),
+					lang('rep_charset_bogus_utf16_link')
+					);
+				}
+			}
+
+
+		// CHARSET REPORT: UTF-16LE or UTF-16BE found in a character encoding declaration
+		$nonBomCharsets = array_merge(
+			(array) Information::getValues('charset_http'),
+			(array) Information::getValues('charset_xml'),
+			(array) Information::getValues('charset_meta')
+			);
+		$nonBomCharsets = array_filter($nonBomCharsets, array($this,"hasValue"));
+		$found = false;
+		foreach ($nonBomCharsets as $item) {
+			if (strtoupper($item['values']) == 'UTF-16LE' || strtoupper($item['values']) == 'UTF-16BE') { $found = true; }
+			}
+		if ($found) {
+			Report::addReport(
+				'rep_charset_utf16le-be',
+				$category, REPORT_LEVEL_ERROR,
+				lang('rep_charset_utf16le-be'),
+				lang('rep_charset_utf16le-be_expl', Language::format(Utils::codesFromValArray($nonBomCharsets), LANG_FORMAT_OL_CODE)),
+				lang('rep_charset_utf16le-be_todo'),
+				lang('rep_charset_utf16le-be_link')
+				);
+			}
+
+
+		// CHARSET REPORT: Meta character encoding declaration not within 1024 byte of file start
+		if ($this->doc->isHTML5 && Information::getFirstVal('charset_meta') != null) {
+			if (!preg_match("/<meta\s[^>]*http-equiv=[\"\']?Content-Type[^>]*>/i", substr($this->markup,0,1024)) &&
+				!preg_match("/<meta\s[^>]*charset=[^>]*>/i", substr($this->markup,0,1024))) { 
+				Report::addReport(
+					'rep_charset_1024_limit',
+					$category, REPORT_LEVEL_ERROR,
+					lang('rep_charset_1024_limit'),
+					lang('rep_charset_1024_limit_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_1024_limit_todo'),
+					lang('rep_charset_1024_limit_link')
+					);
+				}
+			}
+
+	} 
+	
+	
+	private function hasValue ($array) {
+		// used by array_filter to filter out value_code pairs from a list when there is no value
+		// array: an array of items, each containing value and code items
+		return ($array['values'] != null && !empty($array['values']));
+		}
+	
 	
 	private function addReportLanguages() {
 		$category = 'lang_category';
 		
 		// Attributes on the html tag
-		$langAttr = Information::getFirstVal('lang_attr_lang');
-		$xmlLangAttr = Information::getFirstVal('lang_attr_xmllang');
+		$langAttr = $this->doc->getHTMLTagAttr('lang');
+		$xmlLangAttr = $this->doc->getHTMLTagAttr('lang', true);
 		// Attributes on all nodes including html tag
 		$htmlLangAttrs = $this->doc->getNodesWithAttr('lang');
 		$xmlLangAttrs = $this->doc->getNodesWithAttr('lang', true);
