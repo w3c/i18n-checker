@@ -242,7 +242,8 @@ class Test {
 					'info_classId' 	 => isset($testConf[$key.'_info_classId']) ? self::getInfoChecks($testConf[$key.'_info_classId']) : null,
 					'info_headers' 	 => isset($testConf[$key.'_info_headers']) ? self::getInfoChecks($testConf[$key.'_info_headers']) : null,
 					'reports' 		 => isset($testConf[$key.'_report']) ? self::getReportChecks($testConf[$key.'_report']) : null,
-					'warning' 		 => isset($testConf[$key.'_warning']) ? $testConf[$key.'_warning'] : null 
+					'warning' 		 => isset($testConf[$key.'_warning']) ? $testConf[$key.'_warning'] : null,
+					'applicableOnlyTo' => isset($testConf[$key.'_applicableOnlyTo']) ? $testConf[$key.'_applicableOnlyTo'] : null 
 				);
 			}
 		}

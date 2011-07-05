@@ -1212,6 +1212,9 @@ body > .section {
 	width:0.5em !important;
 	background-color:#EAEBEE;
 }
+#infos.tests .na {
+	background-color:#EAEBEE;
+}
 #infos.tests .success a {
 	color:green;
 	background-color:transparent;

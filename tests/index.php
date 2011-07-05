@@ -91,6 +91,16 @@ foreach ($tests as $category => $catTests) {
 		echo '<td>', $i, '</td><td', $test['warning'] ? ' class="warning" title="'.$test['warning'].'"' : '', '>', $test['name'], '</td>';
 		$i++;
 		$testFor = explode(',', $test['test_for']);
+		if (isset($test['applicableOnlyTo'])) {
+			if ($test['applicableOnlyTo'] == 'uri' && $testFakeUpload) {
+				echo '<td class="na" colspan="'.count($test_formats).'">Not applicable with uri method</td>';
+				continue;
+			}
+			if ($test['applicableOnlyTo'] == 'upload' && !$testFakeUpload) {
+				echo '<td class="na" colspan="'.count($test_formats).'">Not applicable with fake upload method</td>';
+				continue;
+			}
+		}
 		foreach ($test_formats as $format) {
 			if (!in_array($format, $testFor)) {
 				echo '<td>-</td>';
