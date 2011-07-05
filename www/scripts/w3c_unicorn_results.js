@@ -61,7 +61,6 @@ var W3Cr = {
 			value.setStyle('display', 'none');
 		});
 		$els = $$('#infos strong[class^="classId_non_nfc"]');
-		console.log($els.length);
 		if ($els.length >= 1) {
 			$e = new Element('strong').set('text', $els.length);
 			$e.inject($els.getLast(), 'after');
