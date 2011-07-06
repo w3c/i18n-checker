@@ -32,8 +32,10 @@ if (!isset($_GET['uri']) && !isset($_FILES['file'])) {
 	exit;
 }
 require_once(PATH_SRC.'/class.Net.php');
-if (isset($_GET['uri']))
+if (isset($_GET['uri'])) {
+	$uri = $_GET['uri'];
 	$document = Net::getDocumentByUri($_GET['uri']);
+}
 elseif (isset($_FILES['file']))
 	$document = Net::getDocumentByFileUpload($_FILES['file']);
 if ($document == false) {
