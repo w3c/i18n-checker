@@ -6,7 +6,6 @@
 /**
  * 
  */
-require_once('class.Parser.PHPQuery.php');
 require_once('class.Parser.HTML5Lib.php');
 require_once('class.Utils.php');
 /**
@@ -47,12 +46,13 @@ abstract class Parser {
 	}
 	
 	public static function getParser($markup, $contentType) {
-		if (true) { //self::is_HTML5($markup)) {
+		//if (true) { //self::is_HTML5($markup)) {
 			self::$logger->debug(sprintf("Creating HTML5 parser. Content-type is: %s", $contentType == null ? 'null' : $contentType));
+			//return new ParserDOM($markup, $contentType);
 			return new ParserHTML5Lib($markup, $contentType);
-		} else
-			self::$logger->debug(sprintf("Creating (X)HTML parser. Content-type is: %s", $contentType == null ? 'null' : $contentType));
-			return new ParserPHPQuery($markup, $contentType);
+		//}
+			//self::$logger->debug(sprintf("Creating (X)HTML parser. Content-type is: %s", $contentType == null ? 'null' : $contentType));
+			//return new ParserPHPQuery($markup, $contentType);
 	}
 	
 	protected function __construct($markup, $contentType) {
@@ -85,9 +85,9 @@ abstract class Parser {
 			$this->isHTML = true;
 		} else if (preg_match("/<!DOCTYPE HTML>/i", substr($this->markup, '0', Conf::get('perf_head_length')))) { 
 			$this->isHTML5 = true;
-		} else if (preg_match("/<!DOCTYPE [^>]*DTD XHTML 1.0[^>]+/i", substr($this->markup, '0', Conf::get('perf_head_length')), $matches)) {
+		} else if (preg_match("/<!DOCTYPE [^>]*DTD XHTML(\+[^ ]+)? 1.0[^>]+/i", substr($this->markup, '0', Conf::get('perf_head_length')), $matches)) {
 			$this->isXHTML10 = true;
-		} else if (preg_match("/<!DOCTYPE [^>]*DTD XHTML 1.1[^>]+/i", substr($this->markup, '0', Conf::get('perf_head_length')), $matches)) {
+		} else if (preg_match("/<!DOCTYPE [^>]*DTD XHTML(\+[^ ]+)? 1.1[^>]+/i", substr($this->markup, '0', Conf::get('perf_head_length')), $matches)) {
 			$this->isXHTML11 = true;
 		} else {
 			//TODO Add warning
@@ -120,10 +120,15 @@ abstract class Parser {
 	}
 	
 	public function getHTMLTagAttr($name, $xmlNamespace = false) {
+		//if ($this->document->getElementsByTagName('html')->item(0) == null)
+		//	return null;
+		$htmlAttrs = $this->document->getElementsByTagName('html')->item(0)->attributes;//$this->document->documentElement->attributes;
+		if ($htmlAttrs == null)
+			return null;
 		if ($xmlNamespace)
-			$attr = $this->document->getElementsByTagName('html')->item(0)->attributes->getNamedItemNS('http://www.w3.org/XML/1998/namespace', $name);
+			$attr = $htmlAttrs->getNamedItemNS('http://www.w3.org/XML/1998/namespace', $name);
 		else
-			$attr = $this->document->getElementsByTagName('html')->item(0)->attributes->getNamedItemNS(null, $name);
+			$attr = $htmlAttrs->getNamedItemNS(null, $name);
 		return ($attr != null) ? $attr->value : null;
 	}
 	
@@ -178,7 +183,7 @@ abstract class Parser {
 	public function getNodesWithAttr($attr, $xmlNamespace = false) {
 		$t = &$this;
 		$test = function($node) use (&$result, $t, $attr, $xmlNamespace) {
-			if ($node->hasAttributes()) {
+			if ($node != null && $node->hasAttributes()) {
 				$a = !$xmlNamespace ? $node->attributes->getNamedItemNS(null, $attr) : $node->attributes->getNamedItemNS('http://www.w3.org/XML/1998/namespace', $attr);
 				if ($a != null) {
 					$result[] = array(
@@ -210,6 +215,8 @@ abstract class Parser {
 	protected function iterate($callback, $node, $includeParentNode = false) {
 		if ($includeParentNode)
 			$callback($node);
+		if ($node == null)
+			return;
 		foreach ($node->childNodes as $child) {
 			$callback($child);
 			if ($child->hasChildNodes())
