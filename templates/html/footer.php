@@ -16,7 +16,7 @@
 				<?php } ?>
 			</select>
 			<input id="lang_change" type="submit" value="OK" />
-			<?php if (isset($uri)) { ?><input name="uri" id="uri" type="hidden" value="<?php echo htmlentities($uri) ?>" /><?php } ?>
+			<?php if (isset($uri)) { ?><input name="uri" id="uri" type="hidden" value="<?php echo htmlentities($uri,ENT_COMPAT,'UTF-8') ?>" /><?php } ?>
 		</fieldset>
 	</form>
 	<?php } ?>

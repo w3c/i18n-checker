@@ -29,7 +29,7 @@ include(PATH_TEMPLATES.'/html/messages.php');
 
 <div id="results" class="section">
 	<h1 class="title">
-		<a href="#result"><?php if ($uri) echo htmlentities(lang('results', $uri)); else echo lang('results_upload') ?></a>
+		<a href="#result"><?php if ($uri) echo htmlentities(lang('results', $uri),ENT_COMPAT,'UTF-8'); else echo lang('results_upload') ?></a>
 	</h1>
 	
 	<div class="block<?php echo Report::getCount() == 0 ? ' noissues' : '' ?>">
