@@ -49,7 +49,7 @@ class Checker {
 			$this->doc = Parser::getParser($this->markup, $contentType);
 		} catch (Exception $e) {
 			//Message::addMessage(MSG_LEVEL_ERROR, 'Exception: '.$e->getMessage());
-			Message::addMessage(MSG_LEVEL_ERROR, lang('message_parsing_failed'));
+			Message::addMessage(MSG_LEVEL_ERROR, lang('message_parse_error_failed',isset($this->curl_info['url']) ? 'check?uri='.urlencode($this->curl_info['url']) : ''));
 			self::$logger->error('Exception raised for URI: '.$this->curl_info['url'], $e);
 			return false;
 		}
