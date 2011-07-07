@@ -1439,6 +1439,12 @@ code {
 	border-radius: 3px; 
 }
 
+code.kw {
+	background-color: inherit;
+	color: #900;
+	margin-left:3px;
+	margin-right:3px;
+	}
 #infos table ol li {
 	margin-bottom:4px;
 }
