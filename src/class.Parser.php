@@ -97,7 +97,7 @@ abstract class Parser {
 	
 	public function doctype2String() {
 		if ($this->isHTML)
-			return 'HTML';
+			return 'HTML 4.01';
 		if ($this->isXHTML10)
 			return 'XHTML 1.0';
 		if ($this->isXHTML11)
