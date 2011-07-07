@@ -3,6 +3,10 @@
  * Contains and initializes the Net class.
  * @package i18nChecker
  */
+/*
+ * 
+ */
+require_once(PATH_LIB.'/IDNA.php');
 /**
  * HTTP related functions
  * 
@@ -43,11 +47,11 @@ class Net {
 		}
 		
 		// Check that the uri is correct (CURLE_URL_MALFORMAT is not enough)
-		if (preg_match('@((https?://)?([-\w]+\.[-\w\.]+)+\w(:\d+)?(/([-\w/_\.]*(\?\S+)?)?)*)@', $uri) == 0) {
+		/*if (preg_match('@((https?://)?([-\w]+\.[-\w\.]+)+\w(:\d+)?(/([-\w/_\.]*(\?\S+)?)?)*)@', $uri) == 0) {
 			Message::addMessage(MSG_LEVEL_ERROR, lang("message_invalid_url_syntax", $uri));
 			self::$logger->info("- Aborted: incorrect syntax");
-			return false;
-		}
+			//return false;
+		}*/
 		
 		// Get the content and headers of the submitted document
 		$result = self::fetchDocument($uri);
@@ -67,7 +71,7 @@ class Net {
 				Message::addMessage(MSG_LEVEL_ERROR, lang("message_unknown_host", parse_url($uri, PHP_URL_HOST)));
 			} elseif ($curl_error == CURLE_COULDNT_CONNECT) {
 				Message::addMessage(MSG_LEVEL_ERROR, lang("message_connect_exception"));
-			} elseif ($curl_error == 'CURLE_REMOTE_ACCESS_DENIED') {
+			} elseif ($curl_error == CURLE_REMOTE_ACCESS_DENIED) {
 				Message::addMessage(MSG_LEVEL_ERROR, lang("message_unauthorized_access"));
 			} else {
 				// Otherwise send the curl error message (english)
@@ -115,7 +119,7 @@ class Net {
 	
 	public static function getDocumentByFileUpload($file) {
 		Message::addMessage(MSG_LEVEL_WARNING, lang("message_file_upload_warning"));
-		Message::addMessage(MSG_LEVEL_WARNING, "The file upload feature is still experimental and not fully tested. Results should be considered with care.");
+		//Message::addMessage(MSG_LEVEL_WARNING, "The file upload feature is still experimental and not fully tested. Results should be considered with care.");
 		$content = file_get_contents($file['tmp_name']);
 		/* // seems that php deletes temporary file at the end of the request anyway 
 		 * if (Conf::get('delete_uploaded_files'))
@@ -125,11 +129,14 @@ class Net {
 	}
 	
 	public static function fetchDocument($url) {
-		$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
-		
+		// Support of IRIs. Encoding will do nothing if not an IRI.
+		$IDN = new Net_IDNA();
+		$encodedUrl = $IDN->encode($url);
+		$url != $encodedUrl ? $isIRI = true : $isIRI = false;
+		//$url = str_replace("&amp;", "&", urldecode(trim($encodedUrl)));
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_USERAGENT, Conf::get('curl_user_agent'));
-		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_URL, $encodedUrl);
 		if (Conf::get('curl_cookiejar_enabled'))
 			curl_setopt( $ch, CURLOPT_COOKIEJAR, Conf::get('curl_cookiejar_path'));
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -155,6 +162,7 @@ class Net {
 				"\n\t\t Timeout: ".Conf::get('curl_timeout').
 				"\n\t\t Max redirections: ".Conf::get('curl_maxredirs'));
 		
+		$header = array();
 		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 			$header[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 		if (isset($_SERVER['HTTP_ACCEPT_CHARSET']))
@@ -172,8 +180,12 @@ class Net {
 			$response['content_language'] = $_REQUEST['doc_content_language'];
 			unset($_REQUEST['doc_content_language']);
 			self::$logger->debug("Found Content-Language header: ".$response['content_language']);
-		} 
-		
+		}
+		// FIXME?
+		// If http://उदाहरण.परीक्षा is redirected to http://उदाहरण.परीक्षा/मुख्य_पृष्ठ curl will return http://xn--p1b6ci4b4b3a.xn--11b5bs3a9aj6g/%E0%A4%AE%E0%A5%81%E0%A4%96%E0%A5%8D%E0%A4%AF_%E0%A4%AA%E0%A5%83%E0%A4%B7%E0%A5%8D%E0%A4%A0
+		// If the submitted uri is an iri and there has been a redirection then decode the url. It might be inexact in some cases.
+		if ($isIRI && $response['url'] != $encodedUrl)
+			$response['url'] = urldecode($response['url']);
 		return array($response['url'], $content, $response, $code, $error);
 	}
 }
