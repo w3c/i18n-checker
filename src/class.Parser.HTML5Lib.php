@@ -24,6 +24,7 @@ final class ParserHTML5Lib extends Parser {
 	}
 	
 	protected function __construct($markup, $contentType) {
+		global $uri; // FIXME: will that be set every time ? Another way to pass it here ?
 		try {
 			// XXX Hack: Only way i found to force html is to remove the doctype declaration first
 			$this->document = HTML5_Parser::parse(preg_replace('/<!DOCTYPE[^>]+(\n[^>]+)?>/', '', $markup, Conf::get('perf_head_length')));
@@ -38,13 +39,13 @@ final class ParserHTML5Lib extends Parser {
 			// Tidy
 			$tidy = new tidy;
 			$markup = $tidy->repairString($markup, $config, 'utf8');
-			//$tidy->cleanRepair();
 			try {
 				$this->document = HTML5_Parser::parse(preg_replace('/<!DOCTYPE[^>]+(\n[^>]+)?>/', '', $markup, Conf::get('perf_head_length')));
 			} catch (Exception $e) {
 				self::$logger->debug("Document parsing failed: ".$e->getMessage(), $e);
 				throw $e;
 			}
+			Message::addMessage(MSG_LEVEL_WARNING, lang('message_parse_warn_tidied', isset($uri) && $uri != "" ? 'check?uri='.urlencode($uri) : ''));
 		}
 		parent::__construct($markup, $contentType);
 	}
