@@ -29,7 +29,7 @@ $hideLangSelection = true;
 	free service by <acronym title="World Wide Web Consortium">W3C</acronym>
 	that provides information about internationalization features of your
 	page, and provides advice on how to improve your use of
-	internationalization markup.</p>
+    markup for the multilingual Web.</p>
 	<p>Getting internationalization features right at the beginning saves a
 	lot of time and trouble if you ever need to use your content in a
 	language-sensitive way in the future. However, the test will also throw
@@ -39,24 +39,16 @@ $hideLangSelection = true;
 	<p>The first part of the report for a page lists key
 	internationalization settings related to character encoding, language
 	declarations, text direction and class/id names. This information
-	includes HTTP headers, which can be particularly useful for
+	includes that coming in HTTP headers, which can be particularly useful for
 	troubleshooting problems.</p>
 	<p>The second part of the report lists errors, warnings and helpful
 	suggestions based on your use (or not) of internationalization-related
 	markup. The report also points you to resources where you can read more
 	about the topic in question.</p>
-	<p><strong>The checker is still only a prototype, so there are
-	guarranteed to be bugs and missing features.</strong> It will slowly
-	improve over the coming months, but it has been made available for use
-	since it is likely to be helpful to many people already. If you have
-	suggestions for ways to improve the checker, please fill in the <a
-	href="feedback.html">feedback form</a>.</p>
+	<p><strong>The checker is currently a beta release, so please let us know about bugs and missing feature</strong> using the <a href="feedback.html">feedback form</a>. We already have plans to add a number of new features over the coming months, and to translation the user interface.</p>
 	
-	<p>Note that the checker supports HTML4, HTML5 and XHTML 1.0 served as
-	text/html, and XHTML 1.0 served as application/xhtml+xml. It hasn't yet
-	been developed to produce issue reports for XHTML5 or XHTML 1.1, however
-	the information panel at the top of the page should work fine for those
-	formats.</p>
+	<p>The information panel at the top of the page should work for most formats. In terms of issue reports, the checker currently targets HTML4, HTML5, and XHTML 1.0/1.1 (served as
+	text/html or application/xhtml+xml). It doesn't yet produce issue reports for XHTML5.</p>
 	<p>The hope is to eventually merge features of this checker with other
 	checkers and validators at the W3C, once it reaches an appropriate level
 	of maturity.</p>
@@ -127,9 +119,7 @@ $hideLangSelection = true;
 
 <h3 id="credits">Credits</h3>
 <div class="bd compact">
-	<p>The user interface of the W3C mobileOK Checker was derived from that
-	of the <a href="http://validator.w3.org/mobile/">W3C mobileOK checker</a>.
-	<a href="http://rishida.net/">Richard Ishida</a> is developing the
+	<p><a href="http://rishida.net/">Richard Ishida</a> and Thomas Gambet are developing the
 	checker at the W3C. The <a href="http://multilingualweb.eu/">MultilingualWeb
 	project</a> partners are also providing feedback on the checker.</p>
 </div>
