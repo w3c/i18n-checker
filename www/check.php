@@ -26,7 +26,7 @@ if (!file_exists(PATH_TEMPLATES."/results.$format.php")) {
 	Message::addMessage(MSG_LEVEL_WARNING, lang("message_requested_format_unavailable", $_REQUEST['format'], $format));
 }
 // Check uri parameter or uploaded file
-if (!isset($_GET['uri']) && !isset($_FILES['file'])) {
+if (!isset($_GET['uri']) && (!isset($_FILES['file']) || $_FILES['file']['tmp_name'] == "")) {
 	Message::addMessage(MSG_LEVEL_ERROR, lang("message_nothing_to_validate"));
 	include(PATH_TEMPLATES."/index.$format.php");
 	exit;
