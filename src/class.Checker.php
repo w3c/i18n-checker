@@ -318,7 +318,7 @@ class Checker {
 #echo 'Information::getFirstVal("charset_xml")';
 #print_r(Information::getFirstVal('charset_xml'));
 		
-		// WARNING: No character encoding information
+		// CHARSET REPORT: No character encoding information
 		if (empty($charsetVals)) {
 			self::$logger->debug('No charset information found for this document.');
 			if (! $this->doc->isServedAsXML) {
@@ -343,7 +343,7 @@ class Checker {
 			return;
 		}
 		
-		// INFO: Non-UTF8 character encoding declared
+		// CHARSET REPORT: Non-UTF8 character encoding declared
 		if (!in_array("UTF-8", $charsetVals) || count(array_unique($charsetVals)) > 1) {
 			$nonUTF8CharsetCodes = Utils::codesFromValArray(
 				array_filter($charsets, function ($array) {
@@ -364,7 +364,7 @@ class Checker {
 			);
 		}
 		
-		// ERROR: Conflicting character encoding declarations
+		// CHARSET REPORT: Conflicting character encoding declarations
 		if (count(array_unique($charsetVals)) != 1) {
 			$codes = $charsetCodes;
 			Report::addReport(
@@ -377,7 +377,7 @@ class Checker {
 			);
 		}
 		
-		// WARNING/ERROR: XML Declaration used
+		// CHARSET REPORT: XML Declaration used
 		if (Information::getFirstVal('charset_xml') != null) {
 			if ($this->doc->isHTML || $this->doc->isHTML5 && !$this->doc->isServedAsXML) {
 				if ($this->doc->isHTML) { $_expl = 'rep_charset_xml_decl_used_expl_html'; } else { $_expl = 'rep_charset_xml_decl_used_expl_html5'; }
@@ -405,7 +405,7 @@ class Checker {
 		#if ($debug) { echo "<p>n".'Utils::codesFromValArray(Information::getValues("charset_meta"))'."</p>"; print_r(Utils::codesFromValArray(Information::getValues('charset_meta'))); }
 		#if ($debug) { echo "<p>".'$charsetCodes'."</p>"; print_r($charsetCodes); }
 		
-		// WARNING: Meta charset tag will cause validation to fail
+		// CHARSET REPORT: Meta charset tag will cause validation to fail
 		if (Information::getFirstVal('charset_meta') != null && !Utils::_empty($this->doc->getMetaCharset())) {
 			if (!$this->doc->isHTML5) {
 				Report::addReport(
@@ -422,7 +422,7 @@ class Checker {
 		#if ($debug) { echo "<p>n".'$inDocCharsets'."</p>"; print_r($inDocCharsets); }
 		#if ($debug) { echo "<p>".'Information::getFirstVal("charset_meta")'."</p><pre>"; print_r(Information::getFirstVal('charset_meta')); echo "</pre>"; }
 		
-		// COMMENT: Meta encoding declarations don't work with XML
+		// CHARSET REPORT: Meta encoding declarations don't work with XML
 		if (Information::getFirstVal('charset_meta') != null) {
 			#if ($this->doc->isServedAsXML && strtoupper(Information::getFirstVal('charset_meta')) == 'UTF-8' || strtoupper(Information::getFirstVal('charset_meta') == 'UTF-16')) {
 			if ($this->doc->isServedAsXML) {
@@ -437,7 +437,7 @@ class Checker {
 			}
 		}
 		
-		// WARNING: Incorrect use of meta encoding declaration
+		// CHARSET REPORT: Incorrect use of meta encoding declaration
 		$inDocCharsets = array_merge(
 			(array) Information::getValues('charset_http'),
 			(array) Information::getValues('charset_bom'),
@@ -452,18 +452,18 @@ class Checker {
 		#if ($debug) { echo "<p>n".'$inDocCharsets'."</p>"; print_r($inDocCharsets); }
 		#if ($debug) { echo "<p>".'Information::getFirstVal("charset_meta")'."</p><pre>"; print_r(Information::getFirstVal('charset_meta')); echo "</pre>"; }
 		if (Information::getFirstVal('charset_meta') != null && empty($inDocCharsets) && strtoupper(Information::getFirstVal('charset_meta')) != 'UTF-8' && strtoupper(Information::getFirstVal('charset_meta')) != 'UTF-16') {
-			if ($this->doc->isXHTML10 && ! $this->doc->isServedAsXML) {
+			if ($this->doc->isXHTML1x && ! $this->doc->isServedAsXML) {
 				#if ($debug) { echo "<p>YES</p>"; }
 				Report::addReport(
 					'rep_incorrect_use_meta',
 					$category, REPORT_LEVEL_WARNING,
 					lang('rep_incorrect_use_meta'),
 					lang('rep_incorrect_use_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
-					lang('rep_incorrect_use_meta_todo'),
+					lang('rep_incorrect_use_meta_todo_xhtml'),
 					lang('rep_incorrect_use_meta_link')
 				);
 			}
-			if (($this->doc->isXHTML10 || $this->doc->isXHTML11) && $this->doc->isServedAsXML) {
+			if ($this->doc->isXHTML1x && $this->doc->isServedAsXML) {
 				#if ($debug) { echo "<p>YES</p>"; }
 				Report::addReport(
 					'rep_incorrect_use_meta',
@@ -476,7 +476,7 @@ class Checker {
 			}
 		}
 		
-		// WARNING: Multiple encoding declarations using the meta tag
+		// CHARSET REPORT: Multiple encoding declarations using the meta tag
 		if (count(Information::getValues('charset_meta')) > 1) {
 			Report::addReport(
 				'rep_charset_multiple_meta',
@@ -488,7 +488,7 @@ class Checker {
 			);
 		}
 		
-		// WARNING: UTF-8 BOM found at start of file
+		// CHARSET REPORT: UTF-8 BOM found at start of file
 		if (($bom = Information::getFirstVal('charset_bom')) != null 
 			&& strcasecmp($bom, "UTF-8") == 0) {
 			Report::addReport(
@@ -501,7 +501,7 @@ class Checker {
 			);
 		}
 		
-		// WARNING: No charset declaration in the document
+		// CHARSET REPORT: No charset declaration in the document
 		$inDocCharsets = array_merge(
 			(array) Information::getValues('charset_bom'),
 			(array) Information::getValues('charset_xml'),
@@ -525,7 +525,7 @@ class Checker {
 			);
 		}
 		
-		// WARNING: No visible in-document encoding specified
+		// CHARSET REPORT: No visible in-document encoding specified
 		$inDocCharsets = array_merge(
 			(array) Information::getValues('charset_xml'),
 			(array) Information::getValues('charset_meta')
@@ -552,7 +552,7 @@ class Checker {
 			}
 		}
 		
-		// WARNING: No effective character encoding information
+		// CHARSET REPORT: No effective character encoding information
 		$inDocCharsets = array_merge(
 			(array) Information::getValues('charset_http'),
 			(array) Information::getValues('charset_bom'),
@@ -580,7 +580,7 @@ class Checker {
 			}
 		}
 		
-		// WARNING: BOM in content
+		// CHARSET REPORT: BOM in content
 		// /!\ In the following line is the invisible BOM.
 		if (preg_match('/﻿/', substr($this->markup,3))) {
 			Report::addReport(
@@ -661,6 +661,37 @@ class Checker {
 				}
 			}
 
+		// CHARSET REPORT: charset attribute used on a or link elements
+		$tagArray = array();
+		$tags = $this->doc->getElementsByTagName('link');
+		if ($tags->length > 0) {
+			foreach ($tags as $tag) {
+				if ($tag->attributes->getNamedItem('charset') != null) {
+					$tagArray[] = $this->doc->dumpTag($tag);
+					}
+				}
+			}
+		$tags = $this->doc->getElementsByTagName('a');
+		if ($tags->length > 0) {
+			foreach ($tags as $tag) {
+				if ($tag->attributes->getNamedItem('charset') != null) {
+					$tagArray[] = $this->doc->dumpTag($tag);
+					}
+				}
+			}
+		if ($this->doc->isHTML5) { $report_level = REPORT_LEVEL_ERROR; } else { $report_level = REPORT_LEVEL_WARNING; } 
+		if (count($tagArray) > 0) {
+			Report::addReport(
+				'rep_charset_charset_attr',
+				'markup_category', $report_level, 
+				lang('rep_charset_charset_attr'),
+				lang('rep_charset_charset_attr_expl', Language::format($tagArray, LANG_FORMAT_OL_CODE)),
+				lang('rep_charset_charset_attr_todo'),
+				lang('rep_charset_charset_attr_link')
+				);
+			}
+		
+
 	} 
 	
 	
@@ -702,7 +733,7 @@ if ($debug) {
 	}
 */
 		
-		// WARNING: Content-Language meta element
+		// LANG REPORT: Content-Language meta element
 		if (!Utils::_empty($this->doc->getMetaContentLanguage())) {
 			if ($this->doc->isHTML5) { $_reportlevel = REPORT_LEVEL_ERROR; }
 			else { $_reportlevel = REPORT_LEVEL_WARNING; }
@@ -857,6 +888,7 @@ if ($debug) {
 						return false;
 					return true;
 					});
+				$expl = 'rep_dir_incorrect_expl_html5';
 				}
 			else {
 				$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXHTML) {
@@ -865,13 +897,14 @@ if ($debug) {
 						return false;
 					return true;
 					});
+				$expl = 'rep_dir_incorrect_expl';
 				}
 			if (count($invalidDirNodes) > 0)
 				Report::addReport(
 					'rep_dir_incorrect',
 					'dir_category', REPORT_LEVEL_ERROR, 
 					lang('rep_dir_incorrect'),
-					lang('rep_dir_incorrect_expl', Language::format(Utils::codesFromValArray($invalidDirNodes), LANG_FORMAT_OL_CODE)),
+					lang($expl, Language::format(Utils::codesFromValArray($invalidDirNodes), LANG_FORMAT_OL_CODE)),
 					lang('rep_dir_incorrect_todo'),
 					lang('rep_dir_incorrect_link')
 				);
