@@ -4,6 +4,11 @@ var W3Cr = {
 	
 	start: function() {
 		var slideDuration = 500;
+		// Deactivate the slide effect on IE <= 8
+		if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
+			if (new Number(RegExp.$1) <= 8)
+				var slideDuration = 0;
+		}
 		var scroller = new Fx.Scroll(document);
 		var instantScroller = new Fx.Scroll(document, {'duration': 500});
 		if ($('messages') != null)
