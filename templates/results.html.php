@@ -151,11 +151,14 @@ include(PATH_TEMPLATES.'/html/messages.php');
 </div>
 <?php } ?>
 
-<?php  /* <div id="source" class="section">
-	<h1><a href="#source"><?php _lang('source_code') ?></a></h1>
-	<div class="content">
+<?php if (isset($_GET['source']) && $_GET['source'] == 'true') { ?>
+<div id="source" class="section">
+	<h1 class="title"><a href="#source"><?php _lang('source_code') ?></a></h1>
+	<div class="block">
+		<pre><?php echo htmlentities($content, ENT_QUOTES, "UTF-8"); ?></pre>
 	</div>
-</div> */ ?>
+</div>
+<?php } ?>
 
 <?php 
 if (!IS_AJAX) {

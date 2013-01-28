@@ -35,6 +35,7 @@ abstract class Parser {
 	public $isXHTML5 = false;
 	// = isXHTML10 || isXHTML11 || isXHTML5
 	public $isXML = false;
+	public $isRDFa = false;
 	public $isServedAsXML = false;
 	// DOMDocument object
 	public $document;
@@ -87,11 +88,15 @@ abstract class Parser {
 			$this->isHTML5 = true;
 		} else if (preg_match("/<!DOCTYPE [^>]*DTD XHTML(\+[^ ]+)? 1.0[^>]+/i", substr($this->markup, '0', Conf::get('perf_head_length')), $matches)) {
 			$this->isXHTML10 = true;
+			if (preg_match('/RDFa/', $matches[0]))
+				$this->isRDFa = true;
 		} else if (preg_match("/<!DOCTYPE [^>]*DTD XHTML(\+[^ ]+)? 1.1[^>]+/i", substr($this->markup, '0', Conf::get('perf_head_length')), $matches)) {
 			$this->isXHTML11 = true;
+			if (preg_match('/RDFa/', $matches[0]))
+				$this->isRDFa = true;
 		} else {
-			//TODO Add warning
-			$this->isHTML = true;
+			//TODO Add warning?
+			$this->isHTML5 = true;
 		}
 	}
 	
@@ -99,9 +104,15 @@ abstract class Parser {
 		if ($this->isHTML)
 			return 'HTML 4.01';
 		if ($this->isXHTML10)
-			return 'XHTML 1.0';
+			if ($this->isRDFa)
+				return 'XHTML+RDFa 1.0';
+			else
+				return 'XHTML 1.0';
 		if ($this->isXHTML11)
-			return 'XHTML 1.1';
+			if ($this->isRDFa)
+				return 'XHTML+RDFa 1.1';
+			else
+				return 'XHTML 1.1';
 		if ($this->isXHTML5)
 			return 'XHTML 5';
 		if ($this->isHTML5)

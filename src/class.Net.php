@@ -6,7 +6,7 @@
 /*
  * 
  */
-require_once(PATH_LIB.'/IDNA.php');
+require_once(PATH_SRC.'/class.Utils.php');
 /**
  * HTTP related functions
  * 
@@ -129,14 +129,28 @@ class Net {
 	}
 	
 	public static function fetchDocument($url) {
-		// Support of IRIs. Encoding will do nothing if not an IRI.
-		$IDN = new Net_IDNA();
-		$encodedUrl = $IDN->encode($url);
-		$url != $encodedUrl ? $isIRI = true : $isIRI = false;
+		// Support of IRIs.
+		$isIRI = false;
+		if (!Utils::isASCII($url)) {
+			$parsedURL = Utils::parse_url($url);
+			if ($parsedURL != null) {
+				//self::$logger->debug("Parsed url: ".print_r($parsedURL,true));
+				$parsedURL['host'] = idn_to_ascii($parsedURL['host']);
+				//self::$logger->debug("To ascii domain: ".$parsedURL['host']);
+				$parsedURL['path'] = preg_replace('/%2F/', '/', urlencode($parsedURL['path']));
+				//self::$logger->debug("Encoded path: ".$parsedURL['path']);
+				$url = http_build_url($parsedURL);
+				//self::$logger->debug("Final URL: ".$url);
+				$isIRI = true;
+			} else {
+				self::$logger->error("Error parsing url: ".$url);
+			}
+		}
+		
 		//$url = str_replace("&amp;", "&", urldecode(trim($encodedUrl)));
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_USERAGENT, Conf::get('curl_user_agent'));
-		curl_setopt($ch, CURLOPT_URL, $encodedUrl);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		if (Conf::get('curl_cookiejar_enabled'))
 			curl_setopt( $ch, CURLOPT_COOKIEJAR, Conf::get('curl_cookiejar_path'));
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -183,9 +197,18 @@ class Net {
 		}
 		// FIXME?
 		// If http://उदाहरण.परीक्षा is redirected to http://उदाहरण.परीक्षा/मुख्य_पृष्ठ curl will return http://xn--p1b6ci4b4b3a.xn--11b5bs3a9aj6g/%E0%A4%AE%E0%A5%81%E0%A4%96%E0%A5%8D%E0%A4%AF_%E0%A4%AA%E0%A5%83%E0%A4%B7%E0%A5%8D%E0%A4%A0
-		// If the submitted uri is an iri and there has been a redirection then decode the url. It might be inexact in some cases.
-		if ($isIRI && $response['url'] != $encodedUrl)
-			$response['url'] = urldecode($response['url']);
+		// If the submitted uri is an iri then punnycode to utf8 the domain name and decode the path.
+		if ($isIRI) {
+			$parsedURL = Utils::parse_url($response['url']);
+			//self::$logger->debug("Parsed effective url: ".print_r($parsedURL,true));
+			$parsedURL['host'] = idn_to_utf8($parsedURL['host']);
+			//self::$logger->debug("To utf-8 domain: ".$parsedURL['host']);
+			$parsedURL['path'] = urldecode($parsedURL['path']);
+			//self::$logger->debug("Decoded path: ".$parsedURL['path']);
+			$response['url'] = http_build_url($parsedURL);
+			//self::$logger->debug("Final effective URL: ".$response['url']);
+		}
+			
 		return array($response['url'], $content, $response, $code, $error);
 	}
 }

@@ -54,6 +54,8 @@ class Checker {
 			return false;
 		}
 		
+		//print_r(htmlentities($this->doc->markup));
+		
 		// Gather information
 		$this->addInfoDTDMimetype();
 		$this->addInfoCharsetHTTP();
@@ -322,9 +324,11 @@ class Checker {
 		if (empty($charsetVals)) {
 			self::$logger->debug('No charset information found for this document.');
 			if (! $this->doc->isServedAsXML) {
+				if ($this->doc->isHTML5) { $rep_level = REPORT_LEVEL_ERROR; }
+				else { $rep_level = REPORT_LEVEL_WARNING; }
 				Report::addReport(
 					'rep_charset_none',
-					$category, REPORT_LEVEL_WARNING,
+					$category, $rep_level,
 					lang('rep_charset_none'),
 					lang('rep_charset_none_expl'),
 					lang('rep_charset_none_todo'),
@@ -332,12 +336,12 @@ class Checker {
 				);
 			} else {
 				Report::addReport(
-					'rep_no_encoding_xml',
+					'rep_charset_no_encoding_xml',
 					$category, REPORT_LEVEL_WARNING,
-					lang('rep_no_encoding_xml'),
-					lang('rep_no_encoding_xml_expl'),
-					lang('rep_no_encoding_xml_todo'),
-					lang('rep_no_encoding_xml_link')
+					lang('rep_charset_no_encoding_xml'),
+					lang('rep_charset_no_encoding_xml_expl'),
+					lang('rep_charset_no_encoding_xml_todo'),
+					lang('rep_charset_no_encoding_xml_link')
 				);
 			}
 			return;
@@ -409,12 +413,26 @@ class Checker {
 		if (Information::getFirstVal('charset_meta') != null && !Utils::_empty($this->doc->getMetaCharset())) {
 			if (!$this->doc->isHTML5) {
 				Report::addReport(
-					'rep_meta_charset_invalid',
+					'rep_charset_meta_charset_invalid',
 					$category, REPORT_LEVEL_WARNING, 
-					lang('rep_meta_charset_invalid'),
-					lang('rep_meta_charset_invalid_expl', Language::format(Utils::codesFromValArray($this->doc->getMetaCharset()), LANG_FORMAT_OL_CODE)),
-					lang('rep_meta_charset_invalid_todo'),
-					lang('rep_meta_charset_invalid_link')
+					lang('rep_charset_meta_charset_invalid'),
+					lang('rep_charset_meta_charset_invalid_expl', Language::format(Utils::codesFromValArray($this->doc->getMetaCharset()), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_meta_charset_invalid_todo'),
+					lang('rep_charset_meta_charset_invalid_link')
+				);
+			}
+		}
+
+		// CHARSET REPORT: Meta charset declaration uses http-equiv
+		if ($this->doc->isHTML5) {
+			if (Information::getFirstVal('charset_meta') != null && $this->metaType($this->getFirstCVP(Information::getValues('charset_meta'))) == 'http-equiv') {
+				Report::addReport(
+					'rep_charset_pragma',
+					$category, REPORT_LEVEL_INFO, 
+					lang('rep_charset_pragma'),
+					lang('rep_charset_pragma_expl', Language::format(Utils::codesFromValArray($this->doc->getMetaContentType()), LANG_FORMAT_OL_CODE), Information::getFirstVal('charset_meta')),
+					lang('rep_charset_pragma_todo'),
+					lang('rep_charset_pragma_link')
 				);
 			}
 		}
@@ -427,12 +445,12 @@ class Checker {
 			#if ($this->doc->isServedAsXML && strtoupper(Information::getFirstVal('charset_meta')) == 'UTF-8' || strtoupper(Information::getFirstVal('charset_meta') == 'UTF-16')) {
 			if ($this->doc->isServedAsXML) {
 				Report::addReport(
-					'rep_meta_ineffective',
+					'rep_charset_meta_ineffective',
 					$category, REPORT_LEVEL_INFO, 
-					lang('rep_meta_ineffective'),
-					lang('rep_meta_ineffective_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
-					lang('rep_meta_ineffective_todo'),
-					lang('rep_meta_ineffective_link')
+					lang('rep_charset_meta_ineffective'),
+					lang('rep_charset_meta_ineffective_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_meta_ineffective_todo'),
+					lang('rep_charset_meta_ineffective_link')
 				);
 			}
 		}
@@ -455,23 +473,23 @@ class Checker {
 			if ($this->doc->isXHTML1x && ! $this->doc->isServedAsXML) {
 				#if ($debug) { echo "<p>YES</p>"; }
 				Report::addReport(
-					'rep_incorrect_use_meta',
+					'rep_charset_incorrect_use_meta',
 					$category, REPORT_LEVEL_WARNING,
-					lang('rep_incorrect_use_meta'),
-					lang('rep_incorrect_use_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
-					lang('rep_incorrect_use_meta_todo_xhtml'),
-					lang('rep_incorrect_use_meta_link')
+					lang('rep_charset_incorrect_use_meta'),
+					lang('rep_charset_incorrect_use_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_incorrect_use_meta_todo_xhtml'),
+					lang('rep_charset_incorrect_use_meta_link')
 				);
 			}
 			if ($this->doc->isXHTML1x && $this->doc->isServedAsXML) {
 				#if ($debug) { echo "<p>YES</p>"; }
 				Report::addReport(
-					'rep_incorrect_use_meta',
+					'rep_charset_incorrect_use_meta',
 					$category, REPORT_LEVEL_ERROR,
-					lang('rep_incorrect_use_meta'),
-					lang('rep_incorrect_use_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
-					lang('rep_incorrect_use_meta_todo'),
-					lang('rep_incorrect_use_meta_link')
+					lang('rep_charset_incorrect_use_meta'),
+					lang('rep_charset_incorrect_use_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_incorrect_use_meta_todo'),
+					lang('rep_charset_incorrect_use_meta_link')
 				);
 			}
 		}
@@ -539,15 +557,16 @@ class Checker {
 		#if ($debug) { echo "\n".'$inDocCharsets'."\n"; print_r($inDocCharsets); }
 		#if ($debug) { echo "\n".'Information::getFirstVal("charset_bom")'."\n"; print_r(Information::getFirstVal('charset_bom')); }
 		if (Information::getFirstVal('charset_bom') != null && empty($inDocCharsets)) {
-			if ((($this->doc->isHTML5 || $this->doc->isHTML5) && Information::getFirstVal('charset_bom') == 'UTF-8') || 
-				($this->doc->isHTML || $this->doc->isXHTML10 || $this->doc->isXHTML11)) {
+//			if ((($this->doc->isHTML5 || $this->doc->isHTML5) && Information::getFirstVal('charset_bom') == 'UTF-8') || 
+//				($this->doc->isHTML || $this->doc->isXHTML10 || $this->doc->isXHTML11)) {
+			if ( Information::getFirstVal('charset_bom') == 'UTF-8' ) {
 				Report::addReport(
-					'rep_no_visible_charset',
+					'rep_charset_no_visible_charset',
 					$category, REPORT_LEVEL_WARNING,
-					lang('rep_no_visible_charset'),
-					lang('rep_no_visible_charset_expl', htmlspecialchars(Information::get('charset_http')->values[0]['code'])),
-					lang('rep_no_visible_charset_todo'),
-					lang('rep_no_visible_charset_link')
+					lang('rep_charset_no_visible_charset'),
+					lang('rep_charset_no_visible_charset_expl', htmlspecialchars(Information::get('charset_http')->values[0]['code'])),
+					lang('rep_charset_no_visible_charset_todo'),
+					lang('rep_charset_no_visible_charset_link')
 				);
 			}
 		}
@@ -570,12 +589,12 @@ class Checker {
 			if ($this->doc->isHTML5 || $this->doc->isHTML || ($this->doc->isXHTML10 && ! $this->doc->isServedAsXML)) {
 				#if ($debug) { echo "<p>YES</p>"; }
 				Report::addReport(
-					'rep_no_effective_charset',
+					'rep_charset_no_effective_charset',
 					$category, REPORT_LEVEL_WARNING,
-					lang('rep_no_effective_charset'),
-					lang('rep_no_effective_charset_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
-					lang('rep_no_effective_charset_todo'),
-					lang('rep_no_effective_charset_link')
+					lang('rep_charset_no_effective_charset'),
+					lang('rep_charset_no_effective_charset_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_no_effective_charset_todo'),
+					lang('rep_charset_no_effective_charset_link')
 				);
 			}
 		}
@@ -636,12 +655,12 @@ class Checker {
 			}
 		if ($found) {
 			Report::addReport(
-				'rep_charset_utf16le-be',
+				'rep_charset_utf16lebe',
 				$category, REPORT_LEVEL_ERROR,
-				lang('rep_charset_utf16le-be'),
-				lang('rep_charset_utf16le-be_expl', Language::format(Utils::codesFromValArray($nonBomCharsets), LANG_FORMAT_OL_CODE)),
-				lang('rep_charset_utf16le-be_todo'),
-				lang('rep_charset_utf16le-be_link')
+				lang('rep_charset_utf16lebe'),
+				lang('rep_charset_utf16lebe_expl', Language::format(Utils::codesFromValArray($nonBomCharsets), LANG_FORMAT_OL_CODE)),
+				lang('rep_charset_utf16lebe_todo'),
+				lang('rep_charset_utf16lebe_link')
 				);
 			}
 
@@ -700,7 +719,20 @@ class Checker {
 		// array: an array of items, each containing value and code items
 		return ($array['values'] != null && !empty($array['values']));
 		}
+		
+	private function getFirstCVP ($array) {
+		// returns the first code-value pair from an array of code-value pairs
+		if (count($array) > 0) { return $array[0]; }
+		else return null;
+		}
 	
+	private function metaType ($array) {
+		// returns a string to indicate whether a meta declaration uses http-equiv or charset attribute
+		// array: a single value+code item
+		if (preg_match("/http-equiv=/i", $array['code'])) { return 'http-equiv'; }
+		else { return 'charset'; }
+		}
+		
 	
 	private function addReportLanguages() {
 		$category = 'lang_category';
@@ -738,12 +770,12 @@ if ($debug) {
 			if ($this->doc->isHTML5) { $_reportlevel = REPORT_LEVEL_ERROR; }
 			else { $_reportlevel = REPORT_LEVEL_WARNING; }
 			Report::addReport(
-				'rep_content_lang_meta',
+				'rep_lang_content_lang_meta',
 				$category, $_reportlevel,
-				lang('rep_content_lang_meta'),
-				lang('rep_content_lang_meta_expl', Language::format(Information::$infos['lang_meta']->values[0]['code'], LANG_FORMAT_OL_CODE)), // TODO review this after refactoring of Information
-				lang('rep_content_lang_meta_todo'),
-				lang('rep_content_lang_meta_link')
+				lang('rep_lang_content_lang_meta'),
+				lang('rep_lang_content_lang_meta_expl', Language::format(Information::$infos['lang_meta']->values[0]['code'], LANG_FORMAT_OL_CODE)), // TODO review this after refactoring of Information
+				lang('rep_lang_content_lang_meta_todo'),
+				lang('rep_lang_content_lang_meta_link')
 				);
 			}
 
@@ -765,27 +797,27 @@ if ($debug) {
 		// WARNING: The html tag has no effective language declaration
 		if ($langAttr == null && $xmlLangAttr != null) {
 			if ($this->doc->isHTML || $this->doc->isHTML5 || ($this->doc->isXHTML10 && !$this->doc->isServedAsXML)) {
-				if ($this->doc->isXHTML10) { $_todo = 'rep_html_no_effective_lang_todo_xhtml'; }
-				else { $_todo = 'rep_html_no_effective_lang_todo_html'; }
+				if ($this->doc->isXHTML10) { $_todo = 'rep_lang_html_no_effective_lang_todo_xhtml'; }
+				else { $_todo = 'rep_lang_html_no_effective_lang_todo_html'; }
 				Report::addReport(
-					'rep_html_no_effective_lang',
+					'rep_lang_html_no_effective_lang',
 					$category, REPORT_LEVEL_WARNING,
-					lang('rep_html_no_effective_lang'),
-					lang('rep_html_no_effective_lang_expl', Language::format(Utils::codesFromValArray(Information::getValues('lang_attr_lang')), LANG_FORMAT_OL_CODE)),
+					lang('rep_lang_html_no_effective_lang'),
+					lang('rep_lang_html_no_effective_lang_expl', Language::format(Utils::codesFromValArray(Information::getValues('lang_attr_lang')), LANG_FORMAT_OL_CODE)),
 					lang($_todo),
-					lang('rep_html_no_effective_lang_link')
+					lang('rep_lang_html_no_effective_lang_link')
 					);
 				}
 			}
 		if ($xmlLangAttr == null && $langAttr != null) {
 			if ($this->doc->isServedAsXML) {
 				Report::addReport(
-					'rep_html_no_effective_lang',
+					'rep_lang_html_no_effective_lang',
 					$category, REPORT_LEVEL_WARNING,
-					lang('rep_html_no_effective_lang'),
-					lang('rep_html_no_effective_lang_expl', Language::format(Utils::codesFromValArray(Information::getValues('lang_attr_lang')), LANG_FORMAT_OL_CODE)),
-					lang('rep_html_no_effective_lang_todo_xml'),
-					lang('rep_html_no_effective_lang_link')
+					lang('rep_lang_html_no_effective_lang'),
+					lang('rep_lang_html_no_effective_lang_expl', Language::format(Utils::codesFromValArray(Information::getValues('lang_attr_lang')), LANG_FORMAT_OL_CODE)),
+					lang('rep_lang_html_no_effective_lang_todo_xml'),
+					lang('rep_lang_html_no_effective_lang_link')
 					);
 				}
 			}
@@ -888,7 +920,7 @@ if ($debug) {
 						return false;
 					return true;
 					});
-				$expl = 'rep_dir_incorrect_expl_html5';
+				$expl = 'rep_markup_dir_incorrect_expl_html5';
 				}
 			else {
 				$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXHTML) {
@@ -897,16 +929,16 @@ if ($debug) {
 						return false;
 					return true;
 					});
-				$expl = 'rep_dir_incorrect_expl';
+				$expl = 'rep_markup_dir_incorrect_expl';
 				}
 			if (count($invalidDirNodes) > 0)
 				Report::addReport(
-					'rep_dir_incorrect',
+					'rep_markup_dir_incorrect',
 					'dir_category', REPORT_LEVEL_ERROR, 
-					lang('rep_dir_incorrect'),
+					lang('rep_markup_dir_incorrect'),
 					lang($expl, Language::format(Utils::codesFromValArray($invalidDirNodes), LANG_FORMAT_OL_CODE)),
-					lang('rep_dir_incorrect_todo'),
-					lang('rep_dir_incorrect_link')
+					lang('rep_markup_dir_incorrect_todo'),
+					lang('rep_markup_dir_incorrect_link')
 				);
 		}
 		
@@ -917,12 +949,12 @@ if ($debug) {
 		$nonNFCs = Information::getValues('classId_non_nfc');
 		if (count($nonNFCs) > 0) {
 			Report::addReport(
-				'rep_misc_non_nfc',
+				'rep_latin_non_nfc',
 				'nonLatin_category', REPORT_LEVEL_WARNING, 
-				lang('rep_misc_non_nfc'),
-				lang('rep_misc_non_nfc_expl', count($nonNFCs), Language::format(Utils::codesFromValArray($nonNFCs), LANG_FORMAT_OL_CODE)),
-				lang('rep_misc_non_nfc_todo'),
-				lang('rep_misc_non_nfc_link')
+				lang('rep_latin_non_nfc'),
+				lang('rep_latin_non_nfc_expl', count($nonNFCs), Language::format(Utils::codesFromValArray($nonNFCs), LANG_FORMAT_OL_CODE)),
+				lang('rep_latin_non_nfc_todo'),
+				lang('rep_latin_non_nfc_link')
 			);
 		}
 		
@@ -937,12 +969,12 @@ if ($debug) {
 			}
 			if ($count > 0)
 				Report::addReport(
-					'rep_misc_tags_no_class',
+					'rep_markup_tags_no_class',
 					'markup_category', REPORT_LEVEL_INFO, 
-					lang('rep_misc_tags_no_class', 'b'),
-					lang('rep_misc_tags_no_class_expl', 'b', $bTags->length, $count),
-					lang('rep_misc_tags_no_class_todo', 'b'),
-					lang('rep_misc_tags_no_class_link')
+					lang('rep_markup_tags_no_class', 'b'),
+					lang('rep_markup_tags_no_class_expl', 'b', $bTags->length, $count),
+					lang('rep_markup_tags_no_class_todo', 'b'),
+					lang('rep_markup_tags_no_class_link')
 				);
 		}
 		
@@ -957,12 +989,12 @@ if ($debug) {
 			}
 			if ($count > 0)
 				Report::addReport(
-					'rep_misc_tags_no_class',
+					'rep_markup_tags_no_class',
 					'markup_category', REPORT_LEVEL_INFO, 
-					lang('rep_misc_tags_no_class', 'i'),
-					lang('rep_misc_tags_no_class_expl', 'i', $iTags->length, $count),
-					lang('rep_misc_tags_no_class_todo', 'i'),
-					lang('rep_misc_tags_no_class_link')
+					lang('rep_markup_tags_no_class', 'i'),
+					lang('rep_markup_tags_no_class_expl', 'i', $iTags->length, $count),
+					lang('rep_markup_tags_no_class_todo', 'i'),
+					lang('rep_markup_tags_no_class_link')
 				);
 		}
 

@@ -1109,12 +1109,30 @@ div.observer h2.toggled span.arrow {
 }
 
 /* Additions specific to i18n checker*/
-div.intro {
+div.intro, div.disclaimer {
 	margin: 1em 2em;
 }
 
-div.intro p {
+div.intro p, div.disclaimer p {
 	margin: 0.5em 0;
+	font-size:0.95em;
+	line-height:135%;
+}
+
+div.disclaimer {
+	padding:0.5em;
+	background-color: #EAEBEE;
+	background-color: #E8FFDE;
+	border: 1px dotted #CCC;
+	border: 1px solid #5A8600;
+	border: 1px solid rgb(157,199,89);
+	border-radius: 10px;
+	
+}
+div.disclaimer h2 {
+	font-size:115%;	
+	color:#365D95;
+	color:#5A8600;
 }
 
 .w3cLarge {
@@ -1482,4 +1500,55 @@ fieldset div.input input[type=submit] {
 	border-radius: 18px;
 	padding: 4px 16px;
 	text-align: center;
+}
+
+.about {
+	margin: 1.5em 2.3em 1em;
+	line-height:150%;
+}
+.about h2 {
+	color: #690;
+	font-family: Verdana,Arial,sans-serif;
+	background-color: white;
+	font-size: 1.3em;
+	margin-bottom: 20px;
+}
+.about h3 {
+	font-family: Verdana,Arial,sans-serif;
+	color: #690;
+	background-color: white;
+	font-size: 1.1em;
+	border-bottom: 1px dotted #AA7;
+	text-decoration: none;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.about h4 {
+	font-family: Verdana,Arial,sans-serif;
+	color: #690;
+	font-style: italic;
+	text-decoration: none;
+	font-size: .9em;
+	font-weight: 600;
+	margin-top: 1.5em;
+	margin-bottom: .5em;
+}
+.about .toc {
+	margin-bottom: 20px;
+	margin-left: 50px;
+}
+.about .toc ol {
+	list-style-type: decimal;
+}
+.about p, .about ul {
+	margin-bottom: .7em;
+	margin-top: .5em;
+	margin-left: 1.5em;
+	margin-right: 1.5em;
+}
+.about ul {
+	list-style-type:disc;
+}
+.about ul li {
+	margin-bottom:10px;
 }

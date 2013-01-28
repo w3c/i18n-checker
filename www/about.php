@@ -9,7 +9,7 @@ include(PATH_TEMPLATES.'/html/head.php');
 // Hide language selection for now - this page is not internationalized
 $hideLangSelection = true;
 ?>
-<div style="margin: 1.5em 2.3em 1em;">
+<div class="about">
 
 <h2>About The W3C Internationalization (i18n) Checker</h2>
 <h3 id="TableOfContents">Table of contents</h3>
@@ -45,10 +45,10 @@ $hideLangSelection = true;
 	suggestions based on your use (or not) of internationalization-related
 	markup. The report also points you to resources where you can read more
 	about the topic in question.</p>
-	<p><strong>The checker is currently a beta release, so please let us know about bugs and missing feature</strong> using the <a href="feedback.html">feedback form</a>. We already have plans to add a number of new features over the coming months, and to translation the user interface.</p>
+	<p><strong>The checker is currently a pre-release version, so please let us know about bugs and missing features using the <a href="feedback.html">feedback form</a></strong>. We already have plans to add a number of new features over the coming months, and to translate the user interface.</p>
 	
-	<p>The information panel at the top of the page should work for most formats. In terms of issue reports, the checker currently targets HTML4, HTML5, and XHTML 1.0/1.1 (served as
-	text/html or application/xhtml+xml). It doesn't yet produce issue reports for XHTML5.</p>
+	<p>The information panel at the top of the page should work for most formats. In terms of issue reports, the checker currently targets HTML5, HTML4, and XHTML 1.0/1.1  (served as
+	text/html or application/xhtml+xml). It will soon produce issue reports for XHTML5 or Polyglot pages.</p>
 	<p>The hope is to eventually merge features of this checker with other
 	checkers and validators at the W3C, once it reaches an appropriate level
 	of maturity.</p>
@@ -63,7 +63,8 @@ $hideLangSelection = true;
 		Index</a> of the Internationalization Activity provides links to
 		recommendations and useful resources on a task by task basis. The W3C
 		Internationalization Checker reports link back to the part of this
-		index that deals with Authoring HTML &amp; CSS whenever possible.</li>
+	  index that deals with Authoring HTML &amp; CSS.</li>
+		<li>You can track the report suggestions back to authoritative sources using the page <a href="http://www.w3.org/International/quicktips/checker">Internationalization Checker reports</a>.</li>
 		<li>The <a href="http://www.w3.org/International/quicktips/">Internationalization
 		Quick Tips for the Web</a> summarize key concepts of international Web
 		design.</li>
@@ -78,14 +79,13 @@ $hideLangSelection = true;
 <div>
 	<h4>Relevant activities</h4>
 	<ul class="bd compact">
-		<li>The <a href="http://www.w3.org/Mobile/">W3C's Internationalization
+		<li>The <a href="http://www.w3.org/International/">W3C's Internationalization
 		Activity</a> works with W3C working groups and liaises with other
 		organizations to make it possible to use Web technologies with
 		different languages, scripts, and cultures. It also provides articles
 		and other resources about Web internationalization.</li>
-	
 		<li>The <a style="" href="/International/ig/">Internationalization
-		Interest Group</a>. This is a public list supporting the activity of
+		Interest Group</a> operates via a set of public mailing lists supporting the activity of
 		the Internationalization Working Groups. Anyone can participate in the
 		Interest Group by simply joining the mailing list.</li>
 		<li>The <a href="http://www.multilingualweb.eu/">MultilingualWeb

@@ -16,6 +16,15 @@
 							</label>
 						</p>
 					</div>
+					<fieldset class="options advanced toggles">
+						<legend title="Show/Hide extra options">Options</legend>
+						<div class="options">
+							<label title="Show source" for="source">
+								<span>Show source</span>
+								<input type="checkbox" name="show_source" id="show_source" value="true" />
+							</label>
+						</div>
+					</fieldset>
 					<div class="submit">
 						<?php if(isset($_REQUEST['lang']) && $_REQUEST['lang'] == $lang) { ?>
 						<input type="hidden" name="lang" value="<?php echo $lang ?>" class="lang" />

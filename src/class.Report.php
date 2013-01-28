@@ -50,6 +50,8 @@ class Report {
 	}
 	
 	private static function filterReports($severity) {
+		if (self::$reports == null)
+			return null;
 		return array_filter(self::$reports, function($report) use ($severity) {
 					if ($report->severity == $severity)
 						return true;
@@ -107,4 +109,15 @@ class Report {
 	public static function clear() {
 		self::$reports = array();
 	}
+	
+	public static function getReportsStartingWith($name) {
+		if (self::$reports == null)
+			return null;
+		$keys = array_keys(self::$reports);
+		foreach ($keys as $key)
+			if (preg_match('/^'.$name.'/', $key))
+				$result[] = self::$reports[$key];
+		return isset($result) ? $result : null; 
+	}
+	
 }

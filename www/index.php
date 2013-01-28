@@ -5,15 +5,15 @@ require_once(PATH_SRC.DIRECTORY_SEPARATOR.'class.Message.php');
 // Hide language selection for now - remove this line or set to false to bring it back
 $hideLangSelection = true;
 
-Message::addMessage(MSG_LEVEL_WARNING, 'The checker is still only a prototype, so there are guarranteed to be bugs and missing features.  
-	It will be developed over the coming months, but it has been made available for use now since it is likely to be helpful to many people already. 
-	If you have suggestions for ways to improve the checker, please fill in the feedback form.');
+Message::addMessage(MSG_LEVEL_INFO, 'This is a pre-final release of the checker. Please contact us about errors, bugs or suggestions using the <a href="http://www.w3.org/International/2007/06/surveyform-110707.php?docname=http://validator.w3.org/i18n-checker&amp;referer=http://validator.w3.org/i18n-checker">feedback form</a>. We already have plans to add further tests and features, to translate the user interface, to add support for XHTML5 and polyglot documents, and to integrate with the W3C Unicorn checker.');
 
-/*$format = isset($_REQUEST['format']) && $_REQUEST['format'] != "" ? $_REQUEST['format'] : Conf::get('default_format');
+$format = isset($_REQUEST['format']) && $_REQUEST['format'] != "" ? $_REQUEST['format'] : Conf::get('default_format');
 if (!file_exists(PATH_TEMPLATES."/index.$format.php")) {
 	$format = Conf::get('default_format');
 	Message::addMessage(MSG_LEVEL_WARNING, lang("message_requested_format_unavailable", $_REQUEST['format'], $format));
+	include(PATH_TEMPLATES."/index.html.php");
+} else {
+	include(PATH_TEMPLATES."/index.$format.php");
 }
-include(PATH_TEMPLATES."/index.$format.php");*/
 	
-include(PATH_TEMPLATES."/index.html.php");
+//include(PATH_TEMPLATES."/index.html.php");
