@@ -3,3 +3,5 @@ syntax: regexp
 ^\.settings$
 ^\.buildpath$
 \.log$
+\.idea
+^i18n-checker.iml$

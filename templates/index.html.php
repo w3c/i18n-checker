@@ -24,8 +24,8 @@ include(PATH_TEMPLATES.'/html/form.php');
 		<p>On the right side of the Information section heading in the checker, we display the doctype and MIME-type used to process the page. Pages that have no doctype are currently handled as HTML5.</p>
 		<p>For more information about this, see <a href="http://www.w3.org/International/articles/serving-xhtml/">Serving HTML &amp; XHTML</a>.</p>
 	</div>
-	<div id="don_program">
-		<script type="text/javascript" src="http://www.w3.org/QA/Tools/don_prog.js"></script>
+	<div id="w3c-include">
+		<script type="text/javascript" src="http://www.w3.org/QA/Tools/w3c-include.js"></script>
 	</div>
 
 <?php include(PATH_TEMPLATES.'/html/footer.php');
