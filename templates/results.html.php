@@ -164,8 +164,8 @@ include(PATH_TEMPLATES.'/html/messages.php');
 if (!IS_AJAX) {
 ?>
 
-<div id="don_program">
-	<script type="text/javascript" src="http://www.w3.org/QA/Tools/don_prog.js"></script>
+<div id="w3c-include" class="intro">
+    <script type="text/javascript" src="http://www.w3.org/QA/Tools/w3c-include.js"></script>
 </div>
 	
 <?php 
