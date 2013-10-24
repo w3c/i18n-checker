@@ -34,12 +34,13 @@
 			</a>
 		</p>
 		<p class="copyright" xml:lang="en" lang="en" dir="ltr">
-			<a rel="Copyright" href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &copy; 1994-2011
+			<a rel="Copyright" href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &copy; 2013
 			<a href="http://www.w3.org/"><acronym title="World Wide Web Consortium">W3C</acronym></a>&reg;
 
 			(<a href="http://www.csail.mit.edu/"><acronym title="Massachusetts Institute of Technology">MIT</acronym></a>,
 			<a href="http://www.ercim.eu/"><acronym title="European Research Consortium for Informatics and Mathematics">ERCIM</acronym></a>,
-			<a href="http://www.keio.ac.jp/">Keio</a>),
+			<a href="http://www.keio.ac.jp/">Keio</a>,
+			<a href="http://ev.buaa.edu.cn/">Beihang</a>),
 			All Rights Reserved.
 			W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
 			<a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a>,
