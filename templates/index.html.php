@@ -14,7 +14,7 @@ include(PATH_TEMPLATES.'/html/form.php');
 ?>
 
 	<div class="intro">
-		<p><?php _lang('intro') ?></p>
+		<p><?php _lang('intro', Conf::get('base_uri').'about'.(Conf::get('show_extension') ? '.php' : '')) ?></p>
 		<p><?php _lang('intro_links') ?></p>
 	</div>
 	<div class="disclaimer">
