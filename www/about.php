@@ -25,7 +25,7 @@ $hideLangSelection = true;
 <h3 id="about">About this service</h3>
 
 <div class="bd compact">
-	<p>The <a href="index.php">W3C Internationalization Checker</a> is a
+	<p>The <a href="<?php echo Conf::get('base_uri') ?>">W3C Internationalization Checker</a> is a
 	free service by <acronym title="World Wide Web Consortium">W3C</acronym>
 	that provides information about internationalization features of your
 	page, and provides advice on how to improve your use of
