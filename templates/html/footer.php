@@ -29,7 +29,7 @@
 		</div>
 		
 		<p id="support_logo">
-			<a href="http://www.w3.org/QA/Tools/Donate" title="$donation_program">
+			<a href="http://www.w3.org/QA/Tools/Donate" title="Validators Donation Program">
 				<img src="<?php echo Conf::get('base_uri') ?>images/I_heart_validator.png" alt="I heart Validator logo"/>
 			</a>
 		</p>
