@@ -1,7 +1,7 @@
 	<ul id="menu">
 			<li><a href="<?php echo Conf::get('base_uri') ?>" title="<?php _lang('footer_home_title') ?>"><?php _lang('footer_home') ?></a></li>
 			<li><a href="<?php echo Conf::get('base_uri'), 'about', Conf::get('show_extension') ? '.php' : '' ?>" title="<?php _lang('footer_about_title') ?>"><?php _lang('footer_about') ?></a></li>
-			<li><a href="http://dvcs.w3.org/hg/" title="<?php _lang('footer_download_title') ?>"><?php _lang('footer_download') ?></a></li>
+			<li><a href="http://dvcs.w3.org/hg/i18n-checker/" title="<?php _lang('footer_download_title') ?>"><?php _lang('footer_download') ?></a></li>
 			<!-- <li><a href="<?php echo Conf::get('base_uri') ?>translation.html" hreflang="en" title="<?php _lang('footer_translation_title') ?>"><?php _lang('footer_translation') ?></a></li> -->
 			<li><a href="http://www.w3.org/International/2007/06/surveyform-110707.php?docname=http%3A%2F%2Fvalidator.w3.org%2Fi18n-checker&amp;referer=http%3A%2F%2Fvalidator.w3.org%2Fi18n-checker<?php //echo Conf::get('base_uri'), 'feedback', Conf::get('show_extension') ? '.php' : '' ?>" hreflang="en" title="<?php _lang('footer_feedback_title') ?>"><?php _lang('footer_feedback') ?></a></li>
 	</ul>
