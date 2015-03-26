@@ -165,7 +165,7 @@ if (!IS_AJAX) {
 ?>
 
 <div id="w3c-include" class="intro">
-    <script type="text/javascript" src="http://www.w3.org/QA/Tools/w3c-include.js"></script>
+    <script type="text/javascript" src="//www.w3.org/QA/Tools/w3c-include.js"></script>
 </div>
 	
 <?php 
