@@ -590,7 +590,7 @@ class Checker {
 				#if ($debug) { echo "<p>YES</p>"; }
 				Report::addReport(
 					'rep_charset_no_effective_charset',
-					$category, REPORT_LEVEL_WARNING,
+					$category, REPORT_LEVEL_ERROR,
 					lang('rep_charset_no_effective_charset'),
 					lang('rep_charset_no_effective_charset_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
 					lang('rep_charset_no_effective_charset_todo'),
