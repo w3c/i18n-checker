@@ -511,7 +511,7 @@ class Checker {
 			&& strcasecmp($bom, "UTF-8") == 0) {
 			Report::addReport(
 				'rep_charset_bom_found',
-				$category, REPORT_LEVEL_WARNING, 
+				$category, REPORT_LEVEL_INFO, 
 				lang('rep_charset_bom_found'),
 				lang('rep_charset_bom_found_expl'),
 				lang('rep_charset_bom_found_todo'),
