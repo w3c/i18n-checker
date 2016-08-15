@@ -360,7 +360,7 @@ class Checker {
 			);
 			Report::addReport(
 				'rep_charset_no_utf8',
-				$category, REPORT_LEVEL_INFO,
+				$category, REPORT_LEVEL_WARNING,
 				lang('rep_charset_no_utf8'),
 				lang('rep_charset_no_utf8_expl', Language::format($nonUTF8CharsetCodes, LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_no_utf8_todo'),
