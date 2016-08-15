@@ -1103,6 +1103,27 @@ if ($debug) {
 				);
 		}
 
+		// ERROR: <bdo> tag with dir=auto
+		$foundTags = $this->doc->getElementsByTagName('bdo'); 
+		$count = 0;
+		if ($foundTags->length > 0) {
+			foreach ($foundTags as $tag) { 
+				if ($tag->hasAttributes() && $tag->attributes->getNamedItem('dir')->value == "auto") {
+					$count++;
+				}
+			}
+			if ($count > 0)
+				Report::addReport(
+					'rep_markup_bdo_auto',
+					'markup_category', REPORT_LEVEL_ERROR, 
+					lang('rep_markup_bdo_auto', 'b'),
+					lang('rep_markup_bdo_auto_expl', 'b', $foundTags->length, $count),
+					lang('rep_markup_bdo_auto_todo', 'b'),
+					lang('rep_markup_bdo_auto_link')
+				);
+		}
+		
+		
 	}
 }
 
