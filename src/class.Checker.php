@@ -855,12 +855,14 @@ if ($debug) {
 			if (($diff = Utils::diffArray($xmlLangCodes, $htmlLangCodes)) != null) {
 				if ($this->doc->isHTML5) { $_reportlevel = REPORT_LEVEL_ERROR; } 
 				else { $_reportlevel = REPORT_LEVEL_WARNING; } 
+				if ($this->doc->isHTML5) { $_todostring = 'rep_lang_missing_html_attr_todo_html'; } 
+				else { $_todostring = 'rep_lang_missing_html_attr_todo_xhtml'; } 
 				Report::addReport(
 					'rep_lang_missing_html_attr',
 					$category, $_reportlevel, 
 					lang('rep_lang_missing_html_attr'),
 					lang('rep_lang_missing_html_attr_expl', Language::format($diff, LANG_FORMAT_OL_CODE)),
-					lang('rep_lang_missing_html_attr_todo'),
+					lang($_todostring),
 					lang('rep_lang_missing_attr_link')
 				);
 			}
