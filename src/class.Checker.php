@@ -507,7 +507,7 @@ class Checker {
 		}
 
 		// CHARSET REPORT: Meta charset declaration uses http-equiv
-		if ($this->doc->isHTML5) {
+		if (! $this->doc->isServedAsXML) {
 			if (Information::getFirstVal('charset_meta') != null && $this->metaType($this->getFirstCVP(Information::getValues('charset_meta'))) == 'http-equiv') {
 				Report::addReport(
 					'rep_charset_pragma',
