@@ -467,12 +467,12 @@ class Checker {
 		// CHARSET REPORT: XML Declaration used
 		if (Information::getFirstVal('charset_xml') != null) {
 			if ($this->doc->isHTML || $this->doc->isHTML5 && !$this->doc->isServedAsXML) {
-				if ($this->doc->isHTML) { $_expl = 'rep_charset_xml_decl_used_expl_html'; } else { $_expl = 'rep_charset_xml_decl_used_expl_html5'; }
+				#if ($this->doc->isHTML) { $_expl = 'rep_charset_xml_decl_used_expl_html'; } else { $_expl = 'rep_charset_xml_decl_used_expl_html5'; }
 				Report::addReport(
 					'rep_charset_xml_decl_used',
 					$category, REPORT_LEVEL_ERROR, 
 					lang('rep_charset_xml_decl_used'),
-					lang($_expl, Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_xml_decl_used_expl_html5', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
 					lang('rep_charset_xml_decl_used_todo_html'),
 					lang('rep_charset_xml_decl_used_link')
 				);
@@ -480,7 +480,7 @@ class Checker {
 			if ($this->doc->isXHTML10 && !$this->doc->isServedAsXML) {
 				Report::addReport(
 					'rep_charset_xml_decl_used',
-					$category, REPORT_LEVEL_WARNING, 
+					$category, REPORT_LEVEL_ERROR, 
 					lang('rep_charset_xml_decl_used'),
 					lang('rep_charset_xml_decl_used_expl_xhtml', Language::format(Utils::codesFromValArray(Information::getValues('charset_xml')), LANG_FORMAT_OL_CODE)),
 					lang('rep_charset_xml_decl_used_todo_xhtml'),
