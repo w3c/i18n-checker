@@ -493,18 +493,18 @@ class Checker {
 		#if ($debug) { echo "<p>".'$charsetCodes'."</p>"; print_r($charsetCodes); }
 		
 		// CHARSET REPORT: Meta charset tag will cause validation to fail
-		if (Information::getFirstVal('charset_meta') != null && !Utils::_empty($this->doc->getMetaCharset())) {
-			if (!$this->doc->isHTML5) {
-				Report::addReport(
-					'rep_charset_meta_charset_invalid',
-					$category, REPORT_LEVEL_WARNING, 
-					lang('rep_charset_meta_charset_invalid'),
-					lang('rep_charset_meta_charset_invalid_expl', Language::format(Utils::codesFromValArray($this->doc->getMetaCharset()), LANG_FORMAT_OL_CODE)),
-					lang('rep_charset_meta_charset_invalid_todo'),
-					lang('rep_charset_meta_charset_invalid_link')
-				);
-			}
-		}
+		//if (Information::getFirstVal('charset_meta') != null && !Utils::_empty($this->doc->getMetaCharset())) {
+		//	if (!$this->doc->isHTML5) {
+		//		Report::addReport(
+		//			'rep_charset_meta_charset_invalid',
+		//			$category, REPORT_LEVEL_WARNING, 
+		//			lang('rep_charset_meta_charset_invalid'),
+		//			lang('rep_charset_meta_charset_invalid_expl', Language::format(Utils::codesFromValArray($this->doc->getMetaCharset()), LANG_FORMAT_OL_CODE)),
+		//			lang('rep_charset_meta_charset_invalid_todo'),
+		//			lang('rep_charset_meta_charset_invalid_link')
+		//		);
+		//	}
+		//}  REMOVED because no longer a valid check - source left for now for reference
 
 		// CHARSET REPORT: Meta charset declaration uses http-equiv
 		if (! $this->doc->isServedAsXML) {
