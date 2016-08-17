@@ -553,19 +553,19 @@ class Checker {
 		#if ($debug) { echo "<p>n".'$inDocCharsets'."</p>"; print_r($inDocCharsets); }
 		#if ($debug) { echo "<p>".'Information::getFirstVal("charset_meta")'."</p><pre>"; print_r(Information::getFirstVal('charset_meta')); echo "</pre>"; }
 		if (Information::getFirstVal('charset_meta') != null && empty($inDocCharsets) && strtoupper(Information::getFirstVal('charset_meta')) != 'UTF-8' && strtoupper(Information::getFirstVal('charset_meta')) != 'UTF-16') {
-			if ($this->doc->isXHTML1x && ! $this->doc->isServedAsXML) {
-				#if ($debug) { echo "<p>YES</p>"; }
-				Report::addReport(
-					'rep_charset_incorrect_use_meta',
-					$category, REPORT_LEVEL_WARNING,
-					lang('rep_charset_incorrect_use_meta'),
-					lang('rep_charset_incorrect_use_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
-					lang('rep_charset_incorrect_use_meta_todo_xhtml'),
-					lang('rep_charset_incorrect_use_meta_link')
-				);
-			}
-			if ($this->doc->isXHTML1x && $this->doc->isServedAsXML) {
-				#if ($debug) { echo "<p>YES</p>"; }
+			//if ($this->doc->isXHTML1x && ! $this->doc->isServedAsXML) {
+			//	#if ($debug) { echo "<p>YES</p>"; }
+			//	Report::addReport(
+			//		'rep_charset_incorrect_use_meta',
+			//		$category, REPORT_LEVEL_WARNING,
+			//		lang('rep_charset_incorrect_use_meta'),
+			//		lang('rep_charset_incorrect_use_meta_expl', Language::format(Utils::codesFromValArray(Information::getValues('charset_meta')), LANG_FORMAT_OL_CODE)),
+			//		lang('rep_charset_incorrect_use_meta_todo_xhtml'),
+			//		lang('rep_charset_incorrect_use_meta_link')
+			//	);
+			//}
+			//if ($this->doc->isXHTML1x && $this->doc->isServedAsXML) {
+			if ($this->doc->isServedAsXML) {
 				Report::addReport(
 					'rep_charset_incorrect_use_meta',
 					$category, REPORT_LEVEL_ERROR,
