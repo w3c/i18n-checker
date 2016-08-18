@@ -781,11 +781,11 @@ class Checker {
 					}
 				}
 			}
-		if ($this->doc->isHTML5) { $report_level = REPORT_LEVEL_ERROR; } else { $report_level = REPORT_LEVEL_WARNING; } 
+		//if ($this->doc->isHTML5) { $report_level = REPORT_LEVEL_ERROR; } else { $report_level = REPORT_LEVEL_WARNING; } 
 		if (count($tagArray) > 0) {
 			Report::addReport(
 				'rep_charset_charset_attr',
-				'markup_category', $report_level, 
+				'markup_category', REPORT_LEVEL_ERROR, 
 				lang('rep_charset_charset_attr'),
 				lang('rep_charset_charset_attr_expl', Language::format($tagArray, LANG_FORMAT_OL_CODE)),
 				lang('rep_charset_charset_attr_todo'),
