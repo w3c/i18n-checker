@@ -937,14 +937,22 @@ if ($debug) {
 		// WARNING: A tag uses a lang attribute without an associated xml:lang attribute
 		if ($this->doc->isXHTML10 || $this->doc->isXHTML11) {
 			if (($diff = Utils::diffArray($htmlLangCodes, $xmlLangCodes)) != null) {
-				if ($this->doc->isServedAsXML) { $_reportlevel = REPORT_LEVEL_ERROR; $_expl = 'rep_lang_missing_xml_attr_expl_xml'; }
-				else { $_reportlevel = REPORT_LEVEL_WARNING; $_expl = 'rep_lang_missing_xml_attr_expl_xhtml'; }
+				if ($this->doc->isServedAsXML) { 
+					$_reportlevel = REPORT_LEVEL_ERROR;
+					$_expl = 'rep_lang_missing_xml_attr_expl_xml'; 
+					$_todo = 'rep_lang_missing_xml_attr_todo_xml'; 
+					}
+				else { 
+					$_reportlevel = REPORT_LEVEL_WARNING; 
+					$_expl = 'rep_lang_missing_xml_attr_expl_xhtml'; 
+					$_todo = 'rep_lang_missing_xml_attr_todo_xhtml'; 
+					}
 				Report::addReport(
 					'rep_lang_missing_xml_attr',
 					$category, $_reportlevel, 
 					lang('rep_lang_missing_xml_attr'),
 					lang($_expl, Language::format($diff, LANG_FORMAT_OL_CODE)),
-					lang('rep_lang_missing_xml_attr_todo'),
+					lang($_todo),
 					lang('rep_lang_missing_attr_link')
 				);
 			}
