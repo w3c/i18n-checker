@@ -550,8 +550,8 @@ class Checker {
 					return true;
 				return false;
 			});
-		#if ($debug) { echo "<p>n".'$inDocCharsets'."</p>"; print_r($inDocCharsets); }
-		#if ($debug) { echo "<p>".'Information::getFirstVal("charset_meta")'."</p><pre>"; print_r(Information::getFirstVal('charset_meta')); echo "</pre>"; }
+		//echo "<p>n".'$inDocCharsets'."</p>"; var_dump($inDocCharsets); 
+		//echo "<p>".'Information::getFirstVal("charset_meta")'."</p><pre>"; print_r(Information::getFirstVal('charset_meta')); echo "</pre>"; 
 		if (Information::getFirstVal('charset_meta') != null && empty($inDocCharsets) && strtoupper(Information::getFirstVal('charset_meta')) != 'UTF-8' && strtoupper(Information::getFirstVal('charset_meta')) != 'UTF-16') {
 			//if ($this->doc->isXHTML1x && ! $this->doc->isServedAsXML) {
 			//	#if ($debug) { echo "<p>YES</p>"; }
@@ -600,6 +600,21 @@ class Checker {
 				lang('rep_charset_bom_found_todo'),
 				lang('rep_charset_bom_found_link')
 			);
+		}
+		
+		// CHARSET REPORT: UTF-8 BOM disagrees with another declaration
+		if (($bom = Information::getFirstVal('charset_bom')) != null 
+			&& strcasecmp($bom, "UTF-8") == 0) {
+			if (count(array_unique($charsetVals)) != 1) {
+				Report::addReport(
+					'rep_charset_bom_diff_encoding',
+					$category, REPORT_LEVEL_ERROR, 
+					lang('rep_charset_bom_diff_encoding'),
+					lang('rep_charset_bom_diff_encoding_expl', Language::format($codes, LANG_FORMAT_OL_CODE)),
+					lang('rep_charset_bom_diff_encoding_todo'),
+					lang('rep_charset_bom_diff_encoding_link')
+				);
+			}
 		}
 		
 		// CHARSET REPORT: No charset declaration in the document
