@@ -324,11 +324,11 @@ class Checker {
 		if (empty($charsetVals)) {
 			self::$logger->debug('No charset information found for this document.');
 			if (! $this->doc->isServedAsXML) {
-				if ($this->doc->isHTML5) { $rep_level = REPORT_LEVEL_ERROR; }
-				else { $rep_level = REPORT_LEVEL_WARNING; }
+				//if ($this->doc->isHTML5) { $rep_level = REPORT_LEVEL_ERROR; }
+				//else { $rep_level = REPORT_LEVEL_WARNING; }
 				Report::addReport(
 					'rep_charset_none',
-					$category, $rep_level,
+					$category, REPORT_LEVEL_ERROR,
 					lang('rep_charset_none'),
 					lang('rep_charset_none_expl'),
 					lang('rep_charset_none_todo'),
@@ -749,7 +749,7 @@ class Checker {
 
 
 		// CHARSET REPORT: Meta character encoding declaration not within 1024 byte of file start
-		if ($this->doc->isHTML5 && Information::getFirstVal('charset_meta') != null) {
+		if (! $this->doc->isServedAsXML && Information::getFirstVal('charset_meta') != null) {
 			if (!preg_match("/<meta\s[^>]*http-equiv=[\"\']?Content-Type[^>]*>/i", substr($this->markup,0,1024)) &&
 				!preg_match("/<meta\s[^>]*charset=[^>]*>/i", substr($this->markup,0,1024))) { 
 				Report::addReport(
