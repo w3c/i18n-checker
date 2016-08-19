@@ -115,7 +115,7 @@ include(PATH_TEMPLATES.'/html/messages.php');
 		<ol>
 		<?php foreach (Report::getReportsSorted() as $report) { ?> 
 			<li class="section msg">
-				<h2 class="title">
+				<h2 class="title" <?php echo 'title="'.$report->id.'"'; ?>>
 					<?php 
 					if ($report->severity == REPORT_LEVEL_ERROR)
 						echo '<img src="images/error.png" alt="Error" title="Error" />';
