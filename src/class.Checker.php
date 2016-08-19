@@ -921,16 +921,18 @@ if ($debug) {
 			}
 		
 		// WARNING: This HTML file contains xml:lang attributes
-		if ($this->doc->isHTML && $xmlLangAttrs != null) {
-			Report::addReport(
-				'rep_lang_xml_attr_in_html',
-				$category, REPORT_LEVEL_ERROR, 
-				lang('rep_lang_xml_attr_in_html'),
-				lang('rep_lang_xml_attr_in_html_expl', Language::format($xmlLangCodes, LANG_FORMAT_OL_CODE)),
-				lang('rep_lang_xml_attr_in_html_todo'),
-				lang('rep_lang_xml_attr_in_html_link')
-			);
-		}
+		// Removing this, since we are checking HTML4 files in the same way as HTML5 now
+		// Haven't removed the messages yet
+		//if ($this->doc->isHTML && $xmlLangAttrs != null) {
+		//	Report::addReport(
+		//		'rep_lang_xml_attr_in_html',
+		//		$category, REPORT_LEVEL_ERROR, 
+		//		lang('rep_lang_xml_attr_in_html'),
+		//		lang('rep_lang_xml_attr_in_html_expl', Language::format($xmlLangCodes, LANG_FORMAT_OL_CODE)),
+		//		lang('rep_lang_xml_attr_in_html_todo'),
+		//		lang('rep_lang_xml_attr_in_html_link')
+		//	);
+		//}  
 
 		// WARNING: A tag uses a lang attribute without an associated xml:lang attribute
 		if ($this->doc->isXHTML10 || $this->doc->isXHTML11) {
