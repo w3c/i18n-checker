@@ -1022,32 +1022,20 @@ if ($debug) {
 		
 		// ERROR: Incorrect values used for dir attribute
 		$dirNodes = $this->doc->getNodesWithAttr('dir');
-		$isXHTML = $this->doc->isXHTML1x;
+		$isXML = $this->doc->isServedAsXML;
 		if (count($dirNodes) > 0) {
-			if ($this->doc->isHTML5) {
-				$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXHTML) {
-					$b = $isXHTML ? preg_match('/(rtl)|(ltr)|(auto)/', $array['values']) : preg_match('/(rtl)|(ltr)|(auto)/i', $array['values']);
-					if ($b)
-						return false;
-					return true;
-					});
-				$expl = 'rep_markup_dir_incorrect_expl_html5';
-				}
-			else {
-				$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXHTML) {
-					$b = $isXHTML ? preg_match('/(rtl)|(ltr)/', $array['values']) : preg_match('/(rtl)|(ltr)/i', $array['values']);
-					if ($b)
-						return false;
-					return true;
-					});
-				$expl = 'rep_markup_dir_incorrect_expl';
-				}
+			$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXML) {
+				if (is_array($array['values'])) { $array['values'] = implode(' ',$array['values']); }
+				if (! $isXML) { $array['values'] = strtolower($array['values']); }
+				if ($array['values']=='rtl' || $array['values']=='ltr' || $array['values']=='auto') { return false; }
+				return true;
+				});
 			if (count($invalidDirNodes) > 0)
 				Report::addReport(
 					'rep_markup_dir_incorrect',
 					'dir_category', REPORT_LEVEL_ERROR, 
 					lang('rep_markup_dir_incorrect'),
-					lang($expl, Language::format(Utils::codesFromValArray($invalidDirNodes), LANG_FORMAT_OL_CODE)),
+					lang('rep_markup_dir_incorrect_expl_html', Language::format(Utils::codesFromValArray($invalidDirNodes), LANG_FORMAT_OL_CODE)),
 					lang('rep_markup_dir_incorrect_todo'),
 					lang('rep_markup_dir_incorrect_link')
 				);
