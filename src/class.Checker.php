@@ -865,7 +865,7 @@ if ($debug) {
 		
 		// LANG REPORT: Content-Language meta element
 		if (!Utils::_empty($this->doc->getMetaContentLanguage())) {
-			if ($this->doc->isHTML5) { $_reportlevel = REPORT_LEVEL_ERROR; }
+			if (! $this->doc->isServedAsXML) { $_reportlevel = REPORT_LEVEL_ERROR; }
 			else { $_reportlevel = REPORT_LEVEL_WARNING; }
 			Report::addReport(
 				'rep_lang_content_lang_meta',
@@ -1080,12 +1080,12 @@ if ($debug) {
 			}
 			if ($count > 0)
 				Report::addReport(
-					'rep_markup_tags_no_class',
+					'rep_markup_tags_no_class_b',
 					'markup_category', REPORT_LEVEL_INFO, 
-					lang('rep_markup_tags_no_class', 'b'),
-					lang('rep_markup_tags_no_class_expl', 'b', $bTags->length, $count),
-					lang('rep_markup_tags_no_class_todo', 'b'),
-					lang('rep_markup_tags_no_class_link')
+					lang('rep_markup_tags_no_class_b', 'b'),
+					lang('rep_markup_tags_no_class_b_expl', 'b', $bTags->length, $count),
+					lang('rep_markup_tags_no_class_b_todo', 'b'),
+					lang('rep_markup_tags_no_class_b_link')
 				);
 		}
 		
@@ -1100,12 +1100,12 @@ if ($debug) {
 			}
 			if ($count > 0)
 				Report::addReport(
-					'rep_markup_tags_no_class',
+					'rep_markup_tags_no_class_i',
 					'markup_category', REPORT_LEVEL_INFO, 
-					lang('rep_markup_tags_no_class', 'i'),
-					lang('rep_markup_tags_no_class_expl', 'i', $iTags->length, $count),
-					lang('rep_markup_tags_no_class_todo', 'i'),
-					lang('rep_markup_tags_no_class_link')
+					lang('rep_markup_tags_no_class_i', 'i'),
+					lang('rep_markup_tags_no_class_i_expl', 'i', $iTags->length, $count),
+					lang('rep_markup_tags_no_class_i_todo', 'i'),
+					lang('rep_markup_tags_no_class_i_link')
 				);
 		}
 
