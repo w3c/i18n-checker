@@ -865,11 +865,9 @@ if ($debug) {
 		
 		// LANG REPORT: Content-Language meta element
 		if (!Utils::_empty($this->doc->getMetaContentLanguage())) {
-			if (! $this->doc->isServedAsXML) { $_reportlevel = REPORT_LEVEL_ERROR; }
-			else { $_reportlevel = REPORT_LEVEL_WARNING; }
 			Report::addReport(
 				'rep_lang_content_lang_meta',
-				$category, $_reportlevel,
+				$category, REPORT_LEVEL_ERROR,
 				lang('rep_lang_content_lang_meta'),
 				lang('rep_lang_content_lang_meta_expl', Language::format(Information::$infos['lang_meta']->values[0]['code'], LANG_FORMAT_OL_CODE)), // TODO review this after refactoring of Information
 				lang('rep_lang_content_lang_meta_todo'),
