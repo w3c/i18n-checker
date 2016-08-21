@@ -1134,7 +1134,36 @@ if ($debug) {
 					lang('rep_markup_bdo_auto_link')
 				);
 		}
+
+
+		//if (preg_match_all('/\u200E|\u200F|\u202A|\u202B|\u202C|\u202D|\u202E|\u2066|\u2067|\u2068|\u2069/', $this->markup, $foundEntities)) {
+		//	print_r($foundEntities);
+		//	}
 		
+		//if (preg_match_all('/‎|‏|‪|‫|‬|‭|‮|⁦|⁧|⁨|⁩/', $this->markup, $foundEntities)) {
+		//	print_r($foundEntities);
+		//	}
+		
+		
+		// ERROR: Invalid named character references for directional controls
+		if (preg_match_all('/(&lre;)|(&rle;)|(&pdf;)|(&rli;)|(&lri;)|(&fsi;)|(&pdi;)/i', $this->markup, $foundEntities)) {
+			$resultStr = '';
+			$entityList = array_count_values($foundEntities[0]);
+			foreach ($entityList as $key => $val) {
+				$resultStr .= '&amp;'.substr($key,1,3).'; ('.$val.') &#xA0; ';
+				}
+			if ($resultStr)
+				Report::addReport(
+					'rep_markup_bogus_dir_entities',
+					'markup_category', REPORT_LEVEL_ERROR, 
+					lang('rep_markup_bogus_dir_entities'),
+					lang('rep_markup_bogus_dir_entities_expl', $resultStr),
+					lang('rep_markup_bogus_dir_entities_todo'),
+					lang('rep_markup_bogus_dir_entities_link')
+				);
+			}
+		
+	
 		
 	}
 }
