@@ -84,7 +84,7 @@ function pr ($text) {
 		$result .= '<p>'.$val.'</p>';
 		return $result;
 	}
-$testpath = 'href="../www/check?uri=http%3A%2F%2Fwww.w3.org%2FInternational%2Ftests%2Fi18n-checker%2Fgenerate?test=';
+$testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%2Ftests%2Fgenerate?test=';
 ?>
 </head>
 
@@ -1577,6 +1577,8 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Fwww.w3.org%2FInternational%2Fte
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a> </p>
       <p>
         <?php $testnum="malformedattr2"; ?>
+        <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a> </p>
+        <p><?php $testnum="malformedattr3"; ?>
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a> </p>
     </section>
   </section>
