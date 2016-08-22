@@ -80,6 +80,7 @@ abstract class Parser {
 			$this->isHTML5 = false;
 		}
 		$this->charset = Utils::charsetFromContentType($this->contentType);
+		$this->getDirControls();
 	}
 	
 	protected function findDoctype() {
@@ -238,7 +239,6 @@ abstract class Parser {
 	
 	private function getDirControls() {
 		if (preg_match_all('/(&rlm;)|(&lrm;)|(&#8206;)|(&#8207;)|(&#8234;)|(&#8235;)|(&#8236;)|(&#8237;)|(&#8238;)|(&#8294;)|(&#8295;)|(&#8296;)|(&#8297;)|(&#x200E;)|(&#x200F;)|(&#x202A;)|(&#x202B;)|(&#x202C;)|(&#x202D;)|(&#x202E;)|(&#x2066;)|(&#x2067;)|(&#x2068;)|(&#x2069;)|(‎)|(‏)|(‪)|(‫)|(‬)|(‭)|(‮)|(⁦)|(⁧)|(⁨)|(⁩)/', $this->markup, $foundEntities)) {
-print('hello'.$foundEntities);
 			$entityList = array_count_values($foundEntities[0]);
 			$dirControls = array('rlm'=>0,'&rlm'=>0,'#rlm'=>0,'lrm'=>0,'&lrm'=>0,'#lrm'=>0,'lre'=>0,'#lre'=>0, 'rle'=>0,'#rle'=>0, 'pdf'=>0,'#pdf'=>0, 'rli'=>0,'#rli'=>0, 'lri'=>0,'#lri'=>0, 'fsi'=>0,'#fsi'=>0, 'pdi'=>0,'#pdi'=>0, 'rlo'=>0,'#rlo'=>0, 'lro'=>0,'#lro'=>0);
 			// merge the results for hex and dec escapes
@@ -284,11 +284,8 @@ print('hello'.$foundEntities);
 					case '&#x2069;': $dirControls['#pdi'] += $val; break;
 				}
 			}
+		$this->dirControls = $dirControls;
 		}
-		if (count($dirControls) > 0) {
-			$this->dirControls = $dirControls;	
-		}
-		else { $this->dirControls = null; }
 	}
 }
 
