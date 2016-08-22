@@ -40,11 +40,9 @@ $hideLangSelection = true;
 	    suggestions about the page, with pointers to resources where you can learn more.</li>
     </ul>
 	<p>The reports take into account both markup and HTTP headers, which can be particularly useful for
-    troubleshooting problems</p>
-	<p>Please let us know about bugs and missing features using the <a href="feedback.html">feedback form</a>. </p>
-	
-	<p>The information panel at the top of the page should work for most formats. The checker outputs tailored advice for HTML5, HTML4, and XHTML 1.0/1.1  (served as
-	text/html or application/xhtml+xml).</p>
+    troubleshooting problems. The advice given in the checker  reports considers how your HMTL pages (ie. files served as <code class="kw" translate="no">text/html</code>)  will behave in a modern browser, rather than just validating against a particular version of the standard. The advice is tailored to suit files served as <code class="kw" translate="no">application/xhtml+xml</code> for aspects relating to character encoding and language declaration.</p>
+	<p>Please let us know about bugs and missing features using the <a href="feedback.html">feedback form</a>.</p>
+	<p>This software is free / open source, licenced under the terms of [LICENCE]. The source code is available on GitHub; follow the <a href="https://github.com/w3c/i18n-checker">Download</a> link at the bottom of this page.</p>
 </div>
 
 <h3 id="others">References and other resources</h3>
@@ -52,12 +50,10 @@ $hideLangSelection = true;
 <div>
 	<h4>Further reading</h4>
 	<ul class="bd compact">
-		<li>The <a href="http://www.w3.org/International/technique-index">Techniques
-		Index</a> of the Internationalization Activity provides links to
-		recommendations and useful resources on a task by task basis. The W3C
-		Internationalization Checker reports link back to the part of this
-	  index that deals with Authoring HTML &amp; CSS.</li>
-		<li>You can track the report suggestions back to authoritative sources using the page <a href="http://www.w3.org/International/quicktips/checker">Internationalization Checker reports</a>.</li>
+		<li>The W3C's Internationalization Activity's <a href="https://www.w3.org/International/techniques/authoring-html?collapse">techniques
+		Index</a>   provides links to
+		recommendations and useful resources, organised by task. The checker reports link back to  this
+	  index.</li>
 		<li>The <a href="http://www.w3.org/International/quicktips/">Internationalization
 		Quick Tips for the Web</a> summarize key concepts of international Web
 		design.</li>
@@ -91,7 +87,7 @@ $hideLangSelection = true;
 		Activity</a> section of the W3C site points to some <a
 			href="http://www.w3.org/International/tools/">internationalization-related
 		tools</a>.</p>
-		<p>In addition to this checker, the W3C is offering a number of other
+		<p>In addition to this checker, the W3C offers a number of other
 		tools to help you check various types of documents (HTML, XHTML, CSS,
 		RDF, P3P, ...), find broken links in your Web pages, and so on. All
 		these tools are listed on the W3C's <a
@@ -105,8 +101,8 @@ $hideLangSelection = true;
 
 <h3 id="credits">Credits</h3>
 <div class="bd compact">
-	<p>Richard Ishida is maintaining the
-	checker at the W3C, using a code base developed by him and Thomas Gambet.</p>
+	<p>R. Ishida is maintaining the
+	checker at the W3C, using a code base developed with the help of Thomas Gambet.</p>
 </div>
 
 </div>
