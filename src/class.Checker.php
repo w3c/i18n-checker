@@ -66,6 +66,7 @@ class Checker {
 		$this->addInfoLangHTTP();
 		$this->addInfoLangMeta();
 		$this->addInfoDirHTML();
+		$this->addInfoDirControls();
 		$this->addInfoClassId();
 		$this->addInfoRequestHeaders();
 		$this->isUTF16 = ($bom == 'UTF-16LE' || $bom == 'UTF-16BE') ? true : false;
@@ -228,6 +229,70 @@ class Checker {
 			$display_value = 'dir_default_ltr';
 			$value['code'] = null;
 		}
+		Information::addInfo($category, $title, $value, $display_value);	
+	}
+	
+	// INFO: DIRECTIONAL CONTROL CODES
+	private function addInfoDirControls() {
+		$resultStr = '';
+		$totalCtrls = 0;
+		if (preg_match_all('/(&rlm;)|(&lrm;)|(&#8206;)|(&#8207;)|(&#8234;)|(&#8235;)|(&#8236;)|(&#8237;)|(&#8238;)|(&#8294;)|(&#8295;)|(&#8296;)|(&#8297;)|(&#x200E;)|(&#x200F;)|(&#x202A;)|(&#x202B;)|(&#x202C;)|(&#x202D;)|(&#x202E;)|(&#x2066;)|(&#x2067;)|(&#x2068;)|(&#x2069;)|(‎)|(‏)|(‪)|(‫)|(‬)|(‭)|(‮)|(⁦)|(⁧)|(⁨)|(⁩)/', $this->markup, $foundEntities)) {
+			$entityList = array_count_values($foundEntities[0]);
+			$dirControls = array('rlm'=>0,'&rlm'=>0,'#rlm'=>0,'lrm'=>0,'&lrm'=>0,'#lrm'=>0,'lre'=>0,'#lre'=>0, 'rle'=>0,'#rle'=>0, 'pdf'=>0,'#pdf'=>0, 'rli'=>0,'#rli'=>0, 'lri'=>0,'#lri'=>0, 'fsi'=>0,'#fsi'=>0, 'pdi'=>0,'#pdi'=>0, 'rlo'=>0,'#rlo'=>0, 'lro'=>0,'#lro'=>0);
+			// merge the results for hex and dec escapes
+			foreach ($entityList as $key => $val) {
+				switch ($key) {
+					case '‏': $dirControls['rlm'] += $val; break;
+					case '&#8207;';
+					case '&#x200F;':$dirControls['#rlm'] += $val; break;
+					case '&rlm;':$dirControls['&rlm'] += $val; break;
+					case '‎': $dirControls['lrm'] += $val; break;
+					case '&#8206;';
+					case '&#x200E;':$dirControls['#lrm'] += $val; break;
+					case '&lrm;':$dirControls['&lrm'] += $val; break;
+					case '‪': $dirControls['lre'] += $val; break;
+					case '&#8234;';
+					case '&#x202A;':$dirControls['#lre'] += $val; break;
+					case '‫': $dirControls['rle'] += $val; break;
+					case '&#8235;';
+					case '&#x202B;': $dirControls['#rle'] += $val; break;
+					case '‬': $dirControls['pdf'] += $val; break;
+					case '&#8236;';
+					case '&#x202C;': $dirControls['#pdf'] += $val; break;
+
+					case '‭': $dirControls['lro'] += $val; break;
+					case '&#8237;';
+					case '&#x202D;': $dirControls['#lro'] += $val; break;
+					case '‮': $dirControls['rlo'] += $val; break;
+					case '&#8238;';
+					case '&#x202E;': $dirControls['#rlo'] += $val; break;
+
+					case '⁦': $dirControls['lri'] += $val; break;
+					case '&#8294;';
+					case '&#x2066;': $dirControls['#lri'] += $val; break;
+					case '⁧': $dirControls['rli'] += $val; break;
+					case '&#8295;';
+					case '&#x2067;': $dirControls['#rli'] += $val; break;
+
+					case '⁨': $dirControls['fsi'] += $val; break;
+					case '&#8296;';
+					case '&#x2068;': $dirControls['#fsi'] += $val; break;
+					case '⁩': $dirControls['pdi'] += $val; break;
+					case '&#8297;';
+					case '&#x2069;': $dirControls['#pdi'] += $val; break;
+					}
+				}
+			foreach ($dirControls as $key => $val) {
+				$totalCtrls += $val;
+				if ($val > 0) { $resultStr .= $key.'('.$val.'), '; }
+				}
+			}
+//print('totalCtrls:'.$totalCtrls."\n");
+//print_r($dirControls);
+		$category = 'dir_category';
+		$title = 'dir_controls';
+		$value = array(array('code'=>$resultStr,'values'=>null));
+		$display_value = $totalCtrls == 0 ? 'val_none' : $totalCtrls;
 		Information::addInfo($category, $title, $value, $display_value);	
 	}
 	
