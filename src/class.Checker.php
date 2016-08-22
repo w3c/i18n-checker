@@ -1139,6 +1139,43 @@ if ($debug) {
 			}
 		
 	
+		// ERROR: Unicode code points for directional controls found
+		$found = 0;
+		if ($this->doc->dirControls != null) {
+			foreach ($this->doc->dirControls as $key => $val) {
+				if ($key[0] != '#' && $key[0] != '&' && $val > 0) { $found += $val; }
+				}
+			if ($found > 0) {
+				Report::addReport(
+					'rep_markup_dir_control_codes',
+					'markup_category', REPORT_LEVEL_WARNING, 
+					lang('rep_markup_dir_control_codes'),
+					lang('rep_markup_dir_control_codes_expl', $found),
+					lang('rep_markup_dir_control_codes_todo'),
+					lang('rep_markup_dir_control_codes_link')
+				);
+			}
+		}
+		
+	
+		// ERROR: Unicode code points for directional controls found
+		$found = 0;
+		if ($this->doc->dirControls != null) {
+			foreach ($this->doc->dirControls as $key => $val) {
+				if ($key[0] == '#' && $val > 0) { $found += $val; }
+				}
+			if ($found > 0) {
+				Report::addReport(
+					'rep_markup_dir_escapes',
+					'markup_category', REPORT_LEVEL_INFO, 
+					lang('rep_markup_dir_escapes'),
+					lang('rep_markup_dir_escapes_expl', $found),
+					lang('rep_markup_dir_escapes_todo'),
+					lang('rep_markup_dir_escapes_link')
+				);
+			}
+		}
+	
 		
 	}
 }
