@@ -413,7 +413,19 @@ $test["malformedattr2"]=array(
 'test'=>"<div class='test'>Any tag that has an xml:lang or lang attribute with a value that is not just a-zA-Z0-9 plus hyphen.".
 '<p title="Armenian : Armenian" xml:lang="hy, my" class="phrase">armenian text</p>'.
 '<p title="Armenian : Armenian" xml:lang="hy my" class="phrase">armenian text</p>'.
-'<p title="Canadian Syllabics : Inuktitut" lxml:lang="iu_CA" class="phrase">inuktitut text</p></div>',
+'<p title="Canadian Syllabics : Inuktitut" xml:lang="iu_CA" class="phrase">inuktitut text</p></div>',
+);
+
+$test["malformedattr3"]=array(
+'title'=>'rep_lang_malformed_attr',
+'test'=>"<div class='test'>Lang tags have language subtag longer than 3 chars.".
+'<p title="1 of 2" lang="putonghua" >text</p>'.
+'<p title="2 of 4" lang="putonghua-Hans">text</p>'.
+'<p title="should not show" xml:lang="cmn-Hans">text</p>'.
+'<p title="3 of 4" xml:lang="putonghua" >text</p>'.
+'<p title="4 of 4" xml:lang="putonghua-Hans">text</p>'.
+'<p title="should not show" xml:lang="cmn-Hans">text</p>
+</div>',
 );
 
 
