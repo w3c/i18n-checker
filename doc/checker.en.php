@@ -2043,8 +2043,8 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Fwww.w3.org%2FInternational%2Fte
   <p>Tell us what you think.</p>
   <p><a class="interaction" target="_blank" href="https://github.com/w3c/i18n-checker/issues">Leave a comment</a></p>
   <p style="margin-top:1em">Follow our news feed.</p>
-  <p><a class="interaction" href="http://twitter.com/webi18n" title="Twitter: @webi18n"><img src="http://www.w3.org/International/icons/twitter-bird.png" style="vertical-align: middle;" alt=" "> ‎@webi18n</a></p>
-  <p><a class="interaction" href="http://www.w3.org/blog/International/feed/rdf/" title="RSS"><img src="http://www.w3.org/International/icons/rssLink.png" alt=" "> RSS</a></p>
+  <p><a class="interaction" href="http://twitter.com/webi18n" title="Twitter: @webi18n"><img src="http://www.w3.org/International/icons/twitter-bird.png" style="vertical-align: middle;" alt=" ">@webi18n</a></p>
+  <p><a class="interaction" href="http://www.w3.org/blog/International/feed/rdf/" title="RSS"><img src="http://www.w3.org/International/icons/rssLink.png" alt=" ">RSS</a></p>
 </aside>
 <section>
   <h2><a id="materials" href="#materials">Other introductory materials</a></h2>
