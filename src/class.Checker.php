@@ -949,11 +949,11 @@ if ($debug) {
 				);
 			}
 		}
-		
+
 		// WARNING: A language attribute value was incorrectly formed.
 		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
 			foreach ((array) $element['values'] as $val)
-				if (preg_match("/^[a-zA-Z0-9]*[^a-zA-Z0-9\-]+[a-zA-Z0-9]*$/", $val))
+				if (strpos($val,'-') > 3 || (strpos($val,'-') === false && strlen($val) > 3) || preg_match("/[^a-zA-Z0-9\-]/", $val)) 
 					return true; // keep only those that do not match
 				return false;
 			});

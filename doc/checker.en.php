@@ -1529,6 +1529,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Fwww.w3.org%2FInternational%2Fte
       <div class="insidenote">[<?php echo $checkId; ?>]</div>
       <ul class="conditions">
         <li><img src="media/images/error.png" alt="Error:" /> Any tag that has an <code class="kw" translate="no">xml:lang</code> or <code class="kw" translate="no">lang</code> attribute with a value that is not just a-zA-Z0-9 plus hyphen.</li>
+        <li>Also, any tag that has an initial subtag with more than three characters.</li>
       </ul>
     </section>
     <section>
@@ -1566,6 +1567,9 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Fwww.w3.org%2FInternational%2Fte
         </li>
       </ol>
     </section>
+    
+    
+    
     <section class="tests">
       <h4>Tests</h4>
       <p>
