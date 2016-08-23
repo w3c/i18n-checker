@@ -1164,7 +1164,7 @@ if ($debug) {
 			}
 		
 	
-		// ERROR: Unicode code points for directional controls found
+		// WARNING: Found Unicode code points for directional controls
 		$found = 0;
 		if ($this->doc->dirControls != null) {
 			foreach ($this->doc->dirControls as $key => $val) {
@@ -1183,7 +1183,7 @@ if ($debug) {
 		}
 		
 	
-		// ERROR: Unicode code points for directional controls found
+		// INFO: Found escape sequences for paired directional controls
 		$found = 0;
 		if ($this->doc->dirControls != null) {
 			foreach ($this->doc->dirControls as $key => $val) {
@@ -1200,7 +1200,38 @@ if ($debug) {
 				);
 			}
 		}
+		
 	
+		// ERROR: Unpaired directional controls found
+		$startCodes = $this->doc->dirControls['lre']+
+						$this->doc->dirControls['#lre']+
+						$this->doc->dirControls['rle']+
+						$this->doc->dirControls['#rle']+
+						$this->doc->dirControls['fsi']+
+						$this->doc->dirControls['#fsi']+
+						$this->doc->dirControls['lri']+
+						$this->doc->dirControls['#lri']+
+						$this->doc->dirControls['rli']+
+						$this->doc->dirControls['#rli']+
+						$this->doc->dirControls['lro']+
+						$this->doc->dirControls['#lro']+
+						$this->doc->dirControls['rlo']+
+						$this->doc->dirControls['#rlo'];
+		$endCodes = $this->doc->dirControls['pdf']+
+						$this->doc->dirControls['#pdf']+
+						$this->doc->dirControls['pdi']+
+						$this->doc->dirControls['#pdi'];
+		if ($startCodes != $endCodes) {
+			Report::addReport(
+				'rep_markup_dir_unbalanced',
+				'markup_category', REPORT_LEVEL_WARNING, 
+				lang('rep_markup_dir_unbalanced'),
+				lang('rep_markup_dir_unbalanced_expl'),
+				lang('rep_markup_dir_unbalanced_todo'),
+				lang('rep_markup_dir_unbalanced_link')
+			);
+		}
+
 		
 	}
 }

@@ -2044,6 +2044,57 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
     </section>
   </section>
+  
+  
+  <section class="message">
+    <?php $checkId='rep_markup_dir_unbalanced'; ?>
+    <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
+    <section>
+      <h4>Conditions and severity</h4>
+      <div class="insidenote">[<?php echo $checkId; ?>]</div>
+      <ul class="conditions">
+        <li><img src="media/images/warning.png" alt="Warning:" /> The page contains an odd number of paired directional controls<code class="kw" translate="no"></code>.</li>
+      </ul>
+    </section>
+    <section>
+      <h4>Explanation</h4>
+      <?php echo pr($language[$checkId.'_expl']); ?>
+    </section>
+    <section>
+      <h4>What to do</h4>
+      <?php echo pr($language[$checkId.'_todo']); ?>
+    </section>
+    <section>
+      <h4>Further reading</h4>
+      <?php echo pr($language[$checkId.'_link']); ?>
+    </section>
+    <section>
+      <h4>Sources</h4>
+      <ol>
+        <li class="w3">
+          <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
+        </li>
+        <li class="w3">
+          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
+        </li>
+        <li class="w3">
+          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
+        </li>
+      </ol>
+    </section>
+    <section class="tests">
+      <h4>Tests</h4>
+      <p>
+        <?php $testnum="dirUnbalanced"; ?>
+        <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
+      <p>
+        <?php $testnum="dirUnbalanced2"; ?>
+        <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
+    </section>
+  </section>
+  
+  
+  
 </section>
 <aside class="section" id="survey">
   <p>Tell us what you think.</p>

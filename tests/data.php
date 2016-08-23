@@ -570,6 +570,22 @@ $test["dirControls4"]=array(
 </p>.</div>',
 );
 
+$test["dirUnbalanced"]=array(
+'title'=>'rep_markup_dir_controls',
+'test'=>'<div class="test"><p>unbalanced escaped rli 
+&#x2066;نشاط التدويل، W3C
+⁦نشاط التدويل، W3C⁩
+</p>.</div>',
+);
+
+$test["dirUnbalanced2"]=array(
+'title'=>'rep_markup_dir_controls',
+'test'=>'<div class="test"><p>unbalanced rli codepoint
+&#x2066;نشاط التدويل، W3C&#x2069;
+⁦نشاط التدويل، W3C
+</p>.</div>',
+);
+
 
 
 ?>
