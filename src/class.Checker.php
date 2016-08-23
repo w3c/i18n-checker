@@ -65,6 +65,7 @@ class Checker {
 		$this->addInfoLangAttr();
 		$this->addInfoLangHTTP();
 		$this->addInfoLangMeta();
+		$this->addInfoLangTags();
 		$this->addInfoDirHTML();
 		$this->addInfoDirControls();
 		$this->addInfoClassId();
@@ -216,7 +217,28 @@ class Checker {
 		if (!empty($value))
 			Information::addInfo($category, $title, $value, $display_value);		
 	}
-	
+
+
+	// INFO: LANGUAGE TAG ROUNDUP
+	private function addInfoLangTags() {
+		$category = 'lang_category';
+		$title = 'lang_tags';
+		$results = array();
+		$value = null;
+		if ($this->doc->langTags != null) {
+			foreach ($this->doc->langTags as $val) {
+				$results[] = '<a target="_blank" href="http://r12a.github.io/apps/subtags/?check='.$val.'">'.$val.'</a>'; 
+				}
+		}
+		$code = count($results) == 0 ? null : 'Click each tag to check it.';
+		$value = array('code' => $code, 'values' => $results);
+		$display_value = null;
+		if (count($results) == 0) 
+			$display_value = 'val_none_found';
+		Information::addInfo($category, $title, $value, $display_value);	
+	}
+
+
 	// INFO: TEXT DIRECTION FROM HTML TAGS
 	private function addInfoDirHTML() {
 		$category = 'dir_category';

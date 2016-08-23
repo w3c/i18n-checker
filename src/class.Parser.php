@@ -42,6 +42,7 @@ abstract class Parser {
 	// Store of cached results of certain functions
 	private $cache;
 	public $dirControls;
+	public $langTags;
 	public $encLabels = array(
 		"UTF-8"=>"UTF-8", "UNICODE-1-1-UTF-8"=>"UTF-8", "UTF8"=>"UTF-8", 
 		"IBM866"=>"IBM866", "866"=>"IBM866", "CP866"=>"IBM866", "CSIBM866"=>"IBM866", 
@@ -121,6 +122,7 @@ abstract class Parser {
 		}
 		$this->charset = Utils::charsetFromContentType($this->contentType);
 		$this->getDirControls();
+		$this->getLangTags();
 	}
 	
 	protected function findDoctype() {
@@ -327,6 +329,18 @@ abstract class Parser {
 		$this->dirControls = $dirControls;
 		}
 	}
+	
+	
+	private function getLangTags() {
+		// returns a simple array of unique language tag values in the document
+		$langTags = array_merge((array) $this->getNodesWithAttr('lang'), (array) $this->getNodesWithAttr('lang', true));
+		$tagList = array();
+		foreach ($langTags as $val) $tagList[] = strtolower($val['values']);
+		$this->langTags = array_unique($tagList);
+	}
+	
+	
+	
 }
 
 Parser::_init();

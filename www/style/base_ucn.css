@@ -1552,3 +1552,5 @@ fieldset div.input input[type=submit] {
 .about ul li {
 	margin-bottom:10px;
 }
+
+.lang_tags_0 a { color: white; white-space: nowrap; font-size: 80%; }
