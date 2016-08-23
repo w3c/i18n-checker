@@ -1554,3 +1554,5 @@ fieldset div.input input[type=submit] {
 }
 
 .lang_tags_0 a { color: white; white-space: nowrap; font-size: 80%; }
+.dir_controls_0 { white-space: nowrap; }
+.valCount { font-size: 60%; }

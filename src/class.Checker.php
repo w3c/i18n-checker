@@ -256,18 +256,21 @@ class Checker {
 	
 	// INFO: DIRECTIONAL CONTROL CODES
 	private function addInfoDirControls() {
-		$resultStr = '';
+		$results = array();
 		$totalCtrls = 0;
 		if ($this->doc->dirControls != null) {
 			foreach ($this->doc->dirControls as $key => $val) {
-				$totalCtrls += $val;
-				if ($val > 0) { $resultStr .= $key.'('.$val.'), '; }
+				$totalCtrls += $val;				
+				if ($val > 0) $results[] = '<span title="Number indicates how many. # precedes escapes, & entities, rest are characters.">'.$key.'<span class="valCount"> '.$val.'</span></span>'; 
 				}
-			}
+		}
+		$code = count($results) == 0 ? null : 'Total: '.$totalCtrls;
+		$value = array('code' => $code, 'values' => $results);
+		$display_value = null;
+		if (count($results) == 0) 
+			$display_value = 'val_none_found';
 		$category = 'dir_category';
 		$title = 'dir_controls';
-		$value = array(array('code'=>$resultStr,'values'=>null));
-		$display_value = $totalCtrls == 0 ? 'val_none' : $totalCtrls;
 		Information::addInfo($category, $title, $value, $display_value);	
 	}
 	
