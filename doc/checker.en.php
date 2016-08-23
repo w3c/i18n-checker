@@ -1721,6 +1721,8 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
     </section>
   </section>
+  
+  
   <section class="message">
     <?php $checkId='rep_markup_tags_no_class_i'; ?>
     <!-- i tags found with no class attribute -->
@@ -1765,6 +1767,48 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
     </section>
   </section>
+  
+  
+  <section class="message">
+    <?php $checkId='rep_markup_control_escapes'; ?>
+    <!-- Escaped characters addressing control code range -->
+    <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
+    <section>
+      <h4>Conditions and severity</h4>
+      <div class="insidenote">[<?php echo $checkId; ?>]</div>
+      <ul class="conditions">
+        <li><img src="media/images/error.png" alt="Error:" /> A numeric character reference points to the C0 or C1 range.</li>
+      </ul>
+    </section>
+    <section>
+      <h4>Explanation</h4>
+      <?php echo pr($language[$checkId.'_expl']); ?>
+    </section>
+    <section>
+      <h4>What to do</h4>
+      <?php echo pr($language[$checkId.'_todo']); ?>
+    </section>
+    <section>
+      <h4>Further reading</h4>
+      <?php echo pr($language[$checkId.'_link']); ?>
+    </section>
+    <section>
+      <h4>Sources</h4>
+      <ol>
+        <li class="w3">
+          <p class="link"><a href="https://www.w3.org/TR/html51/dom.html#kinds-of-content-phrasing-content">HTML5.1, 3.2.4.2.5. Phrasing content</a > <span class="type">specification</span></p>
+        </li>
+      </ol>
+    </section>
+    <section class="tests">
+      <h4>Tests</h4>
+      <p>
+        <?php $testnum="controlEscapes"; ?>
+        <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
+    </section>
+  </section>
+  
+  
 </section>
 <section>
   <h2><a id="direction" href="#direction">Markup: direction</a></h2>

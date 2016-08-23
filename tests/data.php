@@ -586,6 +586,11 @@ $test["dirUnbalanced2"]=array(
 </p>.</div>',
 );
 
+$test["controlEscapes"]=array(
+'title'=>'rep_markup_control_escapes',
+'test'=>'<div class="test"><p>controls: &#x80; &#128; &#x98; &#x09;  &#0008; &#x0008;</p>.</div>',
+);
+
 
 
 ?>

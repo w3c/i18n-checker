@@ -1232,7 +1232,39 @@ if ($debug) {
 			);
 		}
 
-		
+	
+		// ERROR: Escaped characters addressing control code range
+		$failures = array();
+		for ($e=0;$e<9;$e++) {
+			if (isset($this->doc->numEscapes[$e])) $failures[] = array($e,$this->doc->numEscapes[$e]);
+			}
+		for ($e=11;$e<13;$e++) {
+			if (isset($this->doc->numEscapes[$e])) $failures[] = array($e,$this->doc->numEscapes[$e]);
+			}
+		for ($e=14;$e<31;$e++) {
+			if (isset($this->doc->numEscapes[$e])) $failures[] = array($e,$this->doc->numEscapes[$e]);
+			}
+		for ($e=128;$e<160;$e++) {
+			if (isset($this->doc->numEscapes[$e])) $failures[] = array($e,$this->doc->numEscapes[$e]);
+			}
+		$str = '';
+		foreach ($failures as $val) {
+			$str .= '&amp;#'.$val[0].'; / &amp;#x'.dechex($val[0]).';<sup>('.$val[1].') </sup><br/>';	
+			}
+		if (count($failures) > 0) {
+			Report::addReport(
+				'rep_markup_control_escapes',
+				'markup_category', REPORT_LEVEL_ERROR, 
+				lang('rep_markup_control_escapes'),
+				lang('rep_markup_control_escapes_expl', $str),
+				lang('rep_markup_control_escapes_todo'),
+				lang('rep_markup_control_escapes_link')
+			);
+		}
+
+		//print((preg_match_all('/[\x00-\x1F]|[\x80-\x9F]/', $this->markup, $foundEntities)));
+		//print_r($foundEntities);
+
 	}
 }
 
