@@ -43,6 +43,7 @@ abstract class Parser {
 	private $cache;
 	public $dirControls;
 	public $langTags;
+	public $numEscapes;
 	public $encLabels = array(
 		"UTF-8"=>"UTF-8", "UNICODE-1-1-UTF-8"=>"UTF-8", "UTF8"=>"UTF-8", 
 		"IBM866"=>"IBM866", "866"=>"IBM866", "CP866"=>"IBM866", "CSIBM866"=>"IBM866", 
@@ -123,6 +124,7 @@ abstract class Parser {
 		$this->charset = Utils::charsetFromContentType($this->contentType);
 		$this->getDirControls();
 		$this->getLangTags();
+		$this->getNumericEscapes();
 	}
 	
 	protected function findDoctype() {
@@ -340,6 +342,17 @@ abstract class Parser {
 	}
 	
 	
+	private function getNumericEscapes() {
+		// returns an array of unique keys for numeric character references found, with frequency as value
+		// the keys are numeric, and hex and dec escapes are merged
+		preg_match_all('/&#([0-9]+);/', $this->markup, $dec);
+		preg_match_all('/&#x([a-fA-F0-9]+);/', $this->markup, $hex);
+		for ($i=0;$i<count($hex[1]);$i++){
+			$hex[1][$i] = hexdec($hex[1][$i]);
+			}
+		$result = array_count_values(array_merge($hex[1], $dec[1]));
+		$this->numEscapes = $result;
+		}
 	
 }
 
