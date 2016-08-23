@@ -66,6 +66,135 @@ $hideLangSelection = true;
   </table>
   <p>For more information about how these characters work see <a href="https://www.w3.org/International/questions/qa-escapes">Using character escapes in markup and CSS</a>.</p>
 </dd>
+</dd>
+<dt id="controlRanges">C0 and C1 ranges</dt>
+<dd>
+  <p>These refer to two ranges of control characters originating in legacy code pages.</p>
+  <p>The C1 range includes the following characters, at the start of the code page.</p>
+  <table>
+    <tbody>
+   <tr>
+     <th>Hex</th>
+   <th>0</th>
+   <th>1</th>
+   <th>2</th>
+   <th>3</th>
+   <th>4</th>
+   <th>5</th>
+   <th>6</th>
+   <th>7</th>
+   <th>8</th>
+   <th>9</th>
+   <th>A</th>
+   <th>B</th>
+   <th>C</th>
+   <th>D</th>
+   <th>E</th>
+   <th>F</th>
+   </tr>
+     <tr>
+       <th>0</th>
+       <td>NUL</td>
+       <td>SOH        
+         <td>STX          
+           <td>ETX          
+            <td>EOT          
+            <td>ENO          
+            <td>ACK          
+            <td>BEL          
+            <td>BS          
+            <td>HT          
+            <td>LF          
+            <td>VT          
+            <td>FF          
+            <td>CR          
+            <td>SO          
+            <td>SI        
+          </tr>
+     <tr>
+       <th>1</th>
+       <td>DLE</td>
+       <td>DC1       
+       <td>DC2       
+       <td>DC3       
+       <td>DC4       
+       <td>NAK       
+       <td>WYN       
+       <td>ETB       
+       <td>CAN       
+       <td>EM       
+       <td>SUB       
+       <td>ESC       
+       <td>FS       
+       <td>GS       
+       <td>RS       
+       <td>US       
+     </tr>
+      </tbody>
+  </table>
+  <p>Then come the remaining ASCII characters, followed by the C1 range, shown below, and then additional characters beyond.</p>
+  <table>
+    <tbody>
+   <tr>
+     <th>Hex</th>
+   <th>0</th>
+   <th>1</th>
+   <th>2</th>
+   <th>3</th>
+   <th>4</th>
+   <th>5</th>
+   <th>6</th>
+   <th>7</th>
+   <th>8</th>
+   <th>9</th>
+   <th>A</th>
+   <th>B</th>
+   <th>C</th>
+   <th>D</th>
+   <th>E</th>
+   <th>F</th>
+   </tr>
+     <tr>
+       <th>8</th>
+       <td>XXX</td>
+       <td>XXX
+       <td>BPH
+       <td>NBH
+       <td>IND
+       <td>NEL
+       <td>SSA
+       <td>ESA
+       <td>HTS
+       <td>HTJ
+       <td>VTS
+       <td>PLD
+       <td>PLU
+       <td>RI
+       <td>SS2
+       <td>SS3</tr>
+     <tr>
+       <th>9</th>
+       <td>DCS</td>
+       <td>PU1
+       <td>PU2
+       <td>STS
+       <td>CCH
+       <td>MW
+       <td>SPA
+       <td>EPA
+       <td>SOS
+       <td>XXX
+       <td>SCI
+       <td>CSI
+       <td>ST
+       <td>OSC
+       <td>PM
+       <td>APC</tr>
+      </tbody>
+  </table>
+  <p>HTML prohibits the use of any of these characters apart from the whitespace characters, LF, CR and HT.</p>
+  <p>For more information about these characters see <a href="https://www.w3.org/International/questions/qa-controls">HTML, XHTML, XML and Control Codes</a>.</p>
+</dd>
 </dl>
 </div>
 
