@@ -337,7 +337,10 @@ abstract class Parser {
 		// returns a simple array of unique language tag values in the document
 		$langTags = array_merge((array) $this->getNodesWithAttr('lang'), (array) $this->getNodesWithAttr('lang', true));
 		$tagList = array();
-		foreach ($langTags as $val) $tagList[] = strtolower($val['values']);
+		foreach ($langTags as $val) {
+			if (is_array($val['values'])) $val['values'] = implode($val['values']);
+			$tagList[] = strtolower($val['values']);
+			}
 		$this->langTags = array_unique($tagList);
 	}
 	
