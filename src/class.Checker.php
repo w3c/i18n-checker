@@ -1315,6 +1315,31 @@ if ($debug) {
 		//print((preg_match_all('/[\x00-\x1F]|[\x80-\x9F]/', $this->markup, $foundEntities)));
 		//print_r($foundEntities);
 
+
+		// ERROR: Incorrect values used for translate attribute
+		$xlateNodes = $this->doc->getNodesWithAttr('translate');
+		if (count($xlateNodes) > 0) {
+			$invalidxlateNodes = array_filter($xlateNodes, function ($array) {
+				if (is_array($array['values'])) { $array['values'] = implode(' ',$array['values']); }
+				$array['values'] = strtolower($array['values']);
+				if ($array['values']=='yes' || $array['values']=='no') { return false; }
+				return true;
+				});
+			if (count($invalidxlateNodes) > 0)
+				Report::addReport(
+					'rep_markup_translate_incorrect',
+					'dir_category', REPORT_LEVEL_ERROR, 
+					lang('rep_markup_translate_incorrect'),
+					lang('rep_markup_translate_incorrect_expl', Language::format(Utils::codesFromValArray($invalidxlateNodes), LANG_FORMAT_OL_CODE)),
+					lang('rep_markup_translate_incorrect_todo'),
+					lang('rep_markup_translate_incorrect_link')
+				);
+		}
+
+
+
+
+
 	}
 }
 

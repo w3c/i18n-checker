@@ -683,6 +683,12 @@ $test["controlEscapes"]=array(
 'test'=>'<div class="test"><p>controls: &#x80; &#128; &#x98; &#x09;  &#0008; &#x0008;</p>.</div>',
 );
 
+$test["translateIncorrect"]=array(
+'title'=>'rep_markup_translate_incorrect',
+'test'=>'<div class="test"><p>A translate attribute is set to <span translate="maybe">maybe</span>.</p><p>Here are the controls, set to <span translate="no">no and <span translate="yes">yes</span></span>.</p>
+</div>',
+);
+
 
 
 ?>
