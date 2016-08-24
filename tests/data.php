@@ -416,16 +416,95 @@ $test["malformedattr2"]=array(
 '<p title="Canadian Syllabics : Inuktitut" xml:lang="iu_CA" class="phrase">inuktitut text</p></div>',
 );
 
+
 $test["malformedattr3"]=array(
-'title'=>'rep_lang_malformed_attr',
-'test'=>"<div class='test'>Lang tags have language subtag longer than 3 chars.".
-'<p title="1 of 2" lang="putonghua" >text</p>'.
-'<p title="2 of 4" lang="putonghua-Hans">text</p>'.
-'<p title="should not show" xml:lang="cmn-Hans">text</p>'.
-'<p title="3 of 4" xml:lang="putonghua" >text</p>'.
-'<p title="4 of 4" xml:lang="putonghua-Hans">text</p>'.
-'<p title="should not show" xml:lang="cmn-Hans">text</p>
-</div>',
+'title'=>'rep_lang_malformed_attr 3',
+'test'=>"<div class='test'>Incorrect lengths of subtags.".
+'<p lang="ang">ok</p>'.
+
+'<p lang="sgn-jos">ok</p>'.
+'<p lang="ar-aao">ok</p>'.
+'<p lang="hy-Armn">ok</p>'.
+'<p lang="ang-Latn">ok</p>'.
+'<p lang="hy-AM">ok</p>'.
+'<p lang="en-150">ok</p>'.
+'<p lang="hy-arevela">ok</p>'.
+
+'<p lang="hy-aen-Armn">ok</p>'.
+'<p lang="hy-aen-AM">ok</p>'.
+'<p lang="hy-aen-arevela">ok</p>'.
+'<p lang="hy-Armn-AM">ok</p>'.
+'<p lang="hy-Armn-arevela">ok</p>'.
+'<p lang="hy-AM-arevela">ok</p>'.
+
+'<p lang="hy-aen-Armn-AM">ok</p>'.
+'<p lang="hy-aen-Armn-arevela">ok</p>'.
+'<p lang="hy-aen-AM-arevela">ok</p>'.
+'<p lang="hy-Armn-AM-arevela">ok</p>'.
+
+'<p lang="hy-Armn-AM-arevela-x-misc">ok</p>'.
+
+
+'<p lang="x" title="1 of 15">fail</p>'.
+'<p lang="putonghua" title="2 of 15">fail</p>'.
+
+'<p lang="sgn-x" title="3 of 15">fail</p>'.
+'<p lang="zh-putonghua" title="4 of 15">fail</p>'.
+
+'<p lang="hy-x-Armn" title="5 of 15">fail</p>'.
+'<p lang="hy-arevela-AM" title="6 of 15">fail</p>'.
+'<p lang="hy-aen-x" title="7 of 15">fail</p>'.
+'<p lang="zh-Hans-putonghua" title="8 of 15">fail</p>'.
+
+'<p lang="hy-AM-Armn-AM" title="9 of 15">fail</p>'.
+'<p lang="zh-putong-cmn-arevela" title="10 of 15">fail</p>'.
+'<p lang="hy-aen-x-arevela" title="11 of 15">fail</p>'.
+'<p lang="hy-areve-Armn-arevela" title="12 of 15">fail</p>'.
+'<p lang="zh-cmn-CN-putonghua" title="13 of 15">fail</p>'.
+'<p lang="hy-Armn-AM-x-misc" title="14 of 15">fail</p>'.
+
+'<p lang="i-klingon" title="15 of 15">fail</p>'.
+'</div>',
+);
+
+
+$test["grandfathered"]=array(
+'title'=>'rep_lang_grandfathered',
+'test'=>"<div class='test'>Uses grandfathered subtags.".
+'<p lang="art-lojban" title="1 of 26">fail</p>'.
+'<p lang="cel-gaulish" title="2 of 26">fail</p>'.
+'<p lang="en-gb-oed" title="3 of 26">fail</p>'.
+'<p lang="i-ami" title="4 of 26">fail</p>'.
+'<p lang="i-bnn" title="5 of 26">fail</p>'.
+'<p lang="i-default" title="6 of 26">fail</p>'.
+'<p lang="i-enochian" title="7 of 26">fail</p>'.
+'<p lang="i-hak" title="8 of 26">fail</p>'.
+'<p lang="i-klingon" title="9 of 26">fail</p>'.
+'<p lang="i-lux" title="10 of 26">fail</p>'.
+'<p lang="i-mingo" title="11 of 26">fail</p>'.
+'<p lang="i-navajo" title="12 of 26">fail</p>'.
+'<p lang="i-pwn" title="13 of 26">fail</p>'.
+'<p lang="i-tao" title="14 of 26">fail</p>'.
+'<p lang="i-tay" title="15 of 26">fail</p>'.
+'<p lang="i-tsu" title="16 of 26">fail</p>'.
+'<p lang="no-bok" title="17 of 26">fail</p>'.
+'<p lang="no-nyn" title="18 of 26">fail</p>'.
+'<p lang="sgn-be-fr" title="19 of 26">fail</p>'.
+'<p lang="sgn-be-nl" title="20 of 26">fail</p>'.
+'<p lang="sgn-ch-de" title="21 of 26">fail</p>'.
+'<p lang="zh-guoyu" title="22 of 26">fail</p>'.
+'<p lang="zh-hakka" title="23 of 26">fail</p>'.
+'<p lang="zh-min" title="24 of 26">fail</p>'.
+'<p lang="zh-min-nan" title="25 of 26">fail</p>'.
+'<p lang="zh-xiang" title="26 of 26">fail</p>'.
+
+'<p lang="jbo">ok</p>'.
+'<p lang="en-gb-oxendict">ok</p>'.
+'<p lang="ami">ok</p>'.
+'<p lang="bnn">ok</p>'.
+'<p lang="hak">ok</p>'.
+'<p lang="tlh">ok</p>'.
+'</div>',
 );
 
 
