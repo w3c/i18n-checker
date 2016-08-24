@@ -80,6 +80,19 @@ class Checker {
 		return true;
 	}
 
+	private function tagWellFormed($langAttr) {
+		if (preg_match("/[^a-zA-Z0-9\-]/", $langAttr)) return false;
+		$subtags = explode('-',$langAttr);
+		if (strlen($subtags[0]) < 2 || strlen($subtags[0]) > 3) return false;
+		if (count($subtags) == 1) return true;
+		switch (count($subtags)) {
+			case 2: if (strlen($subtags[1]) < 2 || strlen($subtags[1]) > 8) return false; break;
+			case 3: if (strlen($subtags[1]) < 2 || strlen($subtags[1]) > 4 || strlen($subtags[2]) < 2 || strlen($subtags[2]) > 8) return false; break;
+			default: if (strlen($subtags[1]) < 3 || strlen($subtags[1]) > 4 || strlen($subtags[2]) < 2 || strlen($subtags[2]) > 4 || strlen($subtags[3]) < 2 || strlen($subtags[3]) > 8) return false;
+			}
+		return true;
+	}
+
 	private function convertEncoding() {
 		# this should be adapted to take into account HTTP headers set to UTF16/-LE/-BE
 		$filestart = substr($this->markup,0,3);
@@ -978,7 +991,7 @@ if ($debug) {
 		// WARNING: A language attribute value was incorrectly formed.
 		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
 			foreach ((array) $element['values'] as $val)
-				if (strpos($val,'-') > 3 || (strpos($val,'-') === false && strlen($val) > 3) || preg_match("/[^a-zA-Z0-9\-]/", $val)) 
+				if (! $this->tagWellFormed($val)) 
 					return true; // keep only those that do not match
 				return false;
 			});

@@ -222,7 +222,7 @@ class Test {
 	}
 	
 	static function generateTestURL($uri, $testFakeUpload) {
-		$uri = Conf::get('base_uri').'check.php?uri='.urlencode($uri);
+		$uri = Conf::get('base_uri').'../www/check.php?uri='.urlencode($uri);
 		$uri = $testFakeUpload ? $uri.'&debug_upload=true' : $uri;
 		return $uri;
 	}
