@@ -508,6 +508,19 @@ $test["grandfathered"]=array(
 );
 
 
+$test["zhCNTW"]=array(
+'title'=>'rep_lang_zhCNTW',
+'htmlattributes'=>"lang='zh-CN'",
+'test'=>"<div class='test'><p>Lang attribute uses zh-CN.</p></div>",
+);
+
+$test["zhCNTW2"]=array(
+'title'=>'rep_lang_zhCNTW',
+'htmlattributes'=>"lang='zh-TW'",
+'test'=>"<div class='test'><p>Lang attribute uses zh-TW.</p></div>",
+);
+
+
 $test["contentlangmeta"]=array(
 'title'=>'rep_lang_content_lang_meta',
 'contentlanguagep'=>'<meta http-equiv="Content-Language" content="ko" />',

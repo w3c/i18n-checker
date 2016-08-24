@@ -1025,6 +1025,24 @@ if ($debug) {
 			);
 		}
 		
+		// INFO: A language attribute uses zh-CN or zh-TW.
+		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
+			foreach ((array) $element['values'] as $val)
+				if ($val == 'zh-CN' || $val == 'zh-TW') 
+					return true; // keep only those that do not match
+				return false;
+			});
+		if ($malformedAttrs != null) {
+			Report::addReport(
+				'rep_lang_zhCNTW',
+				$category, REPORT_LEVEL_INFO, 
+				lang('rep_lang_zhCNTW'),
+				lang('rep_lang_zhCNTW_expl', Language::format(array_unique(Utils::codesFromValArray($malformedAttrs)), LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_zhCNTW_todo'),
+				lang('rep_lang_zhCNTW_link')
+			);
+		}
+		
 		// ERROR: A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
 		$nonMatchingAttrs = array();
 		if (count($htmlLangAttrs) > 0)
