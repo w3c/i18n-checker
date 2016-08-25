@@ -451,19 +451,45 @@ $test["malformedattr3"]=array(
 '<p lang="sgn-x" title="3 of 15">fail</p>'.
 '<p lang="zh-putonghua" title="4 of 15">fail</p>'.
 
-'<p lang="hy-x-Armn" title="5 of 15">fail</p>'.
+'<p lang="hy-p-Armn" title="5 of 15">fail</p>'.
 '<p lang="hy-arevela-AM" title="6 of 15">fail</p>'.
 '<p lang="hy-aen-x" title="7 of 15">fail</p>'.
 '<p lang="zh-Hans-putonghua" title="8 of 15">fail</p>'.
 
 '<p lang="hy-AM-Armn-AM" title="9 of 15">fail</p>'.
 '<p lang="zh-putong-cmn-arevela" title="10 of 15">fail</p>'.
-'<p lang="hy-aen-x-arevela" title="11 of 15">fail</p>'.
+'<p lang="hy-aen-p-arevela" title="11 of 15">fail</p>'.
 '<p lang="hy-areve-Armn-arevela" title="12 of 15">fail</p>'.
 '<p lang="zh-cmn-CN-putonghua" title="13 of 15">fail</p>'.
-'<p lang="hy-Armn-AM-x-misc" title="14 of 15">fail</p>'.
+'<p lang="hy-Armn-AM-p-misc" title="14 of 15">fail</p>'.
 
 '<p lang="i-klingon" title="15 of 15">fail</p>'.
+
+'<p lang="hy-x-Armn-AM">ok</p>'.
+'<p lang="zh-x-putong-cmn-arevela">ok</p>'.
+'<p lang="hy-aen-x-arevela">ok</p>'.
+'<p lang="hy-Armn-x-arevela">ok</p>'.
+'<p lang="zh-cmn-t-putonghua">ok</p>'.
+'<p lang="hy-Armn-u-p-misc">ok</p>'.
+'</div>',
+);
+
+
+$test["subtagInvalid"]=array(
+'title'=>'rep_lang_invalid',
+'test'=>"<div class='test'>Invalid subtags.".
+'<p>Valid subtag <span lang="en-Latn">en-Latn</span>.</p>'.
+'<p>Valid subtag <span lang="ar-Arab">ar-Arab</span>.</p>'.
+'<p>Valid subtag <span lang="hy-Armn-AM-arevela">hy-Armn-AM-arevela</span>.</p>'.
+'<p>Valid subtag <span lang="zzj-Zzzz-ZZ-1606nict">zzj-Zzzz-ZZ-1606nict</span>.</p>'.
+'<p>Valid subtag <span lang="zzj-x-Qqqq-QQ-qqqqqq">zzj-x-Qqqq-QQ-qqqqqq</span>.</p>'.
+'<p>Valid subtag <span lang="zzj-t-Qqqq-QQ-qqqqqq">zzj-t-Qqqq-QQ-qqqqqq</span>.</p>'.
+'<p>Valid subtag <span lang="zzj-u-Qqqq-QQ-qqqqqq">zzj-u-Qqqq-QQ-qqqqqq</span>.</p>'.
+'<p>Invalid subtag <span lang="zzz-Latn" title="1 of 5">zzz-Latn</span>.</p>'.
+'<p>Invalid subtag <span lang="ar-zzz" title="2 of 5">ar-zzz</span>.</p>'.
+'<p>Invalid subtag <span lang="hy-Armn-AM-zzzzz" title="3 of 5">hy-Armn-AM-zzzzz</span>.</p>'.
+'<p>Invalid subtag <span lang="zzj-Qqqq-QQ-qqqqqq" title="4 of 5">zzj-Qqqq-QQ-qqqqqq</span>.</p>'.
+'<p>Invalid subtag <span lang="x-Qqqq-QQ-qqqqqq" title="5 of 5">x-Qqqq-QQ-qqqqqq</span>.</p>'.
 '</div>',
 );
 
