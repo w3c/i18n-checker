@@ -57,6 +57,7 @@
 	margin-right: 32%;
 	padding: 30px;
 	margin-bottom: 3em;
+	position: relative;
 }
 .message h3 {
 	margin-left: 0;
@@ -71,6 +72,25 @@
 	margin-top: -2em;
 	font-style:italic;
 }
+.new:before {
+	content: 'New!';
+}
+.update:before {
+	content: 'Updated!';
+}
+.new:before, .update:before {
+	position: absolute;
+	top: 0;
+	right:0;
+	font-size: 1.5em;
+	padding: 5px 10px;
+	line-height: 1;
+	background-color: yellow;
+	border-radius: 20px;
+	box-shadow: 5px 5px 3px #AFABAB;
+	margin: 10px 20px 0 0;
+	border: 1px solid #ccc;
+	}
 </style>
 <script src="http://www.w3.org/International/javascript/articletoc.js" type="text/javascript">
 </script>
@@ -133,6 +153,8 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
 
 <section>
   <h2><a id="httpheader" href="#httpheader">Character encoding: HTTP header</a></h2>
+  
+  
   <section class="message">
     <?php $checkId='rep_charset_no_in_doc'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -177,9 +199,12 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
     </section>
   </section>
 </section>
+
+
 <section>
   <h2><a id="bom" href="#bom">Character encoding: BOM</a></h2>
-  <section class="message">
+  
+  <section class="message update">
     <?php $checkId='rep_charset_bom_found'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
@@ -230,7 +255,9 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>"</p>
     </section>
   </section>
-  <section class="message">
+  
+  
+  <section class="message new">
     <?php $checkId='rep_charset_bom_diff_encoding'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
@@ -369,9 +396,13 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
     </section>
   </section>
 </section>
+
+
 <section>
   <h2><a id="xmldecl" href="#xmldecl">Character encoding: XML declaration</a></h2>
-  <section class="message">
+  
+  
+  <section class="message update">
     <?php $checkId='rep_charset_xml_decl_used'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
@@ -429,14 +460,16 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>"</p>
     </section>
   </section>
-  <section class="message">
+  
+  
+  <section class="message update">
     <?php $checkId='rep_charset_no_effective_charset'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
       <h4>Conditions and severity</h4>
       <div class="insidenote">[<?php echo $checkId; ?>]</div>
       <ul class="conditions">
-        <li><img src="media/images/error.png" alt="Warning:" /> <span class="formats">html,html5,xhtml</span> The page has an XML declaration and no other character encoding declaration.</li>
+        <li><img src="media/images/error.png" alt="Warning:" /> <span class="formats">html</span> The page has an XML declaration and no other character encoding declaration.</li>
       </ul>
     </section>
     <section>
@@ -482,6 +515,8 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
     </section>
   </section>
 </section>
+
+
 <section>
   <h2><a id="meta" name="meta">Character encoding: meta declaration</a></h2>
   <section class="message">
@@ -525,7 +560,9 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>"</p>
     </section>
   </section>
-  <section class="message">
+  
+  
+  <section class="message update">
     <?php $checkId='rep_charset_meta_ineffective'; ?>
     <!-- meta encoding declarations don't work with XML -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -616,7 +653,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
 	    </div>
       </div-->
   
-  <section class="message">
+  <section class="message update">
     <?php $checkId='rep_charset_incorrect_use_meta'; ?>
     <!-- Incorrect use of meta encoding declarations -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -872,9 +909,13 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
     </section>
   </section>
 </section>
+
+
 <section>
   <h2><a id="charset" href="#charset">Character encoding: charset attribute</a></h2>
-  <section class="message">
+  
+  
+  <section class="message update">
     <?php $checkId='rep_charset_charset_attr'; ?>
     <!-- charset attribute used on a or link elements -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -922,9 +963,13 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
     </section>
   </section>
 </section>
+
+
 <section>
   <h2><a id="charother" href="#charother">Character encoding: other</a></h2>
-  <section class="message">
+  
+  
+  <section class="message update">
     <?php $checkId='rep_charset_none'; ?>
     <!-- No character encoding information -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -1074,7 +1119,9 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>"</p>
     </section>
   </section>
-  <section class="message">
+  
+  
+  <section class="message new">
     <?php $checkId='rep_charset_legacy'; ?>
     <!-- Non-preferred name used for legacy character encoding  -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -1127,7 +1174,9 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>"</p>
     </section>
   </section>
-  <section class="message">
+  
+  
+  <section class="message new">
     <?php $checkId='rep_charset_unknown'; ?>
     <!-- Non-preferred name used for legacy character encoding  -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -1175,9 +1224,13 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
     </section>
   </section>
 </section>
+
+
 <section>
   <h2><a id="langattr" href="#langattr">Language: attributes</a></h2>
-  <section class="message">
+  
+  
+  <section class="message update">
     <?php $checkId='rep_lang_missing_html_attr'; ?>
     <!-- A tag uses an xml:lang attribute without an associated lang attribute-->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -1234,7 +1287,9 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>"</p>
     </section>
   </section>
-  <section class="message">
+  
+  
+  <section class="message update">
     <!-- A tag uses a lang attribute without an associated xml:lang attribute -->
     <?php $checkId='rep_lang_missing_xml_attr'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -1520,7 +1575,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
     </div>
   </div-->
   
-  <section class="message">
+  <section class="message update">
     <?php $checkId='rep_lang_malformed_attr'; ?>
     <!-- A language attribute value was incorrectly formed -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -1581,7 +1636,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
   </section>
   
   
-  <section class="message">
+  <section class="message new">
     <?php $checkId='rep_lang_subtag_invalid'; ?>
     <!-- A language subtag is invalid -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -1638,7 +1693,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
   
   
 </section>
-  <section class="message">
+  <section class="message new">
     <?php $checkId='rep_lang_grandfathered'; ?>
     <!-- A language attribute uses a grandfathered value -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -1683,7 +1738,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
   
   
 </section>
-  <section class="message">
+  <section class="message new">
     <?php $checkId='rep_lang_zhCNTW'; ?>
     <!-- A language attribute uses a grandfathered value -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -1734,7 +1789,9 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
 </section>
 <section>
   <h2><a id="contentlang" name="contentlang">Language: Content-Language meta</a></h2>
-  <section class="message">
+  
+  
+  <section class="message update">
     <?php $checkId='rep_lang_content_lang_meta'; ?>
     <!-- Content-Language meta element used to set the default document language -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -1918,7 +1975,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
   </section>
   
   
-  <section class="message">
+  <section class="message new">
     <?php $checkId='rep_markup_control_escapes'; ?>
     <!-- Escaped characters addressing control code range -->
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -2046,8 +2103,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <?php $testnum="bdoNoDir"; ?>
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
     </section>
+    
+    
   </section>
-  <section class="message">
+  <section class="message new">
     <?php $checkId='rep_markup_bdo_auto'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
@@ -2090,7 +2149,9 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
     </section>
   </section>
-  <section class="message">
+  
+  
+  <section class="message new">
     <?php $checkId='rep_markup_bogus_dir_entities'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
@@ -2133,7 +2194,9 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
     </section>
   </section>
-  <section class="message">
+  
+  
+  <section class="message new">
     <?php $checkId='rep_markup_dir_control_codes'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
@@ -2185,7 +2248,9 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
     </section>
   </section>
-  <section class="message">
+  
+  
+  <section class="message new">
     <?php $checkId='rep_markup_dir_escapes'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
@@ -2239,7 +2304,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
   </section>
   
   
-  <section class="message">
+  <section class="message new">
     <?php $checkId='rep_markup_dir_unbalanced'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
@@ -2287,7 +2352,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
   </section>
   
   
-  <section class="message">
+  <section class="message new">
     <?php $checkId='rep_markup_translate_incorrect'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
