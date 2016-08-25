@@ -80,11 +80,23 @@ class Checker {
 		return true;
 	}
 
-	private function tagWellFormed($langAttr) {
-		if (preg_match("/[^a-zA-Z0-9\-]/", $langAttr)) return false;
-		$subtags = explode('-',$langAttr);
+	private function tagIsWellFormed($langAttr) {
+		if (preg_match("/[^a-zA-Z0-9\-]/", $langAttr)) return false;  // eliminate tags that have unexpected characters
+		
+		// removed the x-, u- and t- related stuff
+		$parts = explode('-x-',$langAttr);
+		$base = $parts[0];
+		$parts = explode('-u-',$base);
+		$base = $parts[0];
+		$parts = explode('-t-',$base);
+		$base = $parts[0];
+		
+		// check the language (first) tag
+		$subtags = explode('-',$base);
 		if (strlen($subtags[0]) < 2 || strlen($subtags[0]) > 3) return false;
 		if (count($subtags) == 1) return true;
+		
+		// check any following tags
 		switch (count($subtags)) {
 			case 2: if (strlen($subtags[1]) < 2 || strlen($subtags[1]) > 8) return false; break;
 			case 3: if (strlen($subtags[1]) < 2 || strlen($subtags[1]) > 4 || strlen($subtags[2]) < 2 || strlen($subtags[2]) > 8) return false; break;
@@ -991,7 +1003,7 @@ if ($debug) {
 		// ERROR: A language attribute value was incorrectly formed.
 		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
 			foreach ((array) $element['values'] as $val)
-				if (! $this->tagWellFormed($val)) 
+				if (! $this->tagIsWellFormed($val)) 
 					return true; // keep only those that do not match
 				return false;
 			});
@@ -1003,6 +1015,29 @@ if ($debug) {
 				lang('rep_lang_malformed_attr_expl', Language::format(array_unique(Utils::codesFromValArray($malformedAttrs)), LANG_FORMAT_OL_CODE)),
 				lang('rep_lang_malformed_attr_todo'),
 				lang('rep_lang_malformed_attr_link')
+			);
+		}
+		
+		// ERROR: A language subtag is invalid.
+		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
+			foreach ((array) $element['values'] as $val) {
+				$subtags = explode('-',$val);
+				if (strpos($this->doc->languages,'|'.strtolower($subtags[0]).'|') === false) return true;
+				for ($s=1;$s<count($subtags);$s++) {
+					if ($subtags[$s] == 'x' || $subtags[$s] == 't' || $subtags[$s] == 'u') break;
+					if (strpos($this->doc->otherSubtags,'|'.strtolower($subtags[$s]).'|') === false) { return true; }
+					}
+				return false;
+				}
+			});
+		if ($malformedAttrs != null) {
+			Report::addReport(
+				'rep_lang_subtag_invalid',
+				$category, REPORT_LEVEL_ERROR, 
+				lang('rep_lang_subtag_invalid'),
+				lang('rep_lang_subtag_invalid_expl', Language::format(array_unique(Utils::codesFromValArray($malformedAttrs)), LANG_FORMAT_OL_CODE)),
+				lang('rep_lang_subtag_invalid_todo'),
+				lang('rep_lang_subtag_invalid_link')
 			);
 		}
 		
@@ -1064,6 +1099,8 @@ if ($debug) {
 				lang('rep_lang_conflict_link')
 			);
 		}
+
+
 	}
 	
 	private function addReportDirValues() {

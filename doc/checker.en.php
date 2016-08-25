@@ -1581,6 +1581,62 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
   </section>
   
   
+  <section class="message">
+    <?php $checkId='rep_lang_subtag_invalid'; ?>
+    <!-- A language subtag is invalid -->
+    <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
+    <section>
+      <h4>Conditions and severity</h4>
+      <div class="insidenote">[<?php echo $checkId; ?>]</div>
+      <ul class="conditions">
+        <li><img src="media/images/error.png" alt="Error:" /> A language subtag is invalid.</li>
+      </ul>
+    </section>
+    <section>
+      <h4>Explanation</h4>
+      <?php echo pr($language[$checkId.'_expl']); ?>
+    </section>
+    <section>
+      <h4>What to do</h4>
+      <?php echo pr($language[$checkId.'_todo']); ?>
+    </section>
+    <section>
+      <h4>Further reading</h4>
+      <?php echo pr($language[$checkId.'_link']); ?>
+    </section>
+    <section>
+      <h4>Sources</h4>
+      <ol>
+        <li class="w3">
+          <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
+        </li>
+        <li class="w3">
+          <p class="link"><a href="http://www.rfc-editor.org/rfc/bcp/bcp47.txt">Internet-Draft: BCP 47</a> <span class="type">specification</span></p>
+        </li>
+        <li class="w3">
+          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
+        </li>
+        <li class="w3">
+          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
+        </li>
+        <li class="w3">
+          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
+        </li>
+        <li class="w3">
+          <p class="link"><a href="http://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
+        </li>
+      </ol>
+    </section>
+    <section class="tests">
+      <h4>Tests</h4>
+      <p>
+        <?php $testnum="subtagInvalid"; ?>
+        <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>"</p>
+      <p>
+    </section>
+  </section>
+  
+  
 </section>
   <section class="message">
     <?php $checkId='rep_lang_grandfathered'; ?>
