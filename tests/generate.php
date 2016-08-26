@@ -72,6 +72,10 @@ else { $buffer .= '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.
 
 // write the html tag
 $buffer .= "\n<html ";
+$defaultLang = 'en';
+if (isset($test[$i]['defaultlang'])) { 
+	$defaultLang =  $test[$i]['defaultlang'];  
+	}
 // if data.php specifies attributes, add those, otherwise use standard en
 if (isset($test[$i]['htmldir'])) { 
 	$buffer .=  " ".$test[$i]['htmldir']." ";  
@@ -80,9 +84,9 @@ if (isset($test[$i]['htmlattributes'])) {
 	$buffer .=  " ".$test[$i]['htmlattributes']." ";  
 	}
 else {
-	if ($format=='xhtml' || $format=='xhtml11' || $format=='xhtml5') { $buffer .= ' xml:lang="en" '; }
-	else { $buffer .= ' lang="en" '; }
-	if ($format=='xhtml' && $serveas=='html') { $buffer .= ' lang="en" '; }
+	if ($format=='xhtml' || $format=='xhtml11' || $format=='xhtml5') { $buffer .= ' xml:lang="'.$defaultLang.'" '; }
+	else { $buffer .= ' lang="'.$defaultLang.'" '; }
+	if ($format=='xhtml' && $serveas=='html') { $buffer .= ' lang="'.$defaultLang.'" '; }
 	}
 if ($format=='xhtml' || $format=='xhtml11' || $format=='xhtml5') { $buffer .= ' xmlns="http://www.w3.org/1999/xhtml"'; }
 $buffer .= ">\n";
