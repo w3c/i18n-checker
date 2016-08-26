@@ -93,6 +93,7 @@ class Checker {
 		
 		// check the language (first) tag
 		$subtags = explode('-',$base);
+		if ($subtags[0] == 'x') return true; // user-defined tags like x-default
 		if (strlen($subtags[0]) < 2 || strlen($subtags[0]) > 3) return false;
 		if (count($subtags) == 1) return true;
 		
@@ -1004,6 +1005,7 @@ class Checker {
 		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
 			foreach ((array) $element['values'] as $val) {
 				$subtags = explode('-',$val);
+				if ($subtags[0] == 'x') return false;
 				if (strpos($this->doc->languages,'|'.strtolower($subtags[0]).'|') === false) return true;
 				for ($s=1;$s<count($subtags);$s++) {
 					if ($subtags[$s] == 'x' || $subtags[$s] == 't' || $subtags[$s] == 'u') break;

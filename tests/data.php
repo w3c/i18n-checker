@@ -444,9 +444,10 @@ $test["malformedattr3"]=array(
 '<p lang="hy-Armn-AM-arevela">ok</p>'.
 
 '<p lang="hy-Armn-AM-arevela-x-misc">ok</p>'.
+'<p lang="x-default">ok</p>'.
 
 
-'<p lang="x" title="1 of 15">fail</p>'.
+'<p lang="p" title="1 of 15">fail</p>'.
 '<p lang="putonghua" title="2 of 15">fail</p>'.
 
 '<p lang="sgn-x" title="3 of 15">fail</p>'.
@@ -486,11 +487,13 @@ $test["subtagInvalid"]=array(
 '<p>Valid subtag <span lang="zzj-x-Qqqq-QQ-qqqqqq">zzj-x-Qqqq-QQ-qqqqqq</span>.</p>'.
 '<p>Valid subtag <span lang="zzj-t-Qqqq-QQ-qqqqqq">zzj-t-Qqqq-QQ-qqqqqq</span>.</p>'.
 '<p>Valid subtag <span lang="zzj-u-Qqqq-QQ-qqqqqq">zzj-u-Qqqq-QQ-qqqqqq</span>.</p>'.
+'<p>Valid subtag <span lang="x-default">x-default</span>.</p>'.
+
 '<p>Invalid subtag <span lang="zzz-Latn" title="1 of 5">zzz-Latn</span>.</p>'.
 '<p>Invalid subtag <span lang="ar-zzz" title="2 of 5">ar-zzz</span>.</p>'.
 '<p>Invalid subtag <span lang="hy-Armn-AM-zzzzz" title="3 of 5">hy-Armn-AM-zzzzz</span>.</p>'.
 '<p>Invalid subtag <span lang="zzj-Qqqq-QQ-qqqqqq" title="4 of 5">zzj-Qqqq-QQ-qqqqqq</span>.</p>'.
-'<p>Invalid subtag <span lang="x-Qqqq-QQ-qqqqqq" title="5 of 5">x-Qqqq-QQ-qqqqqq</span>.</p>'.
+'<p>Invalid subtag <span lang="q-Qqqq-QQ-qqqqqq" title="5 of 5">q-Qqqq-QQ-qqqqqq</span>.</p>'.
 '</div>',
 );
 
