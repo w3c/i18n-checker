@@ -1108,27 +1108,58 @@ class Checker {
 				);
 		}
 		
-		// INFO: Consider adding dir="rtl" to the html tag
+		// INFO: Consider adding dir="rtl" to the html tag + WARNING: No rtl markup found
 		$langAttr = $this->doc->getHTMLTagAttr('lang');
 		if ($langAttr == null) $langAttr = $this->doc->getHTMLTagAttr('lang',true); // get the xml:lang value if no lang value
-		$dirAttr = $this->doc->getHTMLTagAttr('dir');
+		$htmlDirAttr = $this->doc->getHTMLTagAttr('dir');
+		$dirAttrList = $this->doc->getNodesWithAttr('dir');
 		if ($langAttr != null) {
 			$parts = explode('-',$langAttr);
 			$rtl = false;
 			if ($parts[0] == 'ar' || $parts[0] == 'fa' || $parts[0] == 'ur' || $parts[0] == 'ckb' || $parts[0] == 'he' || $parts[0] == 'ug' || 
 				$parts[0] == 'dv' || $parts[0] == 'ps' || $parts[0] == 'nqo' || $parts[0] == 'syr' || $parts[0] == 'sd') $rtl = true;
 			if (preg_match('/-Arab$|-Arab-/i',$langAttr)) $rtl = true;
-			if ($rtl == true && $dirAttr == null)
+			if ($rtl == true && $dirAttrList == null)
+				Report::addReport(
+					'rep_markup_no_dir',
+					'dir_category', REPORT_LEVEL_WARNING, 
+					lang('rep_markup_no_dir'),
+					lang('rep_markup_no_dir_expl', $langAttr),
+					lang('rep_markup_no_dir_todo'),
+					lang('rep_markup_no_dir_link')
+				);
+			else if ($rtl == true && $htmlDirAttr == null)
 				Report::addReport(
 					'rep_markup_dir_default',
 					'dir_category', REPORT_LEVEL_INFO, 
 					lang('rep_markup_dir_default'),
-					lang('rep_markup_dir_default_expl_html', $langAttr),
+					lang('rep_markup_dir_default_expl', $langAttr),
 					lang('rep_markup_dir_default_todo'),
 					lang('rep_markup_dir_default_link')
 				);
+			
 		}
-		
+
+		// WARNING: CSS is being used to set direction
+		$styleNodes = $this->doc->getNodesWithAttr('style');
+		if (count($styleNodes) > 0) {
+			$invalidstyleNodes = array_filter($styleNodes, function ($array) {
+				if (is_array($array['values'])) { $array['values'] = implode(' ',$array['values']); }
+				$array['values'] = strtolower($array['values']);
+				if (preg_match('/direction:\s*rtl/',$array['values']) || preg_match('/direction:\s*ltr/',$array['values'])) { return true; }
+				return false;
+				});
+			if (count($invalidstyleNodes) > 0)
+				Report::addReport(
+					'rep_markup_css_direction',
+					'dir_category', REPORT_LEVEL_WARNING, 
+					lang('rep_markup_css_direction'),
+					lang('rep_markup_css_direction_expl', Language::format(Utils::codesFromValArray($invalidstyleNodes), LANG_FORMAT_OL_CODE)),
+					lang('rep_markup_css_direction_todo'),
+					lang('rep_markup_css_direction_link')
+				);
+		}
+
 	}
 	
 	private function addReportMisc() {

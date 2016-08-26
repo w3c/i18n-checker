@@ -719,25 +719,41 @@ $test["translateIncorrect"]=array(
 $test["dirDefault"]=array(
 'title'=>'rep_markup_dir_default',
 'defaultlang'=>"he",
-'test'=>"<div class='test'><p>Primary language set to he. No dir on html.</p></div>",
+'test'=>"<div class='test'><p dir='rtl'>Primary language set to he. No dir on html.</p></div>",
 );
 
 $test["dirDefault2"]=array(
 'title'=>'rep_markup_dir_default',
 'defaultlang'=>"ar-aao",
-'test'=>"<div class='test'><p>Primary language set to ar-aao. No dir on html.</p></div>",
+'test'=>"<div class='test' dir='rtl'><p>Primary language set to ar-aao. No dir on html.</p></div>",
 );
 
 $test["dirDefault3"]=array(
 'title'=>'rep_markup_dir_default',
 'defaultlang'=>"ku-Arab",
-'test'=>"<div class='test'><p>Primary language set to ku-Arab. No dir on html.</p></div>",
+'test'=>"<div class='test' dir='rtl'><p>Primary language set to ku-Arab. No dir on html.</p></div>",
 );
 
 $test["dirDefault4"]=array(
 'title'=>'rep_markup_dir_default',
 'defaultlang'=>"ku-Arab-IR",
-'test'=>"<div class='test'><p>Primary language set to ku-Arab-IR. No dir on html.</p></div>",
+'test'=>"<div class='test' dir='rtl'><p>Primary language set to ku-Arab-IR. No dir on html.</p></div>",
+);
+
+
+$test["noDir"]=array(
+'title'=>'rep_markup_no_dir',
+'defaultlang'=>"ku-Arab-IR",
+'test'=>"<div class='test'><p>Primary language set to ku-Arab-IR. No dir at all.</p></div>",
+);
+
+
+$test["cssDirection"]=array(
+'title'=>'rep_markup_css_direction',
+'test'=>"<p style='direction: rtl;' title='1 of 3'>Primary language set to ku-Arab-IR. No dir on html.</p>".
+"<p style='direction: ltr;' title='2 of 3'>Primary language set to ku-Arab-IR. No dir on html.</p>".
+"<p style='direction:rtl;' title='3 of 3'>Primary language set to ku-Arab-IR. No dir on html.</p>".
+"<p style='text-align:left;' title='3 of 3'>Primary language set to ku-Arab-IR. No dir on html.</p></div>",
 );
 
 
