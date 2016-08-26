@@ -867,6 +867,7 @@ class Checker {
 		// Attributes on all nodes including html tag
 		$htmlLangAttrs = $this->doc->getNodesWithAttr('lang');
 		$xmlLangAttrs = $this->doc->getNodesWithAttr('lang', true);
+		$hreflangAttrs = $this->doc->getNodesWithAttr('hreflang');
 		// Only the tag dumps of nodes containing (xml:)lang
 		$htmlLangCodes = Utils::codesFromValArray($htmlLangAttrs);
 		$xmlLangCodes = Utils::codesFromValArray($xmlLangAttrs);
@@ -984,7 +985,7 @@ class Checker {
 		}
 
 		// ERROR: A language attribute value was incorrectly formed.
-		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
+		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs, (array) $hreflangAttrs), function ($element) {
 			foreach ((array) $element['values'] as $val)
 				if (! $this->tagIsWellFormed($val)) 
 					return true; // keep only those that do not match
@@ -1002,7 +1003,7 @@ class Checker {
 		}
 		
 		// ERROR: A language subtag is invalid.
-		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
+		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs, (array) $hreflangAttrs), function ($element) {
 			foreach ((array) $element['values'] as $val) {
 				$subtags = explode('-',$val);
 				if ($subtags[0] == 'x') return false;
@@ -1027,7 +1028,7 @@ class Checker {
 		
 		// ERROR: A language attribute uses a grandfathered value.
 		$grandfathered = "|art-lojban|cel-gaulish|en-gb-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|no-bok|no-nyn|sgn-be-fr|sgn-be-nl|sgn-ch-de|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang|";
-		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) use ($grandfathered) {
+		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs, (array) $hreflangAttrs), function ($element) use ($grandfathered) {
 			foreach ((array) $element['values'] as $val)
 				if (strpos($grandfathered,'|'.strtolower($val).'|') !== false) 
 					return true; // keep only those that do not match
@@ -1045,7 +1046,7 @@ class Checker {
 		}
 		
 		// INFO: A language attribute uses zh-CN or zh-TW.
-		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs), function ($element) {
+		$malformedAttrs = array_filter(array_merge((array) $htmlLangAttrs, (array) $xmlLangAttrs, (array) $hreflangAttrs), function ($element) {
 			foreach ((array) $element['values'] as $val)
 				if ($val == 'zh-CN' || $val == 'zh-TW') 
 					return true; // keep only those that do not match

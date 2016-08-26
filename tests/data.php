@@ -445,27 +445,29 @@ $test["malformedattr3"]=array(
 
 '<p lang="hy-Armn-AM-arevela-x-misc">ok</p>'.
 '<p lang="x-default">ok</p>'.
+'<p><a href="none" hreflang="hy-arm">hreflang hy-arm</a></p>'.
 
 
-'<p lang="p" title="1 of 15">fail</p>'.
-'<p lang="putonghua" title="2 of 15">fail</p>'.
+'<p lang="p" title="1 of 16">fail</p>'.
+'<p lang="putonghua" title="2 of 16">fail</p>'.
 
-'<p lang="sgn-x" title="3 of 15">fail</p>'.
-'<p lang="zh-putonghua" title="4 of 15">fail</p>'.
+'<p lang="sgn-x" title="3 of 16">fail</p>'.
+'<p lang="zh-putonghua" title="4 of 16">fail</p>'.
 
-'<p lang="hy-p-Armn" title="5 of 15">fail</p>'.
-'<p lang="hy-arevela-AM" title="6 of 15">fail</p>'.
-'<p lang="hy-aen-x" title="7 of 15">fail</p>'.
-'<p lang="zh-Hans-putonghua" title="8 of 15">fail</p>'.
+'<p lang="hy-p-Armn" title="5 of 16">fail</p>'.
+'<p lang="hy-arevela-AM" title="6 of 16">fail</p>'.
+'<p lang="hy-aen-x" title="7 of 16">fail</p>'.
+'<p lang="zh-Hans-putonghua" title="8 of 16">fail</p>'.
 
-'<p lang="hy-AM-Armn-AM" title="9 of 15">fail</p>'.
-'<p lang="zh-putong-cmn-arevela" title="10 of 15">fail</p>'.
-'<p lang="hy-aen-p-arevela" title="11 of 15">fail</p>'.
-'<p lang="hy-areve-Armn-arevela" title="12 of 15">fail</p>'.
-'<p lang="zh-cmn-CN-putonghua" title="13 of 15">fail</p>'.
-'<p lang="hy-Armn-AM-p-misc" title="14 of 15">fail</p>'.
+'<p lang="hy-AM-Armn-AM" title="9 of 16">fail</p>'.
+'<p lang="zh-putong-cmn-arevela" title="10 of 16">fail</p>'.
+'<p lang="hy-aen-p-arevela" title="11 of 16">fail</p>'.
+'<p lang="hy-areve-Armn-arevela" title="12 of 16">fail</p>'.
+'<p lang="zh-cmn-CN-putonghua" title="13 of 16">fail</p>'.
+'<p lang="hy-Armn-AM-p-misc" title="14 of 16">fail</p>'.
 
-'<p lang="i-klingon" title="15 of 15">fail</p>'.
+'<p lang="i-klingon" title="16 of 16">fail</p>'.
+'<p title="16 of 16"><a href="none" hreflang="putonghua">hreflang putonghua</a></p>'.
 
 '<p lang="hy-x-Armn-AM">ok</p>'.
 '<p lang="zh-x-putong-cmn-arevela">ok</p>'.
@@ -488,12 +490,14 @@ $test["subtagInvalid"]=array(
 '<p>Valid subtag <span lang="zzj-t-Qqqq-QQ-qqqqqq">zzj-t-Qqqq-QQ-qqqqqq</span>.</p>'.
 '<p>Valid subtag <span lang="zzj-u-Qqqq-QQ-qqqqqq">zzj-u-Qqqq-QQ-qqqqqq</span>.</p>'.
 '<p>Valid subtag <span lang="x-default">x-default</span>.</p>'.
+'<p><a href="none" hreflang="ar-Arab">hreflang ar-Arab</a></p>'.
 
-'<p>Invalid subtag <span lang="zzz-Latn" title="1 of 5">zzz-Latn</span>.</p>'.
-'<p>Invalid subtag <span lang="ar-zzz" title="2 of 5">ar-zzz</span>.</p>'.
-'<p>Invalid subtag <span lang="hy-Armn-AM-zzzzz" title="3 of 5">hy-Armn-AM-zzzzz</span>.</p>'.
-'<p>Invalid subtag <span lang="zzj-Qqqq-QQ-qqqqqq" title="4 of 5">zzj-Qqqq-QQ-qqqqqq</span>.</p>'.
-'<p>Invalid subtag <span lang="q-Qqqq-QQ-qqqqqq" title="5 of 5">q-Qqqq-QQ-qqqqqq</span>.</p>'.
+'<p>Invalid subtag <span lang="zzz-Latn" title="1 of 6">zzz-Latn</span>.</p>'.
+'<p>Invalid subtag <span lang="ar-zzz" title="2 of 6">ar-zzz</span>.</p>'.
+'<p>Invalid subtag <span lang="hy-Armn-AM-zzzzz" title="3 of 6">hy-Armn-AM-zzzzz</span>.</p>'.
+'<p>Invalid subtag <span lang="zzj-Qqqq-QQ-qqqqqq" title="4 of 6">zzj-Qqqq-QQ-qqqqqq</span>.</p>'.
+'<p>Invalid subtag <span lang="q-Qqqq-QQ-qqqqqq" title="5 of 6">q-Qqqq-QQ-qqqqqq</span>.</p>'.
+'<p><a href="none" hreflang="ar-zzz" title="6 of 6">hreflang ar-zzz</a></p>'.
 '</div>',
 );
 
@@ -501,32 +505,33 @@ $test["subtagInvalid"]=array(
 $test["grandfathered"]=array(
 'title'=>'rep_lang_grandfathered',
 'test'=>"<div class='test'>Uses grandfathered subtags.".
-'<p lang="art-lojban" title="1 of 26">fail</p>'.
-'<p lang="cel-gaulish" title="2 of 26">fail</p>'.
-'<p lang="en-gb-oed" title="3 of 26">fail</p>'.
-'<p lang="i-ami" title="4 of 26">fail</p>'.
-'<p lang="i-bnn" title="5 of 26">fail</p>'.
-'<p lang="i-default" title="6 of 26">fail</p>'.
-'<p lang="i-enochian" title="7 of 26">fail</p>'.
-'<p lang="i-hak" title="8 of 26">fail</p>'.
-'<p lang="i-klingon" title="9 of 26">fail</p>'.
-'<p lang="i-lux" title="10 of 26">fail</p>'.
-'<p lang="i-mingo" title="11 of 26">fail</p>'.
-'<p lang="i-navajo" title="12 of 26">fail</p>'.
-'<p lang="i-pwn" title="13 of 26">fail</p>'.
-'<p lang="i-tao" title="14 of 26">fail</p>'.
-'<p lang="i-tay" title="15 of 26">fail</p>'.
-'<p lang="i-tsu" title="16 of 26">fail</p>'.
-'<p lang="no-bok" title="17 of 26">fail</p>'.
-'<p lang="no-nyn" title="18 of 26">fail</p>'.
-'<p lang="sgn-be-fr" title="19 of 26">fail</p>'.
-'<p lang="sgn-be-nl" title="20 of 26">fail</p>'.
-'<p lang="sgn-ch-de" title="21 of 26">fail</p>'.
-'<p lang="zh-guoyu" title="22 of 26">fail</p>'.
-'<p lang="zh-hakka" title="23 of 26">fail</p>'.
-'<p lang="zh-min" title="24 of 26">fail</p>'.
-'<p lang="zh-min-nan" title="25 of 26">fail</p>'.
-'<p lang="zh-xiang" title="26 of 26">fail</p>'.
+'<p lang="art-lojban" title="1 of 27">fail</p>'.
+'<p lang="cel-gaulish" title="2 of 27">fail</p>'.
+'<p lang="en-gb-oed" title="3 of 27">fail</p>'.
+'<p lang="i-ami" title="4 of 27">fail</p>'.
+'<p lang="i-bnn" title="5 of 27">fail</p>'.
+'<p lang="i-default" title="6 of 27">fail</p>'.
+'<p lang="i-enochian" title="7 of 27">fail</p>'.
+'<p lang="i-hak" title="8 of 27">fail</p>'.
+'<p lang="i-klingon" title="9 of 27">fail</p>'.
+'<p lang="i-lux" title="10 of 27">fail</p>'.
+'<p lang="i-mingo" title="11 of 27">fail</p>'.
+'<p lang="i-navajo" title="12 of 27">fail</p>'.
+'<p lang="i-pwn" title="13 of 27">fail</p>'.
+'<p lang="i-tao" title="14 of 27">fail</p>'.
+'<p lang="i-tay" title="15 of 27">fail</p>'.
+'<p lang="i-tsu" title="16 of 27">fail</p>'.
+'<p lang="no-bok" title="17 of 27">fail</p>'.
+'<p lang="no-nyn" title="18 of 27">fail</p>'.
+'<p lang="sgn-be-fr" title="19 of 27">fail</p>'.
+'<p lang="sgn-be-nl" title="20 of 27">fail</p>'.
+'<p lang="sgn-ch-de" title="21 of 27">fail</p>'.
+'<p lang="zh-guoyu" title="22 of 27">fail</p>'.
+'<p lang="zh-hakka" title="23 of 27">fail</p>'.
+'<p lang="zh-min" title="24 of 27">fail</p>'.
+'<p lang="zh-min-nan" title="25 of 27">fail</p>'.
+'<p lang="zh-xiang" title="26 of 27">fail</p>'.
+'<p><a href="none" hreflang="zh-xiang" title="27 of 27">hreflang zh-xiang</p>'.
 
 '<p lang="jbo">ok</p>'.
 '<p lang="en-gb-oxendict">ok</p>'.
