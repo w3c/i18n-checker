@@ -2013,11 +2013,13 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
         <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
     </section>
   </section>
-  
-  
 </section>
+
+
 <section>
   <h2><a id="direction" href="#direction">Markup: direction</a></h2>
+  
+  
   <section class="message">
     <?php $checkId='rep_markup_dir_incorrect'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
@@ -2053,14 +2055,70 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2">HTML 4.01, 8.2 Specifying the direction of text and tables: the dir attribute</a > <span class="type">specification</span></p>
         </li>
       </ol>
+    </section>
       <section class="tests">
         <h4>Tests</h4>
         <p>
           <?php $testnum="dirIncorrect"; ?>
           <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
       </section>
-    </section>
   </section>
+  
+  
+  <section class="message new">
+    <?php $checkId='rep_markup_dir_default'; ?>
+    <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
+    <section>
+      <h4>Conditions and severity</h4>
+      <div class="insidenote">[<?php echo $checkId; ?>]</div>
+      <ul class="conditions">
+        <li><img src="media/images/error.png" alt="Error:" /> A <code class="kw" translate="no">dir</code> attribute contains values that are not <code class="kw" translate="no">rtl</code>, <code class="kw" translate="no">ltr</code> or <code class="kw" translate="no">auto</code>.</li>
+      </ul>
+    </section>
+    <section>
+      <h4>Explanation</h4>
+      <?php echo pr($language[$checkId.'_expl_html']); ?>
+    </section>
+    <section>
+      <h4>What to do</h4>
+      <?php echo pr($language[$checkId.'_todo']); ?>
+    </section>
+    <section>
+      <h4>Further reading</h4>
+      <?php echo pr($language[$checkId.'_link']); ?>
+    </section>
+    <section>
+      <h4>Sources</h4>
+      <ol>
+        <li class="w3">
+          <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
+        </li>
+        <li class="w3">
+          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-dir-attribute">HTML5, 3.2.3.5 The dir attribute</a > <span class="type">specification</span></p>
+        </li>
+        <li class="w3">
+          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2">HTML 4.01, 8.2 Specifying the direction of text and tables: the dir attribute</a > <span class="type">specification</span></p>
+        </li>
+      </ol>
+    </section>
+      <section class="tests">
+        <h4>Tests</h4>
+        <p>
+          <?php $testnum="dirDefault"; ?>
+          <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
+        <p>
+          <?php $testnum="dirDefault2"; ?>
+          <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
+        <p>
+          <?php $testnum="dirDefault3"; ?>
+          <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
+        <p>
+          <?php $testnum="dirDefault4"; ?>
+          <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
+      </section>
+  </section>
+  
+  
   <section class="message">
     <?php $checkId='rep_markup_bdo_no_dir'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>

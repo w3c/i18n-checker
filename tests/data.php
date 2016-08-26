@@ -7,6 +7,7 @@ $test = array();
 # Optional extras:
 #   htmlattributes: usually lang, xml:lang, or dir, will be added to html tag, if not present a default will be supplied
 #   htmldir: usually lang, xml:lang, or dir, will be added to html tag, if not present a default will be supplied
+#	defaultlang: specifies a language tag that will be used in all formats without specifying lang/xml:lang
 #	metaencodingdecls: write your own meta encoding declarations to appear in the head - if not present, defaults are supplied
 #	contentlanguagep: write your own Content-Language meta elements to appear in the head - if not present, nothing is supplied
 #   httpheader: the encoding part of the header, eg. charset=iso-8859-1
@@ -713,6 +714,30 @@ $test["translateIncorrect"]=array(
 'title'=>'rep_markup_translate_incorrect',
 'test'=>'<div class="test"><p>A translate attribute is set to <span translate="maybe">maybe</span>.</p><p>Here are the controls, set to <span translate="no">no and <span translate="yes">yes</span></span>.</p>
 </div>',
+);
+
+$test["dirDefault"]=array(
+'title'=>'rep_markup_dir_default',
+'defaultlang'=>"he",
+'test'=>"<div class='test'><p>Primary language set to he. No dir on html.</p></div>",
+);
+
+$test["dirDefault2"]=array(
+'title'=>'rep_markup_dir_default',
+'defaultlang'=>"ar-aao",
+'test'=>"<div class='test'><p>Primary language set to ar-aao. No dir on html.</p></div>",
+);
+
+$test["dirDefault3"]=array(
+'title'=>'rep_markup_dir_default',
+'defaultlang'=>"ku-Arab",
+'test'=>"<div class='test'><p>Primary language set to ku-Arab. No dir on html.</p></div>",
+);
+
+$test["dirDefault4"]=array(
+'title'=>'rep_markup_dir_default',
+'defaultlang'=>"ku-Arab-IR",
+'test'=>"<div class='test'><p>Primary language set to ku-Arab-IR. No dir on html.</p></div>",
 );
 
 

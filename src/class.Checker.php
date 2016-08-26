@@ -870,25 +870,7 @@ class Checker {
 		$htmlLangCodes = Utils::codesFromValArray($htmlLangAttrs);
 		$xmlLangCodes = Utils::codesFromValArray($xmlLangAttrs);
 
-//$debug = true;
-/*
-if ($debug) { 
-	echo "<p>".'$langAttr'."</p>"; 
-	echo "<pre>"; print_r($langAttr); echo "</pre>";
-	echo "<p>".'$xmlLangAttr'."</p>"; 
-	echo "<pre>"; print_r($xmlLangAttr);  echo "</pre>";
-	echo "<p>".'$htmlLangAttrs'."</p>"; 
-	echo "<pre>"; print_r($htmlLangAttrs);  echo "</pre>";
-	echo "<p>".'$xmlLangAttrs'."</p>"; 
-	echo "<pre>"; print_r($xmlLangAttrs);  echo "</pre>";
-	echo "<p>".'$htmlLangCodes'."</p>"; 
-	echo "<pre>"; print_r($htmlLangCodes);  echo "</pre>";
-	echo "<p>".'$xmlLangCodes'."</p>"; 
-	echo "<pre>"; print_r($xmlLangCodes);  echo "</pre>";
-	}
-*/
-		
-		// LANG REPORT: Content-Language meta element
+		// LANG REPORT: Content-Language meta element used
 		if (!Utils::_empty($this->doc->getMetaContentLanguage())) {
 			Report::addReport(
 				'rep_lang_content_lang_meta',
@@ -1126,6 +1108,27 @@ if ($debug) {
 				);
 		}
 		
+		// INFO: Consider adding dir="rtl" to the html tag
+		$langAttr = $this->doc->getHTMLTagAttr('lang');
+		if ($langAttr == null) $langAttr = $this->doc->getHTMLTagAttr('lang',true); // get the xml:lang value if no lang value
+		$dirAttr = $this->doc->getHTMLTagAttr('dir');
+		if ($langAttr != null) {
+			$parts = explode('-',$langAttr);
+			$rtl = false;
+			if ($parts[0] == 'ar' || $parts[0] == 'fa' || $parts[0] == 'ur' || $parts[0] == 'ckb' || $parts[0] == 'he' || $parts[0] == 'ug' || 
+				$parts[0] == 'div' || $parts[0] == 'ps' || $parts[0] == 'nqo' || $parts[0] == 'syr' || $parts[0] == 'sd') $rtl = true;
+			if (preg_match('/-Arab$|-Arab-/i',$langAttr)) $rtl = true;
+			if ($rtl == true && $dirAttr == null)
+				Report::addReport(
+					'rep_markup_dir_default',
+					'dir_category', REPORT_LEVEL_INFO, 
+					lang('rep_markup_dir_default'),
+					lang('rep_markup_dir_default_expl_html', $langAttr),
+					lang('rep_markup_dir_default_todo'),
+					lang('rep_markup_dir_default_link')
+				);
+		}
+		
 	}
 	
 	private function addReportMisc() {
@@ -1223,14 +1226,6 @@ if ($debug) {
 		}
 
 
-		//if (preg_match_all('/\u200E|\u200F|\u202A|\u202B|\u202C|\u202D|\u202E|\u2066|\u2067|\u2068|\u2069/', $this->markup, $foundEntities)) {
-		//	print_r($foundEntities);
-		//	}
-		
-		//if (preg_match_all('/‎|‏|‪|‫|‬|‭|‮|⁦|⁧|⁨|⁩/', $this->markup, $foundEntities)) {
-		//	print_r($foundEntities);
-		//	}
-		
 		
 		// ERROR: Invalid named character references for directional controls
 		if (preg_match_all('/(&lre;)|(&rle;)|(&pdf;)|(&rli;)|(&lri;)|(&fsi;)|(&pdi;)/i', $this->markup, $foundEntities)) {
