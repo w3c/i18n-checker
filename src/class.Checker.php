@@ -1120,7 +1120,7 @@ class Checker {
 			$parts = explode('-',$langAttr);
 			$rtl = false;
 			if ($parts[0] == 'ar' || $parts[0] == 'fa' || $parts[0] == 'ur' || $parts[0] == 'ckb' || $parts[0] == 'he' || $parts[0] == 'ug' || 
-				$parts[0] == 'dv' || $parts[0] == 'ps' || $parts[0] == 'nqo' || $parts[0] == 'syr' || $parts[0] == 'sd') $rtl = true;
+				$parts[0] == 'dv' || $parts[0] == 'ps' || $parts[0] == 'nqo' || $parts[0] == 'syr' || $parts[0] == 'sd' || $parts[0] == 'azb' || $parts[0] == 'pnb') $rtl = true;
 			if (preg_match('/-Arab$|-Arab-/i',$langAttr)) $rtl = true;
 			if ($rtl == true && $dirAttrList == null)
 				Report::addReport(
