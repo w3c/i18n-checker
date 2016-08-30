@@ -42,6 +42,8 @@ abstract class Parser {
 	// Store of cached results of certain functions
 	private $cache;
 	public $dirControls;
+	public $i18nAttributes;
+	public $i18nElements;
 	public $langTags;
 	public $numEscapes;
 	public $encLabels = array(
@@ -129,6 +131,8 @@ abstract class Parser {
 		}
 		$this->charset = Utils::charsetFromContentType($this->contentType);
 		$this->getDirControls();
+		$this->getI18nAttributes();
+		$this->getI18nElements();
 		$this->getLangTags();
 		$this->getNumericEscapes();
 	}
@@ -338,6 +342,48 @@ abstract class Parser {
 		}
 	}
 	
+	private function getI18nAttributes() {
+		$i18nAttributes = array();
+		$dir = $this->getNodesWithAttr('dir');
+		if (count($dir)>0) $i18nAttributes['dir'] = count($dir);
+		$dirname = $this->getNodesWithAttr('dirname');
+		if (count($dirname)>0) $i18nAttributes['dirname'] = count($dirname);
+		$translate = $this->getNodesWithAttr('translate');
+		if (count($translate)>0) $i18nAttributes['translate'] = count($translate);
+		$date = $this->getNodesWithAttr('date');
+		if (count($date)>0) $i18nAttributes['date'] = count($date);
+		$datetime = $this->getNodesWithAttr('datetime');
+		if (count($datetime)>0) $i18nAttributes['datetime'] = count($datetime);
+		$this->i18nAttributes = $i18nAttributes;
+		}
+	
+	private function getI18nElements() {
+		$i18nElements = array();
+		$ruby = $this->document->getElementsByTagName('ruby');
+		if ($ruby->length>0) $i18nElements['ruby'] = $ruby->length;
+		$rb = $this->document->getElementsByTagName('rb');
+		if ($rb->length>0) $i18nElements['rb'] = $rb->length;
+		$rt = $this->document->getElementsByTagName('rt');
+		if ($rt->length>0) $i18nElements['rt'] = $rt->length;
+		$rp = $this->document->getElementsByTagName('rp');
+		if ($rp->length>0) $i18nElements['rp'] = $rp->length;
+		$rtc = $this->document->getElementsByTagName('rtc');
+		if ($rtc->length>0) $i18nElements['rtc'] = $rtc->length;
+		$wbr = $this->document->getElementsByTagName('wbr');
+		if ($wbr->length>0) $i18nElements['wbr'] = $wbr->length;
+		$time = $this->document->getElementsByTagName('time');
+		if ($time->length>0) $i18nElements['time'] = $time->length;
+		$u = $this->document->getElementsByTagName('u');
+		if ($u->length>0) $i18nElements['u'] = $u->length;
+		$bdi = $this->document->getElementsByTagName('bdi');
+		if ($bdi->length>0) $i18nElements['bdi'] = $bdi->length;
+		$bdo = $this->document->getElementsByTagName('bdo');
+		if ($bdo->length>0) $i18nElements['bdo'] = $bdo->length;
+		$q = $this->document->getElementsByTagName('q');
+		if ($q->length>0) $i18nElements['q'] = $q->length;
+
+		$this->i18nElements = $i18nElements;
+		}
 	
 	private function getLangTags() {
 		// returns a simple array of unique language tag values in the document

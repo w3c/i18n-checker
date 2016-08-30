@@ -69,6 +69,8 @@ class Checker {
 		$this->addInfoDirHTML();
 		$this->addInfoDirControls();
 		$this->addInfoClassId();
+		$this->addInfoI18nAttributes();
+		$this->addInfoI18nElements();
 		$this->addInfoRequestHeaders();
 		$this->isUTF16 = ($bom == 'UTF-16LE' || $bom == 'UTF-16BE') ? true : false;
 		
@@ -338,6 +340,48 @@ class Checker {
 		$value = array_values($nodes);
 		$display_value = count($value) == 0 ? 'val_none' : null;
 		Information::addInfo($category, $title, $value, $display_value);
+	}
+	
+	
+	// INFO: i18n ATTRIBUTES
+	private function addInfoI18nAttributes() {
+		$results = array();
+		$totalCtrls = 0;
+		if ($this->doc->i18nAttributes != null) {
+			foreach ($this->doc->i18nAttributes as $key => $val) {
+				$totalCtrls += $val;				
+				if ($val > 0) $results[] = '<span title="Number indicates how many.">'.$key.'<span class="valCount"> '.$val.'</span></span>'; 
+				}
+		}
+		$code = count($results) == 0 ? null : 'Total: '.$totalCtrls;
+		$value = array('code' => $code, 'values' => $results);
+		$display_value = null;
+		if (count($results) == 0) 
+			$display_value = 'val_none_found';
+		$category = 'classId_category';
+		$title = 'classId_i18n_attributes';
+		Information::addInfo($category, $title, $value, $display_value);	
+	}
+	
+	
+	// INFO: i18n ELEMENTS
+	private function addInfoI18nElements() {
+		$results = array();
+		$totalCtrls = 0;
+		if ($this->doc->i18nElements != null) {
+			foreach ($this->doc->i18nElements as $key => $val) {
+				$totalCtrls += $val;				
+				if ($val > 0) $results[] = '<span title="Number indicates how many.">'.$key.'<span class="valCount"> '.$val.'</span></span>'; 
+				}
+		}
+		$code = count($results) == 0 ? null : 'Total: '.$totalCtrls;
+		$value = array('code' => $code, 'values' => $results);
+		$display_value = null;
+		if (count($results) == 0) 
+			$display_value = 'val_none_found';
+		$category = 'classId_category';
+		$title = 'classId_i18n_elements';
+		Information::addInfo($category, $title, $value, $display_value);	
 	}
 	
 	// INFO: REQUEST HEADERS
