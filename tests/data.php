@@ -764,6 +764,15 @@ $test["cssDirection"]=array(
 "<p style='text-align:left;' title='3 of 3'>Primary language set to ku-Arab-IR. No dir on html.</p></div>",
 );
 
+$test["surrogateEscapes"]=array(
+'title'=>'rep_markup_surrogate_escapes',
+'test'=>"<p>Gothic &#x10330; and &#66352;.</p>".
+"<p>Gothic &#xD800;&#xDF30;.</p>".
+"<p>Emoji &#x1F375; and &#127861;.</p>".
+"<p>Emoji &#xD83C;&#xDF75;.</p>".
+"</div>",
+);
+
 
 
 ?>

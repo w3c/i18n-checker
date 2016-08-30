@@ -1422,6 +1422,29 @@ class Checker {
 			);
 		}
 
+	
+		// ERROR: Incorrect character escapes for supplementary characters
+		$failures = array();
+		foreach ($this->doc->numEscapes as $key => $val) {
+			if ($key > 0xD79F and $key < 0xE000) 
+				$failures[] = array($key,$val);
+			}
+			
+		$str = '';
+		foreach ($failures as $val) {
+			$str .= '(dec/hex) &amp;#'.$val[0].'; / &amp;#x'.dechex($val[0]).'; <sup>('.$val[1].')</sup><br/>';	
+			}
+		if (count($failures) > 0) {
+			Report::addReport(
+				'rep_markup_surrogate_escapes',
+				'markup_category', REPORT_LEVEL_ERROR, 
+				lang('rep_markup_surrogate_escapes'),
+				lang('rep_markup_surrogate_escapes_expl', $str),
+				lang('rep_markup_surrogate_escapes_todo'),
+				lang('rep_markup_surrogate_escapes_link')
+			);
+		}
+
 		//print((preg_match_all('/[\x00-\x1F]|[\x80-\x9F]/', $this->markup, $foundEntities)));
 		//print_r($foundEntities);
 
