@@ -354,6 +354,16 @@ abstract class Parser {
 		if (count($date)>0) $i18nAttributes['date'] = count($date);
 		$datetime = $this->getNodesWithAttr('datetime');
 		if (count($datetime)>0) $i18nAttributes['datetime'] = count($datetime);
+		$inputmode = $this->getNodesWithAttr('inputmode');
+		if (count($inputmode)>0) $i18nAttributes['inputmode'] = count($inputmode);
+		$spellcheck = $this->getNodesWithAttr('spellcheck');
+		if (count($spellcheck)>0) $i18nAttributes['spellcheck'] = count($spellcheck);
+		$lang = $this->getNodesWithAttr('lang');
+		if (count($lang)>0) $i18nAttributes['lang'] = count($lang);
+		$hreflang = $this->getNodesWithAttr('hreflang');
+		if (count($hreflang)>0) $i18nAttributes['hreflang'] = count($hreflang);
+		$srclang = $this->getNodesWithAttr('srclang');
+		if (count($srclang)>0) $i18nAttributes['srclang'] = count($srclang);
 		$this->i18nAttributes = $i18nAttributes;
 		}
 	
