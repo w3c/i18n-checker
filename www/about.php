@@ -41,7 +41,7 @@ $hideLangSelection = true;
     </ul>
 	<p>The reports take into account both markup and HTTP headers, which can be particularly useful for
     troubleshooting problems. The advice given in the checker  reports considers how your HMTL pages (ie. files served as <code class="kw" translate="no">text/html</code>)  will behave in a modern browser, rather than just validating against a particular version of the standard. The advice is tailored to suit files served as <code class="kw" translate="no">application/xhtml+xml</code> for aspects relating to character encoding and language declaration.</p>
-	<p>Please let us know about bugs and missing features using the <a href="feedback.html">feedback form</a>.</p>
+	<p>Please let us know about bugs and missing features using the <a href="https://github.com/w3c/i18n-checker/issues">feedback form</a>.</p>
 	<p>This software is free / open source, licenced under the terms of [LICENCE]. The source code is available on GitHub; follow the <a href="https://github.com/w3c/i18n-checker">Download</a> link at the bottom of this page.</p>
 </div>
 
