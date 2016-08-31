@@ -2056,13 +2056,53 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
   
   
   <section class="message new">
+    <?php $checkId='rep_markup_align'; ?>
+    <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
+    <section>
+      <h4>Conditions and severity</h4>
+      <div class="insidenote">[<?php echo $checkId; ?>]</div>
+      <ul class="conditions">
+        <li><img src="media/images/error.png" alt="Error:" /> One or more <code class="kw" translate="no">align</code> attributes have been used on elements in the markup.</li>
+      </ul>
+    </section>
+    <section>
+      <h4>Explanation</h4>
+      <?php echo pr($language[$checkId.'_expl']); ?>
+    </section>
+    <section>
+      <h4>What to do</h4>
+      <?php echo pr($language[$checkId.'_todo']); ?>
+    </section>
+    <section>
+      <h4>Further reading</h4>
+      <?php echo pr($language[$checkId.'_link']); ?>
+    </section>
+    <section>
+      <h4>Sources</h4>
+      <ol>
+        <li class="w3">
+          <p class="link"><a href="https://www.w3.org/TR/html51/obsolete.html#obsolete-but-conforming-features">HTML5.1, 11.1. Obsolete but conforming features</a > <span class="type">specification</span></p>
+        </li>
+      </ol>
+    </section>
+    <section class="tests">
+      <h4>Tests</h4>
+      <p>
+        <?php $testnum="align"; ?>
+        <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html%26serveas=html">HTML4</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=html5%26serveas=html">HTML5</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=html">XHTML1.0</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml%26serveas=xml">XHTML1.0x</a> &bull; &nbsp; <a target="_blank" <?php echo $testpath.$testnum; ?>%26format=xhtml11%26serveas=xml">XHTML1.1x</a>" </p>
+      <p>
+    </section>
+  </section>
+  
+  
+  <section class="message new">
     <?php $checkId='rep_markup_surrogate_escapes'; ?>
     <h3><?php echo '<a id="'.$checkId.'" href="#'.$checkId.'">'.$language[$checkId].'</a>'; ?></h3>
     <section>
       <h4>Conditions and severity</h4>
       <div class="insidenote">[<?php echo $checkId; ?>]</div>
       <ul class="conditions">
-        <li><img src="media/images/error.png" alt="Error:" /> One or more <code class="kw" translate="no">translate</code> attributes have incorrect values<code class="kw" translate="no"></code>.</li>
+        <li><img src="media/images/error.png" alt="Error:" /> The markup contains character references for surrogate characters.</li>
       </ul>
     </section>
     <section>

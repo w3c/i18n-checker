@@ -773,6 +773,11 @@ $test["surrogateEscapes"]=array(
 "</div>",
 );
 
+$test["align"]=array(
+'title'=>'rep_markup_align',
+'test'=>"<div class='test' align='right'>This div uses the align attribute.</div>",
+);
+
 
 
 ?>

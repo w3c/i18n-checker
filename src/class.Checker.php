@@ -1447,9 +1447,6 @@ class Checker {
 			);
 		}
 
-		//print((preg_match_all('/[\x00-\x1F]|[\x80-\x9F]/', $this->markup, $foundEntities)));
-		//print_r($foundEntities);
-
 
 		// ERROR: Incorrect values used for translate attribute
 		$xlateNodes = $this->doc->getNodesWithAttr('translate');
@@ -1469,6 +1466,19 @@ class Checker {
 					lang('rep_markup_translate_incorrect_todo'),
 					lang('rep_markup_translate_incorrect_link')
 				);
+		}
+
+		// ERROR: Align attribute used
+		$alignNodes = $this->doc->getNodesWithAttr('align');
+		if (count($alignNodes) > 0) {
+			Report::addReport(
+				'rep_markup_align',
+				'markup_category', REPORT_LEVEL_ERROR, 
+				lang('rep_markup_align'),
+				lang('rep_markup_align_expl', Language::format(Utils::codesFromValArray($alignNodes), LANG_FORMAT_OL_CODE)),
+				lang('rep_markup_align_todo'),
+				lang('rep_markup_align_link')
+			);
 		}
 
 
