@@ -353,7 +353,8 @@ class Checker {
 				if ($val > 0) $results[] = '<span title="Number indicates how many.">'.$key.'<span class="valCount"> '.$val.'</span></span>'; 
 				}
 		}
-		$code = count($results) == 0 ? null : 'Total: '.$totalCtrls;
+		//$code = count($results) == 0 ? null : 'Total: '.$totalCtrls;
+		$code = null;
 		$value = array('code' => $code, 'values' => $results);
 		$display_value = null;
 		if (count($results) == 0) 
@@ -374,7 +375,8 @@ class Checker {
 				if ($val > 0) $results[] = '<span title="Number indicates how many.">'.$key.'<span class="valCount"> '.$val.'</span></span>'; 
 				}
 		}
-		$code = count($results) == 0 ? null : 'Total: '.$totalCtrls;
+		//$code = count($results) == 0 ? null : 'Total: '.$totalCtrls;
+		$code = null;
 		$value = array('code' => $code, 'values' => $results);
 		$display_value = null;
 		if (count($results) == 0) 
