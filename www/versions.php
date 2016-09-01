@@ -38,7 +38,7 @@ $hideLangSelection = true;
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_markup_dir_escapes">Found escape sequences for paired directional controls</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_markup_dir_unbalanced">Unpaired directional controls found</a></li>
     </ul>
-		<p> The descriptive text was updated for the following check results, mostly to incoporate new recommendations post HTML5, or to accomodate the change in focus mentioned above.</p>
+		<p> The descriptive text was updated for the following check results, mostly to incorporate new recommendations post HTML5, or to accommodate the change in focus mentioned above.</p>
 	<ul style="margin-left:3em;">
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#bom">Character encoding: BOM</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#xmldecl">Character encoding: XML declaration</a></li>
