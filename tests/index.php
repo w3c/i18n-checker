@@ -14,8 +14,8 @@ set_time_limit(Conf::get('test_execution_time_limit'));
 
 header('Content-Type: text/html; charset=UTF-8');
 $title = "W3C I18n Checker Tests";
-$css[] = "base_ucn.css";
-$js[] = "mootools-1.3.2.js";
+$css[] = "../../www/style/base_ucn.css";
+$js[] = "../../www/scripts/mootools-1.3.2.js";
 include(PATH_TEMPLATES.'/html/head.php');
 $hideLangSelection = true;
 
