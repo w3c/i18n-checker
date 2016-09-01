@@ -141,6 +141,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
     <p><span class="leadin">Intended audience:</span> this article is mainly intended for people developing the internationalization checker, but can also be used by those interested in tracking source references quickly for a particular report. </p>
   </div>
   <p>This page lists all the report messages used by the <a href="https://validator.w3.org/i18n-checker/">W3C Internationalization Checker</a>. As well as the text of the report and the severity of the report (with variants), it lists the conditions which trigger that report. It also lists references to articles or specifications that provide authoritative sources for the report.</p>
+  <p>Text such as <samp>%1</samp> indicates the location of a list or item of information that will be generated at run time when a page is checked.</p>
   <p>The checker assumes that pages served as <code class="kw" translate="no">text/html</code> are parsed by the browser as HTML5. There are sometimes alternative tests or wording for pages served as <code class="kw" translate="no">application/xhtml+xml</code>, or for XHTML 1.0 pages that might be processed outside the browser as XML.</p>
   <p>This page will be updated from time to time, as new features are added to the checker or existing features are refined.</p>
 </section>
