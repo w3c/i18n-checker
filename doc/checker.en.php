@@ -6,7 +6,8 @@
 <meta name="description"
  content="Lists information about checks run by the i18n-checker." />
 <link rel="copyright" href="#copyright"/>
-<script type="text/javascript" src="http://www.w3.org/International/javascript/articletoc.js">//</script>
+<script src="https://www.w3.org/International/javascript/articletoc.js" type="text/javascript">
+</script>
 <style>
 .unlinked {
 	font-size: 150%;
@@ -14,7 +15,7 @@
 	line-height: 1.5;
 }
 </style>
-<link rel="stylesheet" href="http://www.w3.org/International/style/article-2016.css" type="text/css" />
+<link rel="stylesheet" href="https://www.w3.org/International/style/article-2016.css" type="text/css" />
 <style type="text/css" media="all">
 .message h4 {
 	margin-left: 0;
@@ -92,8 +93,6 @@
 	border: 1px solid #ccc;
 	}
 </style>
-<script src="http://www.w3.org/International/javascript/articletoc.js" type="text/javascript">
-</script>
 </head>
 <?php 	
 $language = parse_ini_file('../langs/en.properties');
@@ -112,7 +111,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
 <header>
   <nav id="mainNavigation">
     <aside id="mainNavigation">
-      <nav id="site-navigation"> <a href="https://www.w3.org/International/"><img id="picture" alt="World map" title="World map" src="http://www.w3.org/International/icons/world.gif" height="61" width="150"></a>
+      <nav id="site-navigation"> <a href="https://www.w3.org/International/"><img id="picture" alt="World map" title="World map" src="https://www.w3.org/International/icons/world.gif" height="61" width="150"></a>
       </nav>
       <nav class="noprint" id="search">
         <form method="get" action="https://www.w3.org/International/site-search.php" enctype="application/x-www-form-urlencoded" style="margin: 0;">
@@ -130,7 +129,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
       </nav>
     </aside>
     <nav id="boilerplate">
-      <div id="siteicons"><a href="http://www.w3.org/" title="Go to W3C Home Page"><img src="https://www.w3.org/International/icons/w3c_home.gif" alt="Go to W3C Home Page"></a><a href="https://www.w3.org/International/" title="Go to Internationalization Activity Home Page" id="i18n-name">Internationalization</a></div>
+      <div id="siteicons"><a href="https://www.w3.org/" title="Go to W3C Home Page"><img src="https://www.w3.org/International/icons/w3c_home.gif" alt="Go to W3C Home Page"></a><a href="https://www.w3.org/International/" title="Go to Internationalization Activity Home Page" id="i18n-name">Internationalization</a></div>
       <div id="sitelinks" class="noprint"><a href="https://www.w3.org/International/" title="Internationalization Activity home page.">Home</a>&nbsp; <a href="https://www.w3.org/International/resources" title="Information resources on the Internationalization site.">Resources</a>&nbsp; <a href="https://www.w3.org/International/technique-index" title="Task-based index of i18n techniques.">Techniques</a>&nbsp; <a href="https://www.w3.org/International/resource-index" title="Topic index for information on this site.">Topics</a>&nbsp; <a href="https://www.w3.org/International/log/description" title="Information about news filters and RSS feeds for W3C Internationalization.">News</a>&nbsp; <a href="https://www.w3.org/International/about#scope" title="Groups that make up the Internationalization Activity.">Groups</a>&nbsp; <a href="https://www.w3.org/International/about" title="About the Internationalization Activity.">About</a>&nbsp;	&nbsp; </div>
       <div id="line">&nbsp;</div>
     </nav>
@@ -141,7 +140,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
   <div id="audience">
     <p><span class="leadin">Intended audience:</span> this article is mainly intended for people developing the internationalization checker, but can also be used by those interested in tracking source references quickly for a particular report. </p>
   </div>
-  <p>This page lists all the report messages used by the <a href="http://validator.w3.org/i18n-checker/">W3C Internationalization Checker</a>. As well as the text of the report and the severity of the report (with variants), it lists the conditions which trigger that report. It also lists references to articles or specifications that provide authoritative sources for the report.</p>
+  <p>This page lists all the report messages used by the <a href="https://validator.w3.org/i18n-checker/">W3C Internationalization Checker</a>. As well as the text of the report and the severity of the report (with variants), it lists the conditions which trigger that report. It also lists references to articles or specifications that provide authoritative sources for the report.</p>
   <p>The checker assumes that pages served as <code class="kw" translate="no">text/html</code> are parsed by the browser as HTML5. There are sometimes alternative tests or wording for pages served as <code class="kw" translate="no">application/xhtml+xml</code>, or for XHTML 1.0 pages that might be processed outside the browser as XML.</p>
   <p>This page will be updated from time to time, as new features are added to the checker or existing features are refined.</p>
 </section>
@@ -184,10 +183,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations#httpheadwhat">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/charmod/#C034">Character Model for the World Wide Web, 4.4.1 Mandating a unique character encoding, C034</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/charmod/#C034">Character Model for the World Wide Web, 4.4.1 Mandating a unique character encoding, C034</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -233,7 +232,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-byte-order-mark">The byte-order mark (BOM) in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -286,7 +285,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-byte-order-mark">The byte-order mark (BOM) in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -384,7 +383,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations#quicklookup">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot Markup: HTML-Compatible XHTML Documents, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot Markup: HTML-Compatible XHTML Documents, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -437,19 +436,19 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/syntax.html#writing">HTML5, 8.1 Writing HTML documents</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/syntax.html#writing">HTML5, 8.1 Writing HTML documents</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#PI-and-xml">Polyglot Markup: HTML-Compatible XHTML Documents, 2. Processing Instructions and the XML Declaration</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#PI-and-xml">Polyglot Markup: HTML-Compatible XHTML Documents, 2. Processing Instructions and the XML Declaration</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_1">XHTML 1.0, C.1. Processing Instructions and the XML Declaration</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_1">XHTML 1.0, C.1. Processing Instructions and the XML Declaration</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_9">XHTML 1.0, C.9. Character Encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_9">XHTML 1.0, C.9. Character Encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xml/#charencoding">XML 1.0, 4.3.3 Character Encoding in Entities</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xml/#charencoding">XML 1.0, 4.3.3 Character Encoding in Entities</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -491,19 +490,19 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-markup/syntax.html#character-encoding">HTML: The Markup Language, 4.2. Character encoding declaration</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-markup/syntax.html#character-encoding">HTML: The Markup Language, 4.2. Character encoding declaration</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/syntax.html#writing">HTML5, 8.1 Writing HTML documents</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/syntax.html#writing">HTML5, 8.1 Writing HTML documents</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#PI-and-xml">Polyglot Markup: HTML-Compatible XHTML Documents, 2. Processing Instructions and the XML Declaration</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#PI-and-xml">Polyglot Markup: HTML-Compatible XHTML Documents, 2. Processing Instructions and the XML Declaration</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_1">XHTML 1.0, C.1. Processing Instructions and the XML Declaration</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_1">XHTML 1.0, C.1. Processing Instructions and the XML Declaration</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_9">XHTML 1.0, C.9. Character Encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_9">XHTML 1.0, C.9. Character Encoding</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -549,7 +548,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/semantics.html#attr-meta-http-equiv-content-type">HTML5, 4.2.5.3 Pragma directives</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/semantics.html#attr-meta-http-equiv-content-type">HTML5, 4.2.5.3 Pragma directives</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -592,13 +591,13 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-markup/syntax.html#character-encoding">HTML: The Markup Language, 4.2. Character encoding declaration</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-markup/syntax.html#character-encoding">HTML: The Markup Language, 4.2. Character encoding declaration</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_9">XHTML 1.0, C.9. Character Encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_9">XHTML 1.0, C.9. Character Encoding</a> <span class="type">specification</span></p>
         </li>
       </ol>
       <section>
@@ -644,10 +643,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
 	          <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
 	        </li>
 	        <li class="w3">
-	          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_9">XHTML 1.0, C.9. Character Encoding</a> <span class="type">specification</span></p>
+	          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_9">XHTML 1.0, C.9. Character Encoding</a> <span class="type">specification</span></p>
             </li>
 	        <li class="w3">
-	          <p class="link"><a href="http://www.w3.org/TR/html401/charset.html#h-5.2.2">HTML 4.01, 5.2.2 Specifying the character encoding</a> <span class="type">specification</span></p>
+	          <p class="link"><a href="https://www.w3.org/TR/html401/charset.html#h-5.2.2">HTML 4.01, 5.2.2 Specifying the character encoding</a> <span class="type">specification</span></p>
             </li>
 	      </ol>
 	    </div>
@@ -686,10 +685,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot Markup, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot Markup, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xml/#charencoding">XML 1.0, 4.3.3 Character Encoding in Entities</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xml/#charencoding">XML 1.0, 4.3.3 Character Encoding in Entities</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -733,10 +732,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/semantics.html#the-meta-element">HTML5, 4.2.5 The meta element</a> <span class="type">article</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/semantics.html#the-meta-element">HTML5, 4.2.5 The meta element</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/parsing.html#the-input-stream">HTML5, 8.2.2 The input stream</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/parsing.html#the-input-stream">HTML5, 8.2.2 The input stream</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -785,7 +784,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </div>
@@ -822,7 +821,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/parsing.html#the-input-stream">HTML5, 8.2.2 The input stream</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/parsing.html#the-input-stream">HTML5, 8.2.2 The input stream</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </div>
@@ -859,7 +858,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xml/#charencoding">XML 1.0, 4.3.3 Character Encoding in Entities</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xml/#charencoding">XML 1.0, 4.3.3 Character Encoding in Entities</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </div>
@@ -894,7 +893,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/parsing.html#determining-the-character-encoding">HTML5, 8.2.2.1 Determining the character encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/parsing.html#determining-the-character-encoding">HTML5, 8.2.2.1 Determining the character encoding</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -945,7 +944,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations#httpheadwhat">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/obsolete.html#non-conforming-features">HTML5, 11.2 Non-conforming features</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/obsolete.html#non-conforming-features">HTML5, 11.2 Non-conforming features</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -999,19 +998,19 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-markup/syntax.html#character-encoding">HTML: The Markup Language, 4.2. Character encoding declaration</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-markup/syntax.html#character-encoding">HTML: The Markup Language, 4.2. Character encoding declaration</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
           <p class="link"><a href="https://www.w3.org/TR/html51/document-metadata.html#specifying-the-documents-character-encoding">HTML5.1, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/charset.html#h-5.2.2">HTML 4.01, 5.2.2 Specifying the character encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/charset.html#h-5.2.2">HTML 4.01, 5.2.2 Specifying the character encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/charmod/#C034">Character Model for the World Wide Web, 4.4.1 Mandating a unique character encoding, C034</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/charmod/#C034">Character Model for the World Wide Web, 4.4.1 Mandating a unique character encoding, C034</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1052,10 +1051,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-html-encoding-declarations">Declaring character encodings in HTML</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot Markup: HTML-Compatible XHTML Documents, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot Markup: HTML-Compatible XHTML Documents, 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/charmod/#C034">Character Model for the World Wide Web, 4.4.1 Mandating a unique character encoding, C034</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/charmod/#C034">Character Model for the World Wide Web, 4.4.1 Mandating a unique character encoding, C034</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1096,10 +1095,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-choosing-encodings">Choosing &amp; applying a character encoding</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot Markup: 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#character-encoding">Polyglot Markup: 3. Specifying a Document's Character Encoding</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1151,7 +1150,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-choosing-encodings">Choosing &amp; applying a character encoding</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
           <p class="link"><a href='https://encoding.spec.whatwg.org/#names-and-labels'>Encoding Spec: Names and labels</a> <span class="type">specification</span></p>
@@ -1206,7 +1205,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-choosing-encodings">Choosing &amp; applying a character encoding</a> <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/semantics.html#charset">HTML5, 4.2.5.5 Specifying the document's character encoding</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
           <p class="link"><a href='https://encoding.spec.whatwg.org/#names-and-labels'>Encoding Spec: Names and labels</a> <span class="type">specification</span></p>
@@ -1266,16 +1265,16 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1326,16 +1325,16 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1376,16 +1375,16 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1434,22 +1433,22 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1496,22 +1495,22 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1557,19 +1556,19 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
 			      <li class="w3">
-			        <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
+			        <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
 			      </li>
 			      <li class="w3">
-			        <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
+			        <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
 			      </li>
 			      <li class="w3">
-			        <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
+			        <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
 			      </li>
 			      <li class="w3">
-			        <p class="link"><a href="http://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
+			        <p class="link"><a href="https://www.w3.org/TR/xhtml1/#C_7">XHTML 1.0, C.7. The lang and xml:lang Attributes</a> <span class="type">specification</span></p>
 			      </li>
 			      <li class="w3">
-			        <p class="link"><a href="http://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
+			        <p class="link"><a href="https://www.w3.org/TR/xhtml11/doctype.html#s_doctype">XHTML 1.1, 3. The XHTML 1.1 Document Type</a> <span class="type">specification</span></p>
 			      </li>
       </ol>
     </div>
@@ -1609,16 +1608,16 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="http://www.rfc-editor.org/rfc/bcp/bcp47.txt">Internet-Draft: BCP 47</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1666,19 +1665,19 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.rfc-editor.org/rfc/bcp/bcp47.txt">Internet-Draft: BCP 47</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.rfc-editor.org/rfc/bcp/bcp47.txt">Internet-Draft: BCP 47</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-lang-and-xml:lang-attributes">HTML5, 3.2.3.3 The lang and xml:lang attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.1">HTML 4.01, 8.1 Specifying the language of content: the lang attribute</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/REC-xml/#sec-lang-tag">XML 1.0, 2.12 Language Identification</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1821,10 +1820,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/semantics.html#pragma-directives">HTML5, 4.2.5.3 Pragma directives</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/semantics.html#pragma-directives">HTML5, 4.2.5.3 Pragma directives</a> <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html-polyglot/#language-attributes">Polyglot markup, 7.2 Language Attributes</a> <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1913,10 +1912,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-b-and-i-tags.en.php">Using &lt;b&gt; and &lt;i&gt; tags</a > <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-b-element">HTML5, 4.6.17 The b element</a > <span class="type">article</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/text-level-semantics.html#the-b-element">HTML5, 4.6.17 The b element</a > <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-i-element">HTML5, 4.6.16 The i element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/text-level-semantics.html#the-i-element">HTML5, 4.6.16 The i element</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -1959,10 +1958,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/questions/qa-b-and-i-tags.en.php">Using &lt;b&gt; and &lt;i&gt; tags</a > <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-b-element">HTML5, 4.6.17 The b element</a > <span class="type">article</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/text-level-semantics.html#the-b-element">HTML5, 4.6.17 The b element</a > <span class="type">article</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-i-element">HTML5, 4.6.16 The i element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/text-level-semantics.html#the-i-element">HTML5, 4.6.16 The i element</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2170,10 +2169,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-dir-attribute">HTML5, 3.2.3.5 The dir attribute</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-dir-attribute">HTML5, 3.2.3.5 The dir attribute</a > <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2">HTML 4.01, 8.2 Specifying the direction of text and tables: the dir attribute</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.2">HTML 4.01, 8.2 Specifying the direction of text and tables: the dir attribute</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2215,10 +2214,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-dir-attribute">HTML5, 3.2.3.5 The dir attribute</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-dir-attribute">HTML5, 3.2.3.5 The dir attribute</a > <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2">HTML 4.01, 8.2 Specifying the direction of text and tables: the dir attribute</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.2">HTML 4.01, 8.2 Specifying the direction of text and tables: the dir attribute</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2269,10 +2268,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-dir-attribute">HTML5, 3.2.3.5 The dir attribute</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-dir-attribute">HTML5, 3.2.3.5 The dir attribute</a > <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2">HTML 4.01, 8.2 Specifying the direction of text and tables: the dir attribute</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.2">HTML 4.01, 8.2 Specifying the direction of text and tables: the dir attribute</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2314,10 +2313,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/elements.html#the-dir-attribute">HTML5, 3.2.3.5 The dir attribute</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/elements.html#the-dir-attribute">HTML5, 3.2.3.5 The dir attribute</a > <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2">HTML 4.01, 8.2 Specifying the direction of text and tables: the dir attribute</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.2">HTML 4.01, 8.2 Specifying the direction of text and tables: the dir attribute</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2359,10 +2358,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2404,10 +2403,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2449,10 +2448,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2494,10 +2493,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2548,10 +2547,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2602,10 +2601,10 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
           <p class="link"><a href="https://www.w3.org/International/tutorials/language-decl/">Declaring Language in XHTML and HTML</a ><span class="type">tutorial</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html5/text-level-semantics.html#the-bdo-element">HTML5, 4.6.24 The bdo element</a > <span class="type">specification</span></p>
         </li>
         <li class="w3">
-          <p class="link"><a href="http://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
+          <p class="link"><a href="https://www.w3.org/TR/html401/struct/dirlang.html#h-8.2.4">HTML 4.01, 8.2.4 Overriding the bidirectional algorithm: the BDO element</a > <span class="type">specification</span></p>
         </li>
       </ol>
     </section>
@@ -2627,8 +2626,8 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
   <p>Tell us what you think.</p>
   <p><a class="interaction" target="_blank" href="https://github.com/w3c/i18n-checker/issues">Leave a comment</a></p>
   <p style="margin-top:1em">Follow our news feed.</p>
-  <p><a class="interaction" href="http://twitter.com/webi18n" title="Twitter: @webi18n"><img src="http://www.w3.org/International/icons/twitter-bird.png" style="vertical-align: middle;" alt=" ">@webi18n</a></p>
-  <p><a class="interaction" href="http://www.w3.org/blog/International/feed/rdf/" title="RSS"><img src="http://www.w3.org/International/icons/rssLink.png" alt=" ">RSS</a></p>
+  <p><a class="interaction" href="http://twitter.com/webi18n" title="Twitter: @webi18n"><img src="https://www.w3.org/International/icons/twitter-bird.png" style="vertical-align: middle;" alt=" ">@webi18n</a></p>
+  <p><a class="interaction" href="https://www.w3.org/blog/International/feed/rdf/" title="RSS"><img src="https://www.w3.org/International/icons/rssLink.png" alt=" ">RSS</a></p>
 </aside>
 <section>
   <h2><a id="materials" href="#materials">Other introductory materials</a></h2>
@@ -2639,7 +2638,7 @@ $testpath = 'href="../www/check?uri=http%3A%2F%2Flocalhost%2Fgit%2Fi18n-checker%
 
 
 <footer><address><p>By: Richard Ishida, W3C. </p></address><small id="version">Content first published <time datetime="2011-07-08">2011-07-08  18:08</time>
-. Last substantive update <time datetime="2016-08-22T14:19Z">2016-08-22  14:19 GMT</time>. This version <time datetime="2016-08-22T14:19Z">2016-08-22  14:19 GMT</time></small>	<small>For the history of document changes, see the <a href="http://www.w3.org/blog/International/tag/article-checker/">news feed</a> for substantive changes, and the <a href="https://github.com/w3c/i18n-checker/commits/master">Github commit list</a> for all changes since Jan 2016.</small><small class="copyright" lang="en"><a rel="Copyright" href="/Consortium/Legal/ipr-notice#Copyright" id="copyright">Copyright</a> © 2008-2016 <a href="/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), All Rights Reserved. W3C <a href="/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a>, <a rel="Copyright" href="/Consortium/Legal/copyright-documents">document use</a> and <a rel="Copyright" href="/Consortium/Legal/copyright-software">software licensing</a> rules apply. Your interactions with this site are in accordance with our <a href="/Consortium/Legal/privacy-statement#Public">public</a> and <a href="/Consortium/Legal/privacy-statement#Members">Member</a> privacy statements.</small>	</footer>
+. Last substantive update <time datetime="2016-08-22T14:19Z">2016-08-22  14:19 GMT</time>. This version <time datetime="2016-08-22T14:19Z">2016-08-22  14:19 GMT</time></small>	<small>For the history of document changes, see the <a href="https://www.w3.org/blog/International/tag/article-checker/">news feed</a> for substantive changes, and the <a href="https://github.com/w3c/i18n-checker/commits/master">Github commit list</a> for all changes since Jan 2016.</small><small class="copyright" lang="en"><a rel="Copyright" href="/Consortium/Legal/ipr-notice#Copyright" id="copyright">Copyright</a> © 2008-2016 <a href="/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), All Rights Reserved. W3C <a href="/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a>, <a rel="Copyright" href="/Consortium/Legal/copyright-documents">document use</a> and <a rel="Copyright" href="/Consortium/Legal/copyright-software">software licensing</a> rules apply. Your interactions with this site are in accordance with our <a href="/Consortium/Legal/privacy-statement#Public">public</a> and <a href="/Consortium/Legal/privacy-statement#Members">Member</a> privacy statements.</small>	</footer>
 
 
 <script type="text/javascript">if (document.getElementById('toclocation')) { createtoc(); }</script>
