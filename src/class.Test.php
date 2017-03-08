@@ -29,6 +29,7 @@ class Test {
 				continue;
 			if (!preg_match("/.+\.properties/", $fileName))
 				continue;
+			$fileName = "../tests/".$fileName;
 			self::$logger->info("Parsing ".$fileName);
 			$testFileConf = parse_ini_file($fileName);
 			if (!$testFileConf) {
