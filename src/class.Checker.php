@@ -255,7 +255,7 @@ class Checker {
 		$value = null;
 		if ($this->doc->langTags != null) {
 			foreach ($this->doc->langTags as $val) {
-				$results[] = '<a target="_blank" href="http://r12a.github.io/apps-subtags/?check='.$val.'">'.$val.'</a>'; 
+				$results[] = '<a target="_blank" href="http://r12a.github.io/app-subtags/?check='.$val.'">'.$val.'</a>'; 
 				}
 		}
 		$code = count($results) == 0 ? null : 'Click each tag to check it.';
