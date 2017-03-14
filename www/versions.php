@@ -14,10 +14,10 @@ $hideLangSelection = true;
 <h2>Change log for the W3C Internationalization (i18n) Checker</h2>
 <p>This page documents changes to the checker. The page <a href="https://www.w3.org/International/quicktips/doc/checker">Internationalization Checker reports</a> lists all checks made, with the report messages and links to tests. New and updated checks listed below link to that page for details.</p>
 <p>Please let us know about bugs and missing features using the <a href="https://github.com/w3c/i18n-checker/issues">feedback form</a>. Detailed change logs can be found in the <a href="https://github.com/w3c/i18n-checker/commits/master">GitHub commit list</a>.</p>
-<h3 id="about">Version 2</h3>
+<h3 id="about">Version 2.0.3</h3>
 
 <div class="bd compact">
-	<p>Version 2 of the checker moves away from checking against particular specifications to checking how a page will work in a browser. For the most part, it assumes that pages will be parsed using an HTML5 compliant parser. Pages served as application/xhtml+xml have some significant differences with regards to character encoding and language declarations, however, and these are taken into account if the checker detects that the page being checked is served as XML.</p>
+	<p>Version 2.0.3 of the checker moves away from checking against particular specifications to checking how a page will work in a browser. For the most part, it assumes that pages will be parsed using an HTML5 compliant parser. Pages served as application/xhtml+xml have some significant differences with regards to character encoding and language declarations, however, and these are taken into account if the checker detects that the page being checked is served as XML.</p>
 	<p>The following new checks were added. Follow the links for details.</p>
 	<ul style="margin-left:3em;">
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_charset_bom_diff_encoding">UTF-8 BOM disagrees with another declaration</a></li>
