@@ -28,6 +28,7 @@ $hideLangSelection = true;
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_lang_zhCNTW">A language attribute uses zh-CN or zh-TW</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_markup_control_escapes">Escaped characters addressing control code range</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_markup_translate_incorrect">Incorrect values used for translate attribute</a></li>
+	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_markup_align">The align attribute is used</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_markup_surrogate_escapes">Incorrect character escapes for supplementary characters</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_markup_dir_default">Consider using dir='rtl' on the html tag</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_markup_no_dir">No rtl markup found</a></li>
@@ -40,11 +41,11 @@ $hideLangSelection = true;
     </ul>
 		<p> The descriptive text was updated for the following check results, mostly to incorporate new recommendations post HTML5, or to accommodate the change in focus mentioned above.</p>
 	<ul style="margin-left:3em;">
-	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#bom">Character encoding: BOM</a></li>
-	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#xmldecl">Character encoding: XML declaration</a></li>
+	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_charset_bom_found">UTF-8 BOM found at start of file</a></li>
+	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_charset_xml_decl_used">XML declaration used</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_charset_no_effective_charset">No effective character encoding information</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_charset_meta_ineffective">meta encoding declarations don't work with XML</a></li>
-	  <li><a href="">Incorrect use of meta encoding declarations</a></li>
+	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_charset_incorrect_use_meta">Incorrect use of meta encoding declarations</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_charset_charset_attr">charset attribute used on a or link elements</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_charset_none">No character encoding information</a></li>
 	  <li><a href="https://www.w3.org/International/quicktips/doc/checker#rep_lang_missing_html_attr">A tag uses an xml:lang attribute without an associated lang attribute</a></li>
