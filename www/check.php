@@ -41,7 +41,7 @@ if (isset($_GET['uri'])) {
 			 include(PATH_TEMPLATES."/index.$format.php");
 			 exit;
 		}
-		$url = $newurl;
+		$uri = $newuri;
 	}
         $document = Net::getDocumentByUri($uri);
 }
