@@ -34,7 +34,16 @@ if (!isset($_GET['uri']) && (!isset($_FILES['file']) || $_FILES['file']['tmp_nam
 require_once(PATH_SRC.'/class.Net.php');
 if (isset($_GET['uri'])) {
 	$uri = $_GET['uri'];
-	$document = Net::getDocumentByUri($_GET['uri']);
+	if (filter_var($uri, FILTER_VALIDATE_URL) === false) {
+		$newuri = "https://".$uri;
+		if (filter_var($newuri, FILTER_VALIDATE_URL) === false) {
+		         Message::addMessage(MSG_LEVEL_ERROR, lang("message_nothing_to_validate"));
+			 include(PATH_TEMPLATES."/index.$format.php");
+			 exit;
+		}
+		$uri = $newuri;
+	}
+        $document = Net::getDocumentByUri($uri);
 }
 elseif (isset($_FILES['file']))
 	$document = Net::getDocumentByFileUpload($_FILES['file']);
