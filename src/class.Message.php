@@ -39,7 +39,7 @@ class Message
 	private function __construct($type, $message, $title='') {
 		$this->type = $type;
 		$this->title = $title;
-		$this->message = $message;
+		$this->message = htmlspecialchars($message, ENT_QUOTES | ENT_HTML5);
 	}
 	
 	static function addMessage($type, $message, $title='') {
