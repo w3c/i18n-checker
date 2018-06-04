@@ -24,9 +24,9 @@ script:
   - HEAD http://localhost/test.php
   - HEAD http://localhost/www/test
   - HEAD http://localhost/www/test.php
-  - HEAD http://127.0.1.1/test
-  - HEAD http://127.0.1.1/test.php
-  - HEAD http://127.0.1.1/www/test
-  - HEAD http://127.0.1.1/www/test.php
+  # - HEAD http://127.0.1.1/test
+  # - HEAD http://127.0.1.1/test.php
+  # - HEAD http://127.0.1.1/www/test
+  # - HEAD http://127.0.1.1/www/test.php
   - cat apache-error.log
   - cat apache-access.log

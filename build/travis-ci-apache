@@ -9,6 +9,20 @@
     Allow from all
   </Directory>
 
+  <Directory "%TRAVIS_BUILD_DIR%/www">
+    Options FollowSymLinks MultiViews ExecCGI
+    AllowOverride All
+    Order deny,allow
+    Allow from all
+  </Directory>
+
+  <Directory "%TRAVIS_BUILD_DIR%/tests">
+    Options FollowSymLinks MultiViews ExecCGI
+    AllowOverride All
+    Order deny,allow
+    Allow from all
+  </Directory>
+
   <IfModule mod_fastcgi.c>
     AddHandler php7.1-fcgi .php
     Action php7.1-fcgi /php7.1-fcgi
