@@ -19,7 +19,7 @@ before_script:
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
   - sudo service apache2 restart
 script:
-  - echo -$pwd-
+  - pwd
   - HEAD http://localhost/test
   - HEAD http://localhost/test.php
   - HEAD http://localhost/www/test
@@ -28,5 +28,5 @@ script:
   - HEAD http://127.0.1.1/test.php
   - HEAD http://127.0.1.1/www/test
   - HEAD http://127.0.1.1/www/test.php
-  - cat "%TRAVIS_BUILD_DIR%/apache-error.log"
-  - cat "%TRAVIS_BUILD_DIR%/apache-access.log"
+  - cat apache-error.log
+  - cat apache-access.log
