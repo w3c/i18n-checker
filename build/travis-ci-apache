@@ -13,7 +13,7 @@
     AddHandler php7.1-fcgi .php
     Action php7.1-fcgi /php7.1-fcgi
     Alias /php7.1-fcgi /usr/lib/cgi-bin/php7.1-fcgi
-    FastCgiExternalServer /usr/lib/cgi-bin/php7.1-fcgi -host 127.0.0.1:9000 -pass-header Authorization
+    FastCgiExternalServer /usr/lib/cgi-bin/php7.1-fcgi -host 127.0.1.1:9000 -pass-header Authorization
   </IfModule>
 
   ErrorLog "%TRAVIS_BUILD_DIR%/apache-error.log"
