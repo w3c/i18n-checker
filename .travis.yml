@@ -30,3 +30,8 @@ script:
   # - HEAD http://127.0.1.1/www/test.php
   - cat apache-error.log
   - cat apache-access.log
+  - ls -lah
+  - ls -lah www/
+  - ls -lah tests/
+notifications:
+  email: false
