@@ -29,7 +29,7 @@ var W3C = {
 		if (W3C.LanguagesForm != null)
 			W3C.LanguagesForm.addEvent('change', function(event) {
 				action = W3C.LanguagesForm.getProperty('action') ? W3C.LanguagesForm.getProperty('action') : "";
-				window.location = action + "?" + this.toQueryString().replace('uri=http%3A%2F%2F', 'uri=') + window.location.hash;
+				window.location = action + "?" + this.toQueryString() + window.location.hash;
 			});
 		
 		W3C.TabLinks.each(function(link, i) {
@@ -47,7 +47,6 @@ var W3C = {
 			});*/
 			form.addEvent('submit', function(event) {
 				event.preventDefault();
-				//form.uri.value = form.uri.value.replace('http://', '');
 				//form.submit();
 				// ------- With ajax
 				/*if ($('messages'))
@@ -57,7 +56,7 @@ var W3C = {
 				if ($$('body > div.section'))
 					$$('body > div.section').dispose();
 				// Generate the query string
-				var queryString = form.toQueryString().replace('uri=http%3A%2F%2F', 'uri=');
+				var queryString = form.toQueryString();
 				// Create the request and send
 				var formRequest = new Request.HTML({
 					url: W3C.Action + "?" + queryString,
@@ -91,7 +90,7 @@ var W3C = {
 				});
 				formRequest.send();*/
 				// ------- Without ajax
-				var queryString = form.toQueryString().replace('uri=http%3A%2F%2F', 'uri=');
+				var queryString = form.toQueryString();
 				if ("?" + queryString == window.location.search) {
 					window.location.reload(true);
 				} else {
@@ -103,7 +102,7 @@ var W3C = {
 					if (passed) {
 						event.preventDefault();
 						//form.submit();
-						var queryString = form.toQueryString().replace('uri=http%3A%2F%2F', 'uri=');
+						var queryString = form.toQueryString();
 						if ("?" + queryString == window.location.search) {
 							window.location.reload(true);
 						} else {
