@@ -1,3 +1,4 @@
 *~
 .idea
+conf/i18n.conf
 logs/*.log*
