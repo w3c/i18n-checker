@@ -50,6 +50,8 @@ legend {
 body {
 	min-width: 40em;
 	padding-bottom: 2em;
+	color:#000;
+	background-color:#fff;
 }
 
 #frontforms,#don_program,#menu,#footer,#translations,#summary,#source,#results
