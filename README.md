@@ -5,8 +5,6 @@ This checker performs various tests on a Web Page to determine its level of inte
 See the latest released version of the checker at
 https://validator.w3.org/i18n-checker/
 
-The checker is also integrated into Unicorn.
-
 The checks run by the currently released version of the checker are documented at https://www.w3.org/International/quicktips/doc/checker.
 
 This software is free/open source, licensed under the terms of the [W3C software licence](https://github.com/w3c/i18n-checker/blob/master/LICENSE.html).
