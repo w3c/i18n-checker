@@ -13,7 +13,7 @@ $hideLangSelection = true;
 
 <h2>Change log for the W3C Internationalization (i18n) Checker</h2>
 <p>This page documents changes to the checker. The page <a href="https://www.w3.org/International/quicktips/doc/checker">Internationalization Checker reports</a> lists all checks made, with the report messages and links to tests. New and updated checks listed below link to that page for details.</p>
-<p>Please let us know about bugs and missing features using the <a href="https://github.com/w3c/i18n-checker/issues">feedback form</a>. Detailed change logs can be found in the <a href="https://github.com/w3c/i18n-checker/commits/master">GitHub commit list</a>.</p>
+<p>Please let us know about bugs and missing features using the <a href="https://github.com/w3c/i18n-checker/issues">feedback form</a>. Detailed change logs can be found in the <a href="https://github.com/w3c/i18n-checker/commits/main">GitHub commit list</a>.</p>
 <h3 id="about">Version 2.0.3</h3>
 
 <div class="bd compact">
