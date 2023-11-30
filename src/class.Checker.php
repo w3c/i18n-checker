@@ -111,14 +111,14 @@ class Checker {
 	private function convertEncoding() {
 		# this should be adapted to take into account HTTP headers set to UTF16/-LE/-BE
 		$filestart = substr($this->markup,0,3);
-		if (ord($filestart{0})== 239 && ord($filestart{1})== 187 && ord($filestart{2})== 191) 
+		if (ord($filestart[0])== 239 && ord($filestart[1])== 187 && ord($filestart[2])== 191)
 			return 'UTF-8';
 		else { 
 			$filestart = substr($this->markup,0,2);
-			if (ord($filestart{0})== 254 && ord($filestart{1})== 255) {
+			if (ord($filestart[0])== 254 && ord($filestart[1])== 255) {
 				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16BE');
 				return 'UTF-16BE';
-			} else if (ord($filestart{0})== 255 && ord($filestart{1})== 254) {
+			} else if (ord($filestart[0])== 255 && ord($filestart[1])== 254) {
 				$this->markup = mb_convert_encoding($this->markup, 'UTF-8', 'UTF-16LE');
 				return 'UTF-16LE';
 			}
@@ -310,7 +310,7 @@ class Checker {
 		
 		// Remove nodes for which all class names are ASCII
 		if (count($nodes) > 0)
-			$nodes = array_filter($nodes, function (&$valArray) {
+			$nodes = array_filter($nodes, function ($valArray) {
 				$valArray['values'] = preg_filter('/[^\x20-\x7E]/', '$0', $valArray['values']);
 				if (empty($valArray['values']))
 					return false;
@@ -1450,7 +1450,7 @@ class Checker {
 
 		// ERROR: Incorrect values used for translate attribute
 		$xlateNodes = $this->doc->getNodesWithAttr('translate');
-		if (count($xlateNodes) > 0) {
+		if ($xlateNodes && count($xlateNodes) > 0) {
 			$invalidxlateNodes = array_filter($xlateNodes, function ($array) {
 				if (is_array($array['values'])) { $array['values'] = implode(' ',$array['values']); }
 				$array['values'] = strtolower($array['values']);
@@ -1470,7 +1470,7 @@ class Checker {
 
 		// ERROR: Align attribute used
 		$alignNodes = $this->doc->getNodesWithAttr('align');
-		if (count($alignNodes) > 0) {
+		if ($alignNodes && count($alignNodes) > 0) {
 			Report::addReport(
 				'rep_markup_align',
 				'markup_category', REPORT_LEVEL_ERROR, 

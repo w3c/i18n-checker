@@ -19,29 +19,22 @@
  */
 
 /**
- * Use this class to quickly configure the package.
- *
- * An example how to use this configurator:
+ * Returns the literal value passed in the constructor, without modifications.
  * 
- * {@example ../../examples/php/configurator_basic.php 19}
- *
- * @version $Revision: 883108 $
  * @package log4php
- * @subpackage configurators
+ * @subpackage pattern
+ * @version $Revision: 1326626 $
+ * @since 2.3
  */
-class LoggerConfiguratorBasic implements LoggerConfigurator {
+class LoggerPatternConverterLiteral extends LoggerPatternConverter {
 
-	/**
-	 * Add a {@link LoggerAppenderConsole} that uses 
-	 * the {@link LoggerLayoutTTCC} to the root category.
-	 * 
-	 * @param string $url not used here
-	 */
-	public function configure(LoggerHierarchy $hierarchy, $url = null) {
-		$root = $hierarchy->getRootLogger();
-		$appender = new LoggerAppenderConsole('A1');
-		$appender->setLayout( new LoggerLayoutTTCC() );
-		$appender->activateOptions();
-		$root->addAppender($appender);
+	private $literalValue;
+	
+	public function __construct($literalValue) {
+		$this->literalValue = $literalValue;
+	}
+	
+	public function convert(LoggerLoggingEvent $event) {
+		return $this->literalValue;
 	}
 }

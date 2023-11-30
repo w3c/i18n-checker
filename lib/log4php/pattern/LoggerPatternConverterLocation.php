@@ -19,35 +19,21 @@
  */
 
 /**
+ * Returns the line number within the file from which the logging request was 
+ * issued. 
+ * 
  * @package log4php
- * @subpackage helpers
+ * @subpackage pattern
+ * @version $Revision: 1326626 $
+ * @since 2.3
  */
-class LoggerDatePatternConverter extends LoggerPatternConverter {
+class LoggerPatternConverterLocation extends LoggerPatternConverter {
 
-	/**
-	 * @var string
-	 */
-	private $df;
-	
-	/**
-	 * Constructor
-	 *
-	 * @param string $formattingInfo
-	 * @param string $df
-	 */
-	public function __construct($formattingInfo, $df) {
-		parent::__construct($formattingInfo);
-		$this->df = $df;
-	}
-
-	/**
-	 * @param LoggerLoggingEvent $event
-	 * @return string
-	 */
-	public function convert($event) {
-		$timeStamp = $event->getTimeStamp();
-		$usecs = round(($timeStamp - (int)$timeStamp) * 1000);
-		$this->df = preg_replace('/((?<!\\\\)(?:\\\\{2})*)u/', '${1}' . sprintf('%03d', $usecs), $this->df);
-		return date($this->df, $event->getTimeStamp());
+	public function convert(LoggerLoggingEvent $event) {
+		return 
+			$event->getLocationInformation()->getClassName() . '.' .
+			$event->getLocationInformation()->getMethodName() . '(' .
+			$event->getLocationInformation()->getFileName() . ':' .
+			$event->getLocationInformation()->getLineNumber() . ')';
 	}
 }

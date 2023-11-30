@@ -19,28 +19,17 @@
  */
 
 /**
- * Implement this interface in order to render objects as strings using {@link LoggerRendererMap}.
- *
- * Implement this interface in order to render objects as strings using {@link LoggerRendererMap}.
- *
- * Example:
- * {@example ../../examples/php/renderer_map.php 19}<br>
- * {@example ../../examples/resources/renderer_map.properties 18}<br>
- * <pre>
- * DEBUG - Now comes the current MyClass object:
- * DEBUG - Doe, John
- * </pre>
- *
- * @version $Revision: 883108 $
+ * Returns a value from the $_COOKIE superglobal array corresponding to the 
+ * given key. If no key is given, return all values.
+ * 
+ * Options:
+ *  [0] $_COOKIE key value
+ * 
  * @package log4php
- * @subpackage renderers
- * @since 0.3
+ * @subpackage pattern
+ * @version $Revision: 1326626 $
+ * @since 2.3
  */
-interface LoggerRendererObject {
-	/**
-	 * Render the entity passed as parameter as a String.
-	 * @param mixed $o entity to render
-	 * @return string
-	 */
-	public function render($o);
+class LoggerPatternConverterCookie extends LoggerPatternConverterSuperglobal {
+	protected $name = '_COOKIE';
 }
