@@ -1,4 +1,4 @@
-<?php if (count(Message::$messages) > 0) { ?>
+<?php if (Message::$messages && count(Message::$messages) > 0) { ?>
 	<div id="messages">
 		<?php foreach (Message::$messages as $message) { ?>
 		<div class="<?php echo $message->type ?>">

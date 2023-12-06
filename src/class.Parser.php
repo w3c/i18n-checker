@@ -345,25 +345,25 @@ abstract class Parser {
 	private function getI18nAttributes() {
 		$i18nAttributes = array();
 		$dir = $this->getNodesWithAttr('dir');
-		if (count($dir)>0) $i18nAttributes['dir'] = count($dir);
+		if ($dir && count($dir)>0) $i18nAttributes['dir'] = count($dir);
 		$dirname = $this->getNodesWithAttr('dirname');
-		if (count($dirname)>0) $i18nAttributes['dirname'] = count($dirname);
+		if ($dirname && count($dirname)>0) $i18nAttributes['dirname'] = count($dirname);
 		$translate = $this->getNodesWithAttr('translate');
-		if (count($translate)>0) $i18nAttributes['translate'] = count($translate);
+		if ($translate && count($translate)>0) $i18nAttributes['translate'] = count($translate);
 		$date = $this->getNodesWithAttr('date');
-		if (count($date)>0) $i18nAttributes['date'] = count($date);
+		if ($date && count($date)>0) $i18nAttributes['date'] = count($date);
 		$datetime = $this->getNodesWithAttr('datetime');
-		if (count($datetime)>0) $i18nAttributes['datetime'] = count($datetime);
+		if ($datetime && count($datetime)>0) $i18nAttributes['datetime'] = count($datetime);
 		$inputmode = $this->getNodesWithAttr('inputmode');
-		if (count($inputmode)>0) $i18nAttributes['inputmode'] = count($inputmode);
+		if ($inputmode && count($inputmode)>0) $i18nAttributes['inputmode'] = count($inputmode);
 		$spellcheck = $this->getNodesWithAttr('spellcheck');
-		if (count($spellcheck)>0) $i18nAttributes['spellcheck'] = count($spellcheck);
+		if ($spellcheck && count($spellcheck)>0) $i18nAttributes['spellcheck'] = count($spellcheck);
 		$lang = $this->getNodesWithAttr('lang');
-		if (count($lang)>0) $i18nAttributes['lang'] = count($lang);
+		if ($lang && count($lang)>0) $i18nAttributes['lang'] = count($lang);
 		$hreflang = $this->getNodesWithAttr('hreflang');
-		if (count($hreflang)>0) $i18nAttributes['hreflang'] = count($hreflang);
+		if ($hreflang && count($hreflang)>0) $i18nAttributes['hreflang'] = count($hreflang);
 		$srclang = $this->getNodesWithAttr('srclang');
-		if (count($srclang)>0) $i18nAttributes['srclang'] = count($srclang);
+		if ($srclang && count($srclang)>0) $i18nAttributes['srclang'] = count($srclang);
 		$this->i18nAttributes = $i18nAttributes;
 		}
 	

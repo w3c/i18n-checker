@@ -19,32 +19,16 @@
  */
 
 /**
+ * Returns the logged message.
+ * 
  * @package log4php
- * @subpackage helpers
+ * @subpackage pattern
+ * @version $Revision: 1326626 $
+ * @since 2.3
  */
-class LoggerMDCPatternConverter extends LoggerPatternConverter {
+class LoggerPatternConverterMessage extends LoggerPatternConverter {
 
-	/**
-	 * @var string
-	 */
-	private $key;
-
-	/**
-	 * Constructor
-	 *
-	 * @param string $formattingInfo
-	 * @param string $key
-	 */
-	public function __construct($formattingInfo, $key) {
-		parent::__construct($formattingInfo);
-		$this->key = $key;
-	}
-
-	/**
-	 * @param LoggerLoggingEvent $event
-	 * @return string
-	 */
-	public function convert($event) {
-		return $event->getMDC($this->key);
+	public function convert(LoggerLoggingEvent $event) {
+		return $event->getRenderedMessage();
 	}
 }

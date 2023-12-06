@@ -19,27 +19,17 @@
  */
 
 /**
+ * Returns the name of the function or method from which the logging request 
+ * was issued. 
+ * 
  * @package log4php
- * @subpackage helpers
+ * @subpackage pattern
+ * @version $Revision: 1326626 $
+ * @since 2.3
  */
-class LoggerClassNamePatternConverter extends LoggerNamedPatternConverter {
+class LoggerPatternConverterMethod extends LoggerPatternConverter {
 
-	/**
-	 * Constructor
-	 *
-	 * @param string $formattingInfo
-	 * @param integer $precision
-	 */
-	public function __construct($formattingInfo, $precision) {
-		parent::__construct($formattingInfo, $precision);
-	}
-
-	/**
-	 * @param LoggerLoggingEvent $event
-	 * @return string
-	 */
-	public function getFullyQualifiedName($event) {
-		return $event->fqcn;
+	public function convert(LoggerLoggingEvent $event) {
+		return $event->getLocationInformation()->getMethodName();
 	}
 }
-

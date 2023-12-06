@@ -60,7 +60,7 @@ class Report {
 	}
 	
 	public static function getCount() {
-		return count(self::$reports);
+		return self::$reports ? count(self::$reports) : 0;
 	}
 	
 	public static function getErrorCount() {
