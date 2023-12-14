@@ -309,7 +309,7 @@ class Checker {
 		$nodes = array_merge((array) $classes,(array) $ids);
 		
 		// Remove nodes for which all class names are ASCII
-		if (count($nodes) > 0)
+		if ($nodes && count($nodes) > 0)
 			$nodes = array_filter($nodes, function ($valArray) {
 				$valArray['values'] = preg_filter('/[^\x20-\x7E]/', '$0', $valArray['values']);
 				if (empty($valArray['values']))
@@ -324,7 +324,7 @@ class Checker {
 		Information::addInfo($category, $title, $value, $display_value);
 		
 		// Remove nodes for which all class names are NFC
-		if (count($nodes) > 0)
+		if ($nodes && count($nodes) > 0)
 			// FIXME? case class="nonASCII nonNFC" may report two nonNFC names if $valArray[values] is not edited. the check should be value by value.
 			$nodes = array_filter($nodes, function (&$valArray) {
 				if (is_array($valArray['values'])) 
@@ -892,7 +892,7 @@ class Checker {
 		
 	private function getFirstCVP ($array) {
 		// returns the first code-value pair from an array of code-value pairs
-		if (count($array) > 0) { return $array[0]; }
+		if ($array && count($array) > 0) { return $array[0]; }
 		else return null;
 		}
 	
@@ -1111,7 +1111,7 @@ class Checker {
 		
 		// ERROR: A lang attribute value did not match an xml:lang value when they appeared together on the same tag.
 		$nonMatchingAttrs = array();
-		if (count($htmlLangAttrs) > 0)
+		if ($htmlLangAttrs && count($htmlLangAttrs) > 0)
 			array_walk($htmlLangAttrs, function (&$valArray, $key) use (&$xmlLangAttrs, &$nonMatchingAttrs) {
 				$code = $valArray['code'];
 				if (($el = Utils::findCodeIn($code, $xmlLangAttrs)) != null) {
@@ -1139,7 +1139,7 @@ class Checker {
 		// ERROR: Incorrect values used for dir attribute
 		$dirNodes = $this->doc->getNodesWithAttr('dir');
 		$isXML = $this->doc->isServedAsXML;
-		if (count($dirNodes) > 0) {
+		if ($dirNodes && count($dirNodes) > 0) {
 			$invalidDirNodes = array_filter($dirNodes, function ($array) use ($isXML) {
 				if (is_array($array['values'])) { $array['values'] = implode(' ',$array['values']); }
 				if (! $isXML) { $array['values'] = strtolower($array['values']); }
@@ -1191,14 +1191,14 @@ class Checker {
 
 		// WARNING: CSS is being used to set direction
 		$styleNodes = $this->doc->getNodesWithAttr('style');
-		if (count($styleNodes) > 0) {
+		if ($styleNodes && count($styleNodes) > 0) {
 			$invalidstyleNodes = array_filter($styleNodes, function ($array) {
 				if (is_array($array['values'])) { $array['values'] = implode(' ',$array['values']); }
 				$array['values'] = strtolower($array['values']);
 				if (preg_match('/direction:\s*rtl/',$array['values']) || preg_match('/direction:\s*ltr/',$array['values'])) { return true; }
 				return false;
 				});
-			if (count($invalidstyleNodes) > 0)
+			if ($invalidstyleNodes && count($invalidstyleNodes) > 0)
 				Report::addReport(
 					'rep_markup_css_direction',
 					'dir_category', REPORT_LEVEL_WARNING, 
@@ -1214,7 +1214,7 @@ class Checker {
 	private function addReportMisc() {
 		// WARNING: are there non-NFC class or id names?
 		$nonNFCs = Information::getValues('classId_non_nfc');
-		if (count($nonNFCs) > 0) {
+		if ($nonNFCs && count($nonNFCs) > 0) {
 			Report::addReport(
 				'rep_latin_non_nfc',
 				'nonLatin_category', REPORT_LEVEL_WARNING, 
