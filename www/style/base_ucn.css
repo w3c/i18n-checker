@@ -84,9 +84,17 @@ body {
 #banner p {
 	font-size: 0.7em;
 	line-height: 100% !important;
-	margin: -2em 12.1em 0 12.1em;
+	margin: -4em 13em 0 13em;
 	padding-bottom: 1em;
 	background-color: transparent;
+}
+
+#logo {
+	border-radius: 10px;
+	width: 100px;
+	margin-left: 20px;
+	margin-top: 10px;
+	height: 100px; 
 }
 
 #tabset_tabs {
@@ -336,13 +344,14 @@ div.submit input:hover {
 }
 
 #banner {
-	background: #365D95 url(../images/head-br.png) no-repeat scroll right
-		bottom;
+	background: #365D95;
 }
 
 #banner h1 {
-	background: url(../images/head-bl.png) no-repeat scroll left bottom;
+	background: #365D95;
 	color: #FDFDFD;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
 }
 
 #banner h1 span {
