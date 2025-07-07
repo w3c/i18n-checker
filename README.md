@@ -7,11 +7,11 @@ https://validator.w3.org/i18n-checker/
 
 The checks run by the currently released version of the checker are documented at https://www.w3.org/International/quicktips/doc/checker.
 
-This software is free/open source, licensed under the terms of the [W3C software licence](https://github.com/w3c/i18n-checker/blob/master/LICENSE.html).
+This software is free/open source, licensed under the terms of the [W3C software licence](https://github.com/w3c/i18n-checker/blob/main/LICENSE.html).
 
 There is a set of [installation notes](https://github.com/w3c/i18n-checker/wiki/Installation-notes) for those who want to work with the source code.
 
-Proposals for changes to the checker must be submitted via pull requests, and will need to be reviewed by someone other than the proposer before merging with the master branch. The file `www/test.php` should be run before submitting a pull request, to ensure that the changes don't break existing tests.
+Proposals for changes to the checker must be submitted via pull requests, and will need to be reviewed by someone other than the proposer before merging with the main branch. The file `www/test.php` should be run before submitting a pull request, to ensure that the changes don't break existing tests.
 
 When submitting a pull requests for a new check, you should
 
