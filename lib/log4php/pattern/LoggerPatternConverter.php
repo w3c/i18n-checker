@@ -56,7 +56,7 @@ abstract class LoggerPatternConverter {
 	 * @param LoggerFormattingInfo $formattingInfo
 	 * @param array $option
 	 */
-	public function __construct(LoggerFormattingInfo $formattingInfo = null, $option = null) {  
+	public function __construct(?LoggerFormattingInfo $formattingInfo = null, $option = null) {  
 		$this->formattingInfo = $formattingInfo;
 		$this->option = $option;
 		$this->activateOptions();

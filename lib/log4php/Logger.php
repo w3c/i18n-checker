@@ -405,7 +405,7 @@ class Logger {
 	 *
 	 * @param LoggerLevel $level The level to set, or NULL to clear the logger level.
 	 */
-	public function setLevel(LoggerLevel $level = null) {
+	public function setLevel(?LoggerLevel $level = null) {
 		$this->level = $level;
 	}
 	
