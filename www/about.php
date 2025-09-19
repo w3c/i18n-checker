@@ -51,7 +51,7 @@ $hideLangSelection = true;
 <div>
 	<h4>Further reading</h4>
 	<ul class="bd compact">
-		<li>The W3C's Internationalization Activity's <a href="https://www.w3.org/International/techniques/authoring-html?collapse">techniques
+		<li>The W3C's Internationalization Activity's <a href="https://www.w3.org/International/i18n-drafts/techniques/authoring-html.en.html">techniques
 		Index</a>   provides links to
 		recommendations and useful resources, organised by task. The checker reports link back to  this
 	  index.</li>
