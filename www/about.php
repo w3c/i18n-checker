@@ -70,10 +70,10 @@ $hideLangSelection = true;
 	<h4>Relevant activities</h4>
 	<ul class="bd compact">
 		<li>The <a href="http://www.w3.org/International/">W3C's Internationalization
-		Activity</a> works with W3C working groups and liaises with other
-		organizations to make it possible to use Web technologies with
-		different languages, scripts, and cultures. It also provides articles
-		and other resources about Web internationalization.</li>
+		Activity</a> works with W3C working groups and liaises with other organizations
+		to ensure Web technologies work for everyone, regardless of their language,
+		script, or culture. It also provides articles and other resources about Web
+		internationalization.</li>
 		<li>The <a style="" href="https://www.w3.org/International/ig/">Internationalization
 		Interest Group</a> operates via a set of public mailing lists supporting the activity of
 		the Internationalization Working Groups. Anyone can participate in the
