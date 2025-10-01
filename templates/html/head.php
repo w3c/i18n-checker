@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang ?>" lang="<?php echo $lang ?>">
 <head>
 	<title><?php echo $title ?></title>
-	<link rel="shortcut icon" href="<?php echo Conf::get('base_uri') ?>images/favicon.ico" type="image/x-icon" />
+	<link rel="icon" type="image/png" href="https://www.w3.org/assets/logos/w3c-2025/favicons/favicon-32.png" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rev="start" href="<?php echo Conf::get('base_uri') ?>" title="Home Page" />
 <?php if (isset($css)) foreach($css as $sheet) { ?>
@@ -14,7 +14,7 @@
 <body>
 	<div id="banner">
 		<h1>
-			<a href="http://www.w3.org/"><img alt="W3C" width="110" height="61" id="logo" src="<?php echo Conf::get('base_uri') ?>images/w3c.png" /></a>
+			<a href="https://www.w3.org/"><img alt="W3C" id="logo" src="https://www.w3.org/assets/logos/w3c-2025/svg/margins/w3c-letters-bg-white.svg" /></a>
 			<a href="<?php echo Conf::get('base_uri') ?>"><span><?php _lang('title') ?></span></a>
 		</h1>
 		<p><?php _lang('subtitle') ?></p>

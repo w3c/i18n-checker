@@ -67,8 +67,11 @@ body {
 }
 
 #banner {
-	margin: 1.5em 2em 1em 2em;
+	background: #365D95;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
 	line-height: 1;
+	margin: 1.5em 2em 1em 2em;
 }
 
 #banner img {
@@ -77,16 +80,39 @@ body {
 }
 
 #banner h1 {
+	background: #365D95;
+	color: #FDFDFD;
 	font-size: 1.6em;
+	margin-bottom: 1em;
 	padding-bottom: 0.43em;
 }
 
+#banner h1 span {
+	border-bottom: 1px solid #4E6F9E;
+	vertical-align: 10px;
+}
+
+#banner a:link,#banner a:hover,#banner a:visited,#banner a:active {
+	color: #FDFDFD;
+	text-decoration: none;
+}
+
 #banner p {
-	font-size: 0.7em;
-	line-height: 100% !important;
-	margin: -2em 12.1em 0 12.1em;
-	padding-bottom: 1em;
 	background-color: transparent;
+	color: #D0DCEE;
+	font-size: 0.7em;
+	letter-spacing: 0.1em;
+	line-height: 100% !important;
+	margin: -5em 0 0 11.5em;
+	padding-bottom: 1em;
+}
+
+#logo {
+	border-radius: 10px;
+	width: 80px;
+	margin-left: 20px;
+	margin-top: 10px;
+	height: 80px;
 }
 
 #tabset_tabs {
@@ -333,30 +359,6 @@ a:hover {
 
 div.submit input:hover {
 	color: #1F2126;
-}
-
-#banner {
-	background: #365D95 url(../images/head-br.png) no-repeat scroll right
-		bottom;
-}
-
-#banner h1 {
-	background: url(../images/head-bl.png) no-repeat scroll left bottom;
-	color: #FDFDFD;
-}
-
-#banner h1 span {
-	border-bottom: 1px solid #4E6F9E;
-}
-
-#banner a:link,#banner a:hover,#banner a:visited,#banner a:active {
-	color: #FDFDFD;
-	text-decoration: none;
-}
-
-#banner p {
-	color: #D0DCEE;
-	letter-spacing: 0.1em;
 }
 
 #tabset_tabs li {
