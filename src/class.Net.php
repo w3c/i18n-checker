@@ -71,9 +71,9 @@ class Net {
 				Message::addMessage(MSG_LEVEL_ERROR, lang("message_unknown_host", parse_url($uri, PHP_URL_HOST)));
 			} elseif ($curl_error == CURLE_COULDNT_CONNECT) {
 				Message::addMessage(MSG_LEVEL_ERROR, lang("message_connect_exception"));
-			} elseif ($curl_error == CURLE_REMOTE_ACCESS_DENIED) {
-				Message::addMessage(MSG_LEVEL_ERROR, lang("message_unauthorized_access"));
-			} else {
+				} elseif (defined('CURLE_REMOTE_ACCESS_DENIED') && $curl_error == CURLE_REMOTE_ACCESS_DENIED) {
+					Message::addMessage(MSG_LEVEL_ERROR, lang("message_unauthorized_access"));
+				} else {
 				// Otherwise send the curl error message (english)
 				Message::addMessage(MSG_LEVEL_ERROR, $result[4]);
 			}

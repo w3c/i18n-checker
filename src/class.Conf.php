@@ -54,6 +54,9 @@ class Conf {
 			echo 'Error parsing configuration file.';
 			exit(1);
 		}
+		$debug = filter_var(self::$configuration['debug'], FILTER_VALIDATE_BOOLEAN);
+		error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+		ini_set('display_errors', $debug ? '1' : '0');
 		foreach (self::$configuration as $key => $value) {
 			if (strpos($key, "path_") === 0 && strpos($value, "/") !== 0) {
 				self::$configuration[$key] = realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.$value);

@@ -11,12 +11,34 @@ This software is free/open source, licensed under the terms of the [W3C software
 
 There is a set of [installation notes](https://github.com/w3c/i18n-checker/wiki/Installation-notes) for those who want to work with the source code.
 
-Proposals for changes to the checker must be submitted via pull requests, and will need to be reviewed by someone other than the proposer before merging with the main branch. The file `www/test.php` should be run before submitting a pull request, to ensure that the changes don't break existing tests.
+## Local development
 
-When submitting a pull requests for a new check, you should
+1. Create a local configuration file:
 
-1. add new tests for that check in tests/data.php
-2. add calls to those tests to `www/test.php`, and ensure that none of the previous tests break
-3. add the check to doc/checker.en.php
-4. add parsed data that may be useful elsewhere to the class.Parser.php file, but add the actual test to class.Checker.php
-5. add the full set of messages and links needed for the report to langs/en.properties
+   ```sh
+   cp conf/i18n.conf.dist conf/i18n.conf
+   ```
+
+2. If you use PHP's built-in server, update `test_url` in `conf/i18n.conf` to:
+
+   ```ini
+   test_url="http://localhost:8000/tests/generate.php"
+   ```
+
+3. Start a local server from the repository root:
+
+   ```sh
+   php -S localhost:8000 -t .
+   ```
+
+4. Open the application at `http://localhost:8000/www/index.php`.
+
+## Repository layout
+
+- `src/` contains the checker logic.
+- `www/` contains the web entry points and static assets.
+- `templates/` contains the HTML/XML presentation templates.
+- `langs/*.properties` contains UI and report strings. `langs/en.properties` is
+  the canonical source for new messages.
+- `tests/` contains generated test fixtures and expected regression results.
+- `lib/` contains vendored third-party code.
