@@ -11,6 +11,8 @@ This software is free/open source, licensed under the terms of the [W3C software
 
 There is a set of [installation notes](https://github.com/w3c/i18n-checker/wiki/Installation-notes) for those who want to work with the source code.
 
+Proposals for changes to the checker must be submitted via pull requests, and will need to be reviewed by someone other than the proposer before merging with the main branch. The file `www/test.php` should be run before submitting a pull request, to ensure that the changes don't break existing tests.
+
 ## Local development
 
 1. Create a local configuration file:
