@@ -15,6 +15,19 @@ Proposals for changes to the checker must be submitted via pull requests, and wi
 
 ## Local development
 
+### Docker
+
+The simplest local setup is Docker:
+
+```sh
+docker compose up --build
+```
+
+Then open `http://localhost:8000/`. See [README.Docker.md](README.Docker.md) for
+port overrides and regression test details.
+
+### PHP built-in server
+
 1. Create a local configuration file:
 
    ```sh

@@ -1,0 +1,7 @@
+services:
+  checker:
+    build:
+      context: .
+    ports:
+      - "${I18N_CHECKER_PORT:-8000}:80"
+    init: true
