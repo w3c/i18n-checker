@@ -30,7 +30,11 @@ final class ParserHTML5Lib extends Parser {
 			$this->document = HTML5_Parser::parse(preg_replace('/<!DOCTYPE[^>]+(\n[^>]+)?>/', '', $markup, Conf::get('perf_head_length')));
 			//$this->document = HTML5_Parser::parse($markup);
 			self::$logger->debug("Successfully parsed document using html5lib.");
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
+			if (!class_exists('tidy')) {
+				self::$logger->debug("Document parsing failed and Tidy is not available: ".$e->getMessage(), $e);
+				throw $e;
+			}
 			// Specify configuration
 			$config = array(
 				//'indent'	=> true,
@@ -41,7 +45,7 @@ final class ParserHTML5Lib extends Parser {
 			$markup = $tidy->repairString($markup, $config, 'utf8');
 			try {
 				$this->document = HTML5_Parser::parse(preg_replace('/<!DOCTYPE[^>]+(\n[^>]+)?>/', '', $markup, Conf::get('perf_head_length')));
-			} catch (Exception $e) {
+			} catch (Throwable $e) {
 				self::$logger->debug("Document parsing failed: ".$e->getMessage(), $e);
 				throw $e;
 			}
