@@ -50,7 +50,7 @@ class Checker {
 		} catch (Throwable $e) {
 			//Message::addMessage(MSG_LEVEL_ERROR, 'Exception: '.$e->getMessage());
 			Message::addMessage(MSG_LEVEL_ERROR, lang('message_parse_error_failed',isset($this->curl_info['url']) ? 'check?uri='.urlencode($this->curl_info['url']) : ''));
-			self::$logger->error('Exception raised for URI: '.(isset($this->curl_info['url']) ? $this->curl_info['url'] : ''), $e);
+			self::$logger->error('Exception raised for URI: '.($this->curl_info['url'] ?? ''), $e);
 			return false;
 		}
 		
