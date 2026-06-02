@@ -18,11 +18,6 @@ jobs:
           - 80:80
         volumes:
           - ${{ github.workspace }}:/var/www/html
-        options: >-
-          --health-cmd "curl -fsS http://localhost/www/index.php || exit 1"
-          --health-interval 10s
-          --health-timeout 3s
-          --health-retries 5
 
     steps:
       - uses: actions/checkout@v4
