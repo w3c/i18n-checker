@@ -34,13 +34,15 @@ jobs:
         run: |
           docker exec ${{ job.services.web.id }} bash -c '
             cp conf/i18n.conf.dist conf/i18n.conf &&
+            printf "ServerName localhost\n" > /etc/apache2/conf-available/servername.conf &&
+            a2enconf servername &&
             sed -i "s#^test_url=.*#test_url=\"http://localhost/tests/generate.php\"#" conf/i18n.conf &&
             sed -i "s#^log4php.appender.A.File=.*#log4php.appender.A.File=/var/www/html/logs/i18n.log#" conf/log4php.properties &&
             mkdir -p logs && touch logs/i18n.log && chown -R www-data:www-data logs
           '
 
-      - name: Restart Apache
-        run: docker exec ${{ job.services.web.id }} apachectl restart
+      - name: Restart web container
+        run: docker restart ${{ job.services.web.id }}
 
       - name: Wait for health
         run: |
