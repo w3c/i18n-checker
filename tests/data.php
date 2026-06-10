@@ -615,6 +615,11 @@ $test["bitagsnoclass2"]=array(
 'test'=>'<div class="test"><p><i>This is italic text</i> but this is not. This is <i>italicised with no class attribute</i>, whereas <i class="control">this has a class attribute</i>.</p></div>',
 );
 
+$test["nestedbuttonanchor"]=array(
+'title'=>'nested button in anchor inside a table cell',
+'test'=>'<table><tbody><tr><td><a href="#"><button type="button">More information</button></a></td></tr></tbody></table>',
+);
+
 
 $test["dirIncorrect"]=array(
 'title'=>'rep_markup_dir_incorrect',

@@ -3291,6 +3291,7 @@ class HTML5_TreeBuilder {
             /* 6. If entry is neither a marker nor an element that is also in
             thetack of open elements, go to step 4. */
             if($entry === self::MARKER || in_array($entry, $this->stack, true)) {
+                $step_seven = true;
                 break;
             }
         }
@@ -3837,4 +3838,3 @@ class HTML5_TreeBuilder {
         }
     }
 }
-
